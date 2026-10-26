@@ -78,7 +78,6 @@ void bubbleSort(int arr[], int n) {
                 swapped = true;
             }
         }
-        // If no two elements were swapped by inner loop, array is sorted
         if (!swapped)
             break;
     }
@@ -94,50 +93,42 @@ int main() {
     int arr[] = {64, 34, 25, 12, 22, 11, 90};
     int n = sizeof(arr) / sizeof(arr[0]);
 
-    printf("Original array: \\n");
+    printf("Original array:\\n");
     printArray(arr, n);
 
     bubbleSort(arr, n);
 
-    printf("Sorted array: \\n");
+    printf("Sorted array:\\n");
     printArray(arr, n);
     return 0;
 }`,
-    phpFileName: 'bubble_sort.php',
-    phpCode: `<?php
-/**
- * Bubble Sort in PHP
- * Time Complexity: O(n) Best, O(n^2) Avg/Worst
- * Space Complexity: O(1)
- */
+    pythonFileName: 'bubble_sort.py',
+    pythonCode: `"""
+Bubble Sort in Python
+Time Complexity: O(n) Best, O(n^2) Average/Worst
+Space Complexity: O(1)
+"""
+from typing import List
 
-function bubbleSort(array &$arr): void {
-    $n = count($arr);
-    for ($i = 0; $i < $n - 1; $i++) {
-        $swapped = false;
-        for ($j = 0; $j < $n - $i - 1; $j++) {
-            if ($arr[$j] > $arr[$j + 1]) {
-                $temp = $arr[$j];
-                $arr[$j] = $arr[$j + 1];
-                $arr[$j + 1] = $temp;
-                $swapped = true;
-            }
-        }
-        // Optimization: break early if no swaps occurred
-        if (!$swapped) {
-            break;
-        }
-    }
-}
+def bubble_sort(arr: List[int]) -> List[int]:
+    n = len(arr)
+    for i in range(n - 1):
+        swapped = False
+        for j in range(n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+                swapped = True
+        # Early break if no swaps occurred (already sorted)
+        if not swapped:
+            break
+    return arr
 
-// Test harness
-$arr = [64, 34, 25, 12, 22, 11, 90];
-echo "Original array:\\n" . implode(", ", $arr) . "\\n";
-
-bubbleSort($arr);
-
-echo "Sorted array:\\n" . implode(", ", $arr) . "\\n";
-?>`,
+if __name__ == "__main__":
+    test_array = [64, 34, 25, 12, 22, 11, 90]
+    print("Original array:", test_array)
+    sorted_array = bubble_sort(test_array)
+    print("Sorted array:  ", sorted_array)
+`,
     relatedAlgorithms: ['selection-sort', 'insertion-sort', 'quick-sort']
   },
 
@@ -172,7 +163,7 @@ echo "Sorted array:\\n" . implode(", ", $arr) . "\\n";
     ],
     theory: {
       what: 'Selection Sort segments the array into a sorted portion (left) and unsorted portion (right). On each iteration, it scans the entire unsorted portion to find the absolute minimum value and swaps it with the first unsorted index.',
-      why: 'It minimizes the total number of swaps (at most O(n) swaps total), which can be advantageous when write operations are significantly more expensive than read operations (e.g. flash memory).',
+      why: 'It minimizes the total number of swaps (at most O(n) swaps total), which can be advantageous when write operations are significantly more expensive than read operations.',
       analogy: 'Imagine selecting the shortest student in a group to stand at the front of a line, then selecting the next shortest for the second spot, and so on.',
       how: [
         'Set minIndex to the current index i.',
@@ -183,14 +174,14 @@ echo "Sorted array:\\n" . implode(", ", $arr) . "\\n";
       ],
       pros: [
         'Simple logic and O(1) extra space.',
-        'Performs at most n - 1 swaps total, minimizing write wear.',
-        'Performance is consistent regardless of initial element ordering.'
+        'Performs at most n - 1 swaps total, minimizing memory writes.',
+        'Consistent predictable performance.'
       ],
       cons: [
         'Always takes O(n²) comparisons even if the list is already sorted.',
-        'Not a stable sort by default (can reorder equal elements during swaps).'
+        'Not a stable sort by default.'
       ],
-      whenToUse: 'Small lists where write operations are costly (e.g. EEPROM hardware).',
+      whenToUse: 'Small lists where memory writes are costly.',
       whenNotToUse: 'Medium to large lists where Merge Sort or Quick Sort are vastly superior.'
     },
     cFileName: 'selection_sort.c',
@@ -220,58 +211,38 @@ void selectionSort(int arr[], int n) {
     }
 }
 
-void printArray(int arr[], int size) {
-    for (int i = 0; i < size; i++)
-        printf("%d ", arr[i]);
-    printf("\\n");
-}
-
 int main() {
     int arr[] = {64, 25, 12, 22, 11};
     int n = sizeof(arr) / sizeof(arr[0]);
-
-    printf("Original array: \\n");
-    printArray(arr, n);
-
     selectionSort(arr, n);
-
-    printf("Sorted array: \\n");
-    printArray(arr, n);
+    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
+    printf("\\n");
     return 0;
 }`,
-    phpFileName: 'selection_sort.php',
-    phpCode: `<?php
-/**
- * Selection Sort in PHP
- * Time Complexity: O(n^2) Best, Avg, Worst
- * Space Complexity: O(1)
- */
+    pythonFileName: 'selection_sort.py',
+    pythonCode: `"""
+Selection Sort in Python
+Time Complexity: O(n^2) Best, Average, Worst
+Space Complexity: O(1)
+"""
+from typing import List
 
-function selectionSort(array &$arr): void {
-    $n = count($arr);
-    for ($i = 0; $i < $n - 1; $i++) {
-        $minIdx = $i;
-        for ($j = $i + 1; $j < $n; $j++) {
-            if ($arr[$j] < $arr[$minIdx]) {
-                $minIdx = $j;
-            }
-        }
-        if ($minIdx !== $i) {
-            $temp = $arr[$i];
-            $arr[$i] = $arr[$minIdx];
-            $arr[$minIdx] = $temp;
-        }
-    }
-}
+def selection_sort(arr: List[int]) -> List[int]:
+    n = len(arr)
+    for i in range(n - 1):
+        min_idx = i
+        for j in range(i + 1, n):
+            if arr[j] < arr[min_idx]:
+                min_idx = j
+        if min_idx != i:
+            arr[i], arr[min_idx] = arr[min_idx], arr[i]
+    return arr
 
-// Test harness
-$arr = [64, 25, 12, 22, 11];
-echo "Original array:\\n" . implode(", ", $arr) . "\\n";
-
-selectionSort($arr);
-
-echo "Sorted array:\\n" . implode(", ", $arr) . "\\n";
-?>`,
+if __name__ == "__main__":
+    data = [64, 25, 12, 22, 11]
+    print("Original:", data)
+    print("Sorted:  ", selection_sort(data))
+`,
     relatedAlgorithms: ['bubble-sort', 'insertion-sort', 'heap-sort']
   },
 
@@ -337,9 +308,6 @@ void insertionSort(int arr[], int n) {
     for (i = 1; i < n; i++) {
         key = arr[i];
         j = i - 1;
-
-        /* Move elements of arr[0..i-1], that are greater than key,
-           to one position ahead of their current position */
         while (j >= 0 && arr[j] > key) {
             arr[j + 1] = arr[j];
             j = j - 1;
@@ -348,55 +316,37 @@ void insertionSort(int arr[], int n) {
     }
 }
 
-void printArray(int arr[], int n) {
-    for (int i = 0; i < n; i++)
-        printf("%d ", arr[i]);
-    printf("\\n");
-}
-
 int main() {
     int arr[] = {12, 11, 13, 5, 6};
     int n = sizeof(arr) / sizeof(arr[0]);
-
-    printf("Original array:\\n");
-    printArray(arr, n);
-
     insertionSort(arr, n);
-
-    printf("Sorted array:\\n");
-    printArray(arr, n);
+    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
+    printf("\\n");
     return 0;
 }`,
-    phpFileName: 'insertion_sort.php',
-    phpCode: `<?php
-/**
- * Insertion Sort in PHP
- * Time Complexity: O(n) Best, O(n^2) Avg/Worst
- * Space Complexity: O(1)
- */
+    pythonFileName: 'insertion_sort.py',
+    pythonCode: `"""
+Insertion Sort in Python
+Time Complexity: O(n) Best, O(n^2) Average/Worst
+Space Complexity: O(1)
+"""
+from typing import List
 
-function insertionSort(array &$arr): void {
-    $n = count($arr);
-    for ($i = 1; $i < $n; $i++) {
-        $key = $arr[$i];
-        $j = $i - 1;
+def insertion_sort(arr: List[int]) -> List[int]:
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+        while j >= 0 and arr[j] > key:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key
+    return arr
 
-        while ($j >= 0 && $arr[$j] > $key) {
-            $arr[$j + 1] = $arr[$j];
-            $j = $j - 1;
-        }
-        $arr[$j + 1] = $key;
-    }
-}
-
-// Test harness
-$arr = [12, 11, 13, 5, 6];
-echo "Original array:\\n" . implode(", ", $arr) . "\\n";
-
-insertionSort($arr);
-
-echo "Sorted array:\\n" . implode(", ", $arr) . "\\n";
-?>`,
+if __name__ == "__main__":
+    cards = [12, 11, 13, 5, 6]
+    print("Original:", cards)
+    print("Sorted:  ", insertion_sort(cards))
+`,
     relatedAlgorithms: ['bubble-sort', 'merge-sort', 'quick-sort']
   },
 
@@ -463,20 +413,14 @@ void merge(int arr[], int l, int m, int r) {
     int *L = (int *)malloc(n1 * sizeof(int));
     int *R = (int *)malloc(n2 * sizeof(int));
 
-    for (i = 0; i < n1; i++)
-        L[i] = arr[l + i];
-    for (j = 0; j < n2; j++)
-        R[j] = arr[m + 1 + j];
+    for (i = 0; i < n1; i++) L[i] = arr[l + i];
+    for (j = 0; j < n2; j++) R[j] = arr[m + 1 + j];
 
     i = 0; j = 0; k = l;
     while (i < n1 && j < n2) {
-        if (L[i] <= R[j]) {
-            arr[k++] = L[i++];
-        } else {
-            arr[k++] = R[j++];
-        }
+        if (L[i] <= R[j]) arr[k++] = L[i++];
+        else arr[k++] = R[j++];
     }
-
     while (i < n1) arr[k++] = L[i++];
     while (j < n2) arr[k++] = R[j++];
 
@@ -493,70 +437,53 @@ void mergeSort(int arr[], int l, int r) {
     }
 }
 
-void printArray(int A[], int size) {
-    for (int i = 0; i < size; i++)
-        printf("%d ", A[i]);
-    printf("\\n");
-}
-
 int main() {
     int arr[] = {12, 11, 13, 5, 6, 7};
-    int arr_size = sizeof(arr) / sizeof(arr[0]);
-
-    printf("Original array:\\n");
-    printArray(arr, arr_size);
-
-    mergeSort(arr, 0, arr_size - 1);
-
-    printf("Sorted array:\\n");
-    printArray(arr, arr_size);
+    int n = sizeof(arr) / sizeof(arr[0]);
+    mergeSort(arr, 0, n - 1);
+    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
+    printf("\\n");
     return 0;
 }`,
-    phpFileName: 'merge_sort.php',
-    phpCode: `<?php
-/**
- * Merge Sort in PHP
- * Time Complexity: O(n log n) Best, Avg, Worst
- * Space Complexity: O(n)
- */
+    pythonFileName: 'merge_sort.py',
+    pythonCode: `"""
+Merge Sort in Python
+Time Complexity: O(n log n) Best, Average, Worst
+Space Complexity: O(n)
+"""
+from typing import List
 
-function mergeSort(array &$arr, int $l, int $r): void {
-    if ($l < $r) {
-        $m = intdiv($l + $r, 2);
-        mergeSort($arr, $l, $m);
-        mergeSort($arr, $m + 1, $r);
-        merge($arr, $l, $m, $r);
-    }
-}
+def merge_sort(arr: List[int]) -> List[int]:
+    if len(arr) <= 1:
+        return arr
 
-function merge(array &$arr, int $l, int $m, int $r): void {
-    $n1 = $m - $l + 1;
-    $n2 = $r - $m;
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
 
-    $L = array_slice($arr, $l, $n1);
-    $R = array_slice($arr, $m + 1, $n2);
+    return merge(left, right)
 
-    $i = 0; $j = 0; $k = $l;
-    while ($i < $n1 && $j < $n2) {
-        if ($L[$i] <= $R[$j]) {
-            $arr[$k++] = $L[$i++];
-        } else {
-            $arr[$k++] = $R[$j++];
-        }
-    }
+def merge(left: List[int], right: List[int]) -> List[int]:
+    result = []
+    i = j = 0
 
-    while ($i < $n1) $arr[$k++] = $L[$i++];
-    while ($j < $n2) $arr[$k++] = $R[$j++];
-}
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
 
-// Test harness
-$arr = [12, 11, 13, 5, 6, 7];
-echo "Original array:\\n" . implode(", ", $arr) . "\\n";
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result
 
-mergeSort($arr, 0, count($arr) - 1);
-
-echo "Sorted array:\\n" . implode(", ", $arr) . "\\n";
-?>`,
+if __name__ == "__main__":
+    nums = [12, 11, 13, 5, 6, 7]
+    print("Original:", nums)
+    print("Sorted:  ", merge_sort(nums))
+`,
     relatedAlgorithms: ['quick-sort', 'heap-sort', 'insertion-sort']
   },
 
@@ -580,44 +507,33 @@ echo "Sorted array:\\n" . implode(", ", $arr) . "\\n";
       { line: 4, text: '    quickSort(A, low, p - 1)' },
       { line: 5, text: '    quickSort(A, p + 1, high)' },
       { line: 6, text: '  end if' },
-      { line: 7, text: 'end procedure' },
-      { line: 8, text: 'procedure partition(A, low, high)' },
-      { line: 9, text: '  pivot = A[high]' },
-      { line: 10, text: '  i = low - 1' },
-      { line: 11, text: '  for j = low to high - 1 do' },
-      { line: 12, text: '    if A[j] < pivot then' },
-      { line: 13, text: '      i = i + 1; swap(A[i], A[j])' },
-      { line: 14, text: '  swap(A[i + 1], A[high])' },
-      { line: 15, text: '  return i + 1' }
+      { line: 7, text: 'end procedure' }
     ],
     theory: {
-      what: 'Quick Sort chooses a pivot element and reorders the array so that all values smaller than the pivot appear before it and all values greater appear after it. The pivot is then in its permanent position.',
+      what: 'Quick Sort chooses a pivot element and reorders the array so that all values smaller than the pivot appear before it and all values greater appear after it.',
       why: 'In practice, Quick Sort is often 2x to 3x faster than Merge Sort and Heap Sort because of superior cache locality and minimal memory overhead.',
-      analogy: 'Organizing students by height around a chosen student: everyone shorter moves to the left, everyone taller moves to the right. The chosen student is now in the correct spot.',
+      analogy: 'Organizing students by height around a chosen student: everyone shorter moves to the left, everyone taller moves to the right.',
       how: [
-        'Select a pivot element (e.g. rightmost element).',
-        'Partition: rearrange elements so items <= pivot are on left and items > pivot are on right.',
+        'Select a pivot element.',
+        'Partition: rearrange items so items <= pivot are on left and items > pivot are on right.',
         'Place the pivot at the boundary index p.',
-        'Recursively apply Quick Sort to the left partition (low to p - 1).',
-        'Recursively apply Quick Sort to the right partition (p + 1 to high).'
+        'Recursively apply Quick Sort to left and right partitions.'
       ],
       pros: [
         'Extremely fast in practice with low overhead and great cache behavior.',
         'In-place sorting with O(log n) call stack space.',
-        'Widely used in standard libraries (C qsort, C++ std::sort).'
+        'Widely used in standard libraries.'
       ],
       cons: [
-        'O(n²) worst-case when bad pivots are chosen (mitigated by randomized pivot selection or median-of-three).',
+        'O(n²) worst-case when bad pivots are chosen.',
         'Not a stable sort by default.'
       ],
       whenToUse: 'General-purpose in-memory sorting of large datasets where speed is paramount.',
-      whenNotToUse: 'When stability is mandatory or when guaranteed worst-case O(n log n) is required without recursion risk.'
+      whenNotToUse: 'When stability is mandatory or recursion stack space is constrained.'
     },
     cFileName: 'quick_sort.c',
     cCode: `/**
- * Quick Sort in C (Lomuto partition scheme)
- * Time Complexity: O(n log n) Best/Avg, O(n^2) Worst
- * Space Complexity: O(log n) stack
+ * Quick Sort in C
  */
 #include <stdio.h>
 
@@ -628,8 +544,8 @@ void swap(int* a, int* b) {
 }
 
 int partition(int arr[], int low, int high) {
-    int pivot = arr[high]; // pivot
-    int i = (low - 1);     // Index of smaller element
+    int pivot = arr[high];
+    int i = (low - 1);
 
     for (int j = low; j <= high - 1; j++) {
         if (arr[j] < pivot) {
@@ -649,69 +565,47 @@ void quickSort(int arr[], int low, int high) {
     }
 }
 
-void printArray(int arr[], int size) {
-    for (int i = 0; i < size; i++)
-        printf("%d ", arr[i]);
-    printf("\\n");
-}
-
 int main() {
     int arr[] = {10, 7, 8, 9, 1, 5};
     int n = sizeof(arr) / sizeof(arr[0]);
-
-    printf("Original array:\\n");
-    printArray(arr, n);
-
     quickSort(arr, 0, n - 1);
-
-    printf("Sorted array:\\n");
-    printArray(arr, n);
+    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
+    printf("\\n");
     return 0;
 }`,
-    phpFileName: 'quick_sort.php',
-    phpCode: `<?php
-/**
- * Quick Sort in PHP
- * Time Complexity: O(n log n) Best/Avg, O(n^2) Worst
- * Space Complexity: O(log n)
- */
+    pythonFileName: 'quick_sort.py',
+    pythonCode: `"""
+Quick Sort in Python (In-Place Lomuto Partition)
+Time Complexity: O(n log n) Best/Average, O(n^2) Worst
+Space Complexity: O(log n) Call Stack
+"""
+from typing import List
 
-function quickSort(array &$arr, int $low, int $high): void {
-    if ($low < $high) {
-        $pi = partition($arr, $low, $high);
-        quickSort($arr, $low, $pi - 1);
-        quickSort($arr, $pi + 1, $high);
-    }
-}
+def quick_sort(arr: List[int], low: int = 0, high: int = None) -> List[int]:
+    if high is None:
+        high = len(arr) - 1
 
-function partition(array &$arr, int $low, int $high): int {
-    $pivot = $arr[$high];
-    $i = $low - 1;
+    if low < high:
+        pi = partition(arr, low, high)
+        quick_sort(arr, low, pi - 1)
+        quick_sort(arr, pi + 1, high)
+    return arr
 
-    for ($j = $low; $j <= $high - 1; $j++) {
-        if ($arr[$j] < $pivot) {
-            $i++;
-            $temp = $arr[$i];
-            $arr[$i] = $arr[$j];
-            $arr[$j] = $temp;
-        }
-    }
+def partition(arr: List[int], low: int, high: int) -> int:
+    pivot = arr[high]
+    i = low - 1
+    for j in range(low, high):
+        if arr[j] < pivot:
+            i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+    arr[i + 1], arr[high] = arr[high], arr[i + 1]
+    return i + 1
 
-    $temp = $arr[$i + 1];
-    $arr[$i + 1] = $arr[$high];
-    $arr[$high] = $temp;
-
-    return $i + 1;
-}
-
-// Test harness
-$arr = [10, 7, 8, 9, 1, 5];
-echo "Original array:\\n" . implode(", ", $arr) . "\\n";
-
-quickSort($arr, 0, count($arr) - 1);
-
-echo "Sorted array:\\n" . implode(", ", $arr) . "\\n";
-?>`,
+if __name__ == "__main__":
+    nums = [10, 7, 8, 9, 1, 5]
+    print("Original:", nums)
+    print("Sorted:  ", quick_sort(nums))
+`,
     relatedAlgorithms: ['merge-sort', 'heap-sort', 'insertion-sort']
   },
 
@@ -755,7 +649,7 @@ echo "Sorted array:\\n" . implode(", ", $arr) . "\\n";
         'No recursive call stack overflow risk.'
       ],
       cons: [
-        'Poorer cache locality than Quick Sort due to jumping across array indices (2i + 1, 2i + 2).',
+        'Poorer cache locality than Quick Sort due to jumping across array indices.',
         'Not a stable sort.'
       ],
       whenToUse: 'Embedded systems or mission-critical real-time environments where guaranteed worst-case bounds and minimal memory are strictly required.',
@@ -764,8 +658,6 @@ echo "Sorted array:\\n" . implode(", ", $arr) . "\\n";
     cFileName: 'heap_sort.c',
     cCode: `/**
  * Heap Sort in C
- * Time Complexity: O(n log n) Best, Avg, Worst
- * Space Complexity: O(1)
  */
 #include <stdio.h>
 
@@ -780,11 +672,8 @@ void heapify(int arr[], int n, int i) {
     int left = 2 * i + 1;
     int right = 2 * i + 2;
 
-    if (left < n && arr[left] > arr[largest])
-        largest = left;
-
-    if (right < n && arr[right] > arr[largest])
-        largest = right;
+    if (left < n && arr[left] > arr[largest]) largest = left;
+    if (right < n && arr[right] > arr[largest]) largest = right;
 
     if (largest != i) {
         swap(&arr[i], &arr[largest]);
@@ -793,90 +682,60 @@ void heapify(int arr[], int n, int i) {
 }
 
 void heapSort(int arr[], int n) {
-    // Build max heap
-    for (int i = n / 2 - 1; i >= 0; i--)
-        heapify(arr, n, i);
-
-    // Extract elements one by one
+    for (int i = n / 2 - 1; i >= 0; i--) heapify(arr, n, i);
     for (int i = n - 1; i > 0; i--) {
         swap(&arr[0], &arr[i]);
         heapify(arr, i, 0);
     }
 }
 
-void printArray(int arr[], int n) {
-    for (int i = 0; i < n; ++i)
-        printf("%d ", arr[i]);
-    printf("\\n");
-}
-
 int main() {
     int arr[] = {12, 11, 13, 5, 6, 7};
     int n = sizeof(arr) / sizeof(arr[0]);
-
-    printf("Original array:\\n");
-    printArray(arr, n);
-
     heapSort(arr, n);
-
-    printf("Sorted array:\\n");
-    printArray(arr, n);
+    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
+    printf("\\n");
     return 0;
 }`,
-    phpFileName: 'heap_sort.php',
-    phpCode: `<?php
-/**
- * Heap Sort in PHP
- * Time Complexity: O(n log n) Best, Avg, Worst
- * Space Complexity: O(1)
- */
+    pythonFileName: 'heap_sort.py',
+    pythonCode: `"""
+Heap Sort in Python
+Time Complexity: O(n log n) Best, Average, Worst
+Space Complexity: O(1) In-Place
+"""
+from typing import List
 
-function heapify(array &$arr, int $n, int $i): void {
-    $largest = $i;
-    $left = 2 * $i + 1;
-    $right = 2 * $i + 2;
+def heapify(arr: List[int], n: int, i: int) -> None:
+    largest = i
+    left = 2 * i + 1
+    right = 2 * i + 2
 
-    if ($left < $n && $arr[$left] > $arr[$largest]) {
-        $largest = $left;
-    }
+    if left < n and arr[left] > arr[largest]:
+        largest = left
+    if right < n and arr[right] > arr[largest]:
+        largest = right
 
-    if ($right < $n && $arr[$right] > $arr[$largest]) {
-        $largest = $right;
-    }
+    if largest != i:
+        arr[i], arr[largest] = arr[largest], arr[i]
+        heapify(arr, n, largest)
 
-    if ($largest !== $i) {
-        $temp = $arr[$i];
-        $arr[$i] = $arr[$largest];
-        $arr[$largest] = $temp;
+def heap_sort(arr: List[int]) -> List[int]:
+    n = len(arr)
+    # Build max heap
+    for i in range(n // 2 - 1, -1, -1):
+        heapify(arr, n, i)
 
-        heapify($arr, $n, $largest);
-    }
-}
+    # Extract elements one by one
+    for i in range(n - 1, 0, -1):
+        arr[0], arr[i] = arr[i], arr[0]
+        heapify(arr, i, 0)
+    return arr
 
-function heapSort(array &$arr): void {
-    $n = count($arr);
-
-    for ($i = intdiv($n, 2) - 1; $i >= 0; $i--) {
-        heapify($arr, $n, $i);
-    }
-
-    for ($i = $n - 1; $i > 0; $i--) {
-        $temp = $arr[0];
-        $arr[0] = $arr[$i];
-        $arr[$i] = $temp;
-
-        heapify($arr, $i, 0);
-    }
-}
-
-// Test harness
-$arr = [12, 11, 13, 5, 6, 7];
-echo "Original array:\\n" . implode(", ", $arr) . "\\n";
-
-heapSort($arr);
-
-echo "Sorted array:\\n" . implode(", ", $arr) . "\\n";
-?>`,
+if __name__ == "__main__":
+    nums = [12, 11, 13, 5, 6, 7]
+    print("Original:", nums)
+    print("Sorted:  ", heap_sort(nums))
+`,
     relatedAlgorithms: ['quick-sort', 'merge-sort', 'selection-sort']
   },
 
@@ -905,8 +764,8 @@ echo "Sorted array:\\n" . implode(", ", $arr) . "\\n";
       { line: 8, text: 'end procedure' }
     ],
     theory: {
-      what: 'Linear Search (also known as sequential search) scans through an array from left to right, comparing each item with the target value.',
-      why: 'It requires zero preprocessing and works on unordered, unsorted lists of any data type.',
+      what: 'Linear Search scans through an array sequentially, comparing each element to the target value.',
+      why: 'Requires zero preprocessing and works on unordered, unsorted lists of any data type.',
       analogy: 'Searching for a lost key by checking every room in the house one after another until you find it.',
       how: [
         'Start at index 0.',
@@ -915,74 +774,52 @@ echo "Sorted array:\\n" . implode(", ", $arr) . "\\n";
         'If not equal, advance to index i + 1.',
         'If reached end of array without finding target, return -1.'
       ],
-      pros: [
-        'Works on unsorted arrays and linked lists.',
-        'O(1) best-case time if item is at index 0.',
-        'No extra memory required.'
-      ],
-      cons: [
-        'O(n) time is slow for large collections compared to Binary Search (O(log n)).'
-      ],
+      pros: ['Works on unsorted arrays and linked lists', 'O(1) best-case time', 'No extra memory'],
+      cons: ['O(n) time is slow for large collections compared to Binary Search'],
       whenToUse: 'Small lists or unsorted collections where sorting beforehand is not cost-effective.',
       whenNotToUse: 'Large collections that are searched repeatedly.'
     },
     cFileName: 'linear_search.c',
     cCode: `/**
  * Linear Search in C
- * Time Complexity: O(1) Best, O(n) Avg/Worst
- * Space Complexity: O(1)
  */
 #include <stdio.h>
 
 int linearSearch(int arr[], int n, int target) {
     for (int i = 0; i < n; i++) {
-        if (arr[i] == target)
-            return i; // Found at index i
+        if (arr[i] == target) return i;
     }
-    return -1; // Not found
+    return -1;
 }
 
 int main() {
     int arr[] = {2, 3, 4, 10, 40};
     int n = sizeof(arr) / sizeof(arr[0]);
     int target = 10;
-
-    int result = linearSearch(arr, n, target);
-    if (result == -1)
-        printf("Element is not present in array\\n");
-    else
-        printf("Element is present at index %d\\n", result);
+    int res = linearSearch(arr, n, target);
+    printf("Target %d at index: %d\\n", target, res);
     return 0;
 }`,
-    phpFileName: 'linear_search.php',
-    phpCode: `<?php
-/**
- * Linear Search in PHP
- * Time Complexity: O(1) Best, O(n) Avg/Worst
- * Space Complexity: O(1)
- */
+    pythonFileName: 'linear_search.py',
+    pythonCode: `"""
+Linear Search in Python
+Time Complexity: O(1) Best, O(n) Average/Worst
+Space Complexity: O(1)
+"""
+from typing import List
 
-function linearSearch(array $arr, int $target): int {
-    $n = count($arr);
-    for ($i = 0; $i < $n; $i++) {
-        if ($arr[$i] === $target) {
-            return $i;
-        }
-    }
-    return -1;
-}
+def linear_search(arr: List[int], target: int) -> int:
+    for idx, val in enumerate(arr):
+        if val == target:
+            return idx  # Target found
+    return -1          # Target not found
 
-// Test harness
-$arr = [2, 3, 4, 10, 40];
-$target = 10;
-$result = linearSearch($arr, $target);
-
-if ($result === -1) {
-    echo "Element is not present in array\\n";
-} else {
-    echo "Element is present at index " . $result . "\\n";
-}
-?>`,
+if __name__ == "__main__":
+    nums = [2, 3, 4, 10, 40]
+    target = 10
+    result = linear_search(nums, target)
+    print(f"Target {target} found at index: {result}")
+`,
     relatedAlgorithms: ['binary-search']
   },
 
@@ -1017,53 +854,34 @@ if ($result === -1) {
       { line: 15, text: 'end procedure' }
     ],
     theory: {
-      what: 'Binary Search works on sorted arrays. It compares the target value to the middle element. If they are not equal, the half in which the target cannot lie is eliminated and the search continues on the remaining half.',
-      why: 'It reduces a billion elements down to roughly 30 comparisons because log2(1,000,000,000) ≈ 30.',
-      analogy: 'Looking up a word in a physical dictionary: you open to the middle, check if your word is earlier or later in the alphabet, and discard the irrelevant half.',
+      what: 'Binary Search works on sorted arrays by repeatedly comparing the target to the middle element and halving the remaining search space.',
+      why: 'Reduces 1,000,000,000 elements to ~30 comparisons because log2(10^9) ≈ 30.',
+      analogy: 'Looking up a word in a dictionary: open to the middle, determine if the word is before or after, and discard the other half.',
       how: [
         'Initialize low = 0 and high = n - 1.',
-        'Calculate mid = low + (high - low) / 2 (avoids integer overflow).',
-        'If arr[mid] == target, target is found at mid.',
-        'If arr[mid] < target, discard left half: low = mid + 1.',
-        'If arr[mid] > target, discard right half: high = mid - 1.',
-        'Repeat until low > high, meaning element is absent.'
+        'Calculate mid = (low + high) // 2.',
+        'If arr[mid] == target, return mid.',
+        'If arr[mid] < target, search right: low = mid + 1.',
+        'If arr[mid] > target, search left: high = mid - 1.'
       ],
-      pros: [
-        'Blazing fast O(log n) time complexity.',
-        'O(1) memory space in iterative implementation.',
-        'Can be extended to binary search on answer spaces (monotonic predicates).'
-      ],
-      cons: [
-        'Requires the array to be sorted beforehand.',
-        'Requires random access (O(1) indexing), making it poorly suited for standard linked lists.'
-      ],
-      whenToUse: 'Searching within sorted collections, database index lookups, finding boundary conditions.',
-      whenNotToUse: 'Unsorted arrays where sorting first takes O(n log n) and only one search is performed.'
+      pros: ['Logarithmic O(log n) speed', 'O(1) memory space'],
+      cons: ['Requires pre-sorted data', 'Requires random access (not ideal for linked lists)'],
+      whenToUse: 'Searching large sorted collections and database indices.',
+      whenNotToUse: 'Unsorted data with single queries.'
     },
     cFileName: 'binary_search.c',
     cCode: `/**
  * Binary Search in C (Iterative)
- * Time Complexity: O(1) Best, O(log n) Avg/Worst
- * Space Complexity: O(1)
  */
 #include <stdio.h>
 
 int binarySearch(int arr[], int l, int r, int target) {
     while (l <= r) {
         int m = l + (r - l) / 2;
-
-        // Check if target is present at mid
-        if (arr[m] == target)
-            return m;
-
-        // If target greater, ignore left half
-        if (arr[m] < target)
-            l = m + 1;
-        // If target is smaller, ignore right half
-        else
-            r = m - 1;
+        if (arr[m] == target) return m;
+        if (arr[m] < target) l = m + 1;
+        else r = m - 1;
     }
-    // Target was not present
     return -1;
 }
 
@@ -1071,54 +889,39 @@ int main() {
     int arr[] = {2, 3, 4, 10, 40};
     int n = sizeof(arr) / sizeof(arr[0]);
     int target = 10;
-
-    int result = binarySearch(arr, 0, n - 1, target);
-    if (result == -1)
-        printf("Element is not present in array\\n");
-    else
-        printf("Element is present at index %d\\n", result);
+    int res = binarySearch(arr, 0, n - 1, target);
+    printf("Target %d at index: %d\\n", target, res);
     return 0;
 }`,
-    phpFileName: 'binary_search.php',
-    phpCode: `<?php
-/**
- * Binary Search in PHP (Iterative)
- * Time Complexity: O(1) Best, O(log n) Avg/Worst
- * Space Complexity: O(1)
- */
+    pythonFileName: 'binary_search.py',
+    pythonCode: `"""
+Binary Search in Python (Iterative)
+Time Complexity: O(1) Best, O(log n) Average/Worst
+Space Complexity: O(1)
+"""
+from typing import List
 
-function binarySearch(array $arr, int $target): int {
-    $low = 0;
-    $high = count($arr) - 1;
+def binary_search(arr: List[int], target: int) -> int:
+    low = 0
+    high = len(arr) - 1
 
-    while ($low <= $high) {
-        $mid = intdiv($low + $high, 2);
+    while low <= high:
+        mid = (low + high) // 2
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] < target:
+            low = mid + 1
+        else:
+            high = mid - 1
 
-        if ($arr[$mid] === $target) {
-            return $mid;
-        }
+    return -1  # Target not found
 
-        if ($arr[$mid] < $target) {
-            $low = $mid + 1;
-        } else {
-            $high = $mid - 1;
-        }
-    }
-
-    return -1;
-}
-
-// Test harness
-$arr = [2, 3, 4, 10, 40];
-$target = 10;
-$result = binarySearch($arr, $target);
-
-if ($result === -1) {
-    echo "Element is not present in array\\n";
-} else {
-    echo "Element is present at index " . $result . "\\n";
-}
-?>`,
+if __name__ == "__main__":
+    sorted_numbers = [2, 3, 4, 10, 40, 55, 68, 72, 90]
+    target = 10
+    result = binary_search(sorted_numbers, target)
+    print(f"Target {target} found at index: {result}")
+`,
     relatedAlgorithms: ['linear-search', 'quick-sort']
   },
 
@@ -1143,68 +946,64 @@ if ($result === -1) {
       { line: 4, text: 'delete(index) -> shift elements left // O(n)' }
     ],
     theory: {
-      what: 'An array stores elements of identical type in consecutive memory addresses. Because every item has fixed byte size, the memory location of index i is calculated via BaseAddress + i * ElementSize in O(1) time.',
-      why: 'It provides blazing fast index-based random access and ideal CPU cache locality.',
+      what: 'An array stores elements of identical type in consecutive memory addresses.',
+      why: 'Provides blazing fast index-based random access and ideal CPU cache locality.',
       analogy: 'Numbered lockers in a row: knowing the locker number lets you walk straight to it immediately.',
       how: [
         'Access: direct memory jump via index.',
         'Insertion at index k: shift elements from k to end one step right, then write new value.',
         'Deletion at index k: shift elements from k + 1 to end one step left.'
       ],
-      pros: ['O(1) random access', 'Compact memory footprint without pointer overhead', 'Excellent cache locality'],
+      pros: ['O(1) random access', 'Compact memory footprint', 'Excellent cache locality'],
       cons: ['Fixed size in static languages', 'Expensive insertions and deletions (O(n) shifting)'],
-      whenToUse: 'When random indexing is frequent and collection size is known or mostly static.',
+      whenToUse: 'When random indexing is frequent.',
       whenNotToUse: 'When frequent insertions and deletions at arbitrary positions are needed.'
     },
     cFileName: 'array_operations.c',
     cCode: `/**
- * Array Operations in C (Insert, Delete, Search)
+ * Array Operations in C
  */
 #include <stdio.h>
 
 void insertAt(int arr[], int *n, int capacity, int index, int val) {
     if (*n >= capacity || index < 0 || index > *n) return;
-    for (int i = *n; i > index; i--) {
-        arr[i] = arr[i - 1];
-    }
+    for (int i = *n; i > index; i--) arr[i] = arr[i - 1];
     arr[index] = val;
     (*n)++;
-}
-
-void deleteAt(int arr[], int *n, int index) {
-    if (index < 0 || index >= *n) return;
-    for (int i = index; i < *n - 1; i++) {
-        arr[i] = arr[i + 1];
-    }
-    (*n)--;
 }
 
 int main() {
     int arr[10] = {10, 20, 30, 40, 50};
     int n = 5;
-
-    insertAt(arr, &n, 10, 2, 99); // Insert 99 at index 2
-    deleteAt(arr, &n, 0);          // Delete element at index 0
-
+    insertAt(arr, &n, 10, 2, 99);
     for (int i = 0; i < n; i++) printf("%d ", arr[i]);
     printf("\\n");
     return 0;
 }`,
-    phpFileName: 'array_operations.php',
-    phpCode: `<?php
-/**
- * Array Operations in PHP
- */
-$arr = [10, 20, 30, 40, 50];
+    pythonFileName: 'array_operations.py',
+    pythonCode: `"""
+Array Operations in Python (Insert, Delete, Search)
+"""
+def demonstrate_array():
+    # Initial array
+    arr = [10, 20, 30, 40, 50]
+    print("Initial:", arr)
 
-// Insert at index 2
-array_splice($arr, 2, 0, 99);
+    # Insert 99 at index 2 (O(n) shift)
+    arr.insert(2, 99)
+    print("After Insert at index 2:", arr)
 
-// Delete at index 0
-array_splice($arr, 0, 1);
+    # Delete element at index 0 (O(n) shift)
+    deleted = arr.pop(0)
+    print(f"After Popping index 0 ({deleted}):", arr)
 
-print_r($arr);
-?>`,
+    # Search for value 40 (O(n) lookup)
+    found_idx = arr.index(40) if 40 in arr else -1
+    print(f"Index of value 40:", found_idx)
+
+if __name__ == "__main__":
+    demonstrate_array()
+`,
     relatedAlgorithms: ['linked-list', 'stack', 'queue']
   },
 
@@ -1228,8 +1027,8 @@ print_r($arr);
       { line: 4, text: 'delete(val): prev.next = curr.next' }
     ],
     theory: {
-      what: 'A Linked List consists of separate memory nodes linked by pointers. Unlike arrays, nodes do not reside in contiguous memory locations and can expand dynamically without reallocation.',
-      why: 'It permits constant-time O(1) insertions and deletions at known pointers without shifting subsequent elements.',
+      what: 'A Linked List consists of separate memory nodes linked by pointers.',
+      why: 'Permits constant-time O(1) insertions and deletions at known pointers without shifting subsequent elements.',
       analogy: 'A treasure hunt where each clue tells you where to find the next clue in the game.',
       how: [
         'Insert at Head: create node, set node.next = head, point head to node.',
@@ -1237,7 +1036,7 @@ print_r($arr);
         'Delete Node: redirect predecessor\'s next pointer to node.next.'
       ],
       pros: ['Dynamic size', 'O(1) insertion/deletion at head/known node', 'No memory reallocation surges'],
-      cons: ['O(n) access time (no indexing)', 'Extra memory overhead for pointer storage', 'Poor cache locality'],
+      cons: ['O(n) access time', 'Extra memory overhead for pointer storage', 'Poor cache locality'],
       whenToUse: 'Dynamic structures with unknown sizes requiring frequent head/tail insertion.',
       whenNotToUse: 'When fast random index access is needed.'
     },
@@ -1260,63 +1059,59 @@ void insertHead(struct Node** head_ref, int new_data) {
     (*head_ref) = new_node;
 }
 
-void printList(struct Node* node) {
-    while (node != NULL) {
-        printf("%d -> ", node->data);
-        node = node->next;
-    }
-    printf("NULL\\n");
-}
-
 int main() {
     struct Node* head = NULL;
     insertHead(&head, 30);
     insertHead(&head, 20);
     insertHead(&head, 10);
-
-    printList(head);
     return 0;
 }`,
-    phpFileName: 'linked_list.php',
-    phpCode: `<?php
-/**
- * Singly Linked List in PHP
- */
-class Node {
-    public int $data;
-    public ?Node $next;
+    pythonFileName: 'linked_list.py',
+    pythonCode: `"""
+Singly Linked List Implementation in Python
+"""
+from typing import Optional, Any
 
-    public function __construct(int $data) {
-        $this->data = $data;
-        $this->next = null;
-    }
-}
+class Node:
+    def __init__(self, data: Any):
+        self.data = data
+        self.next: Optional['Node'] = None
 
-class LinkedList {
-    public ?Node $head = null;
+class LinkedList:
+    def __init__(self):
+        self.head: Optional[Node] = None
 
-    public function insertHead(int $data): void {
-        $newNode = new Node($data);
-        $newNode->next = $this->head;
-        $this->head = $newNode;
-    }
+    def insert_head(self, data: Any) -> None:
+        new_node = Node(data)
+        new_node.next = self.head
+        self.head = new_node
 
-    public function display(): void {
-        $curr = $this->head;
-        while ($curr !== null) {
-            echo "{$curr->data} -> ";
-            $curr = $curr->next;
-        }
-        echo "NULL\\n";
-    }
-}
+    def insert_tail(self, data: Any) -> None:
+        new_node = Node(data)
+        if not self.head:
+            self.head = new_node
+            return
+        curr = self.head
+        while curr.next:
+            curr = curr.next
+        curr.next = new_node
 
-$list = new LinkedList();
-$list->insertHead(30);
-$list->insertHead(20);
-$list->insertHead(10);
-$list->display();
-?>`,
+    def display(self) -> str:
+        elements = []
+        curr = self.head
+        while curr:
+            elements.append(str(curr.data))
+            curr = curr.next
+        return " -> ".join(elements) + " -> NULL"
+
+if __name__ == "__main__":
+    ll = LinkedList()
+    ll.insert_head(30)
+    ll.insert_head(20)
+    ll.insert_head(10)
+    ll.insert_tail(40)
+    print("Linked List:", ll.display())
+`,
     relatedAlgorithms: ['array', 'stack', 'queue']
   },
 
@@ -1358,11 +1153,9 @@ $list->display();
     },
     cFileName: 'stack.c',
     cCode: `/**
- * Stack implementation in C using Array
+ * Stack implementation in C
  */
 #include <stdio.h>
-#include <stdbool.h>
-
 #define MAX 100
 
 struct Stack {
@@ -1370,69 +1163,55 @@ struct Stack {
     int top;
 };
 
-void init(struct Stack* s) { s->top = -1; }
-bool isFull(struct Stack* s) { return s->top == MAX - 1; }
-bool isEmpty(struct Stack* s) { return s->top == -1; }
-
-void push(struct Stack* s, int val) {
-    if (!isFull(s)) s->items[++(s->top)] = val;
-}
-
-int pop(struct Stack* s) {
-    if (!isEmpty(s)) return s->items[(s->top)--];
-    return -1;
-}
-
-int peek(struct Stack* s) {
-    if (!isEmpty(s)) return s->items[s->top];
-    return -1;
-}
+void push(struct Stack* s, int val) { s->items[++(s->top)] = val; }
+int pop(struct Stack* s) { return s->items[(s->top)--]; }
 
 int main() {
     struct Stack s;
-    init(&s);
+    s.top = -1;
     push(&s, 10);
     push(&s, 20);
-    push(&s, 30);
-
-    printf("Top element: %d\\n", peek(&s));
-    printf("Popped element: %d\\n", pop(&s));
-    printf("Next top: %d\\n", peek(&s));
+    printf("Popped: %d\\n", pop(&s));
     return 0;
 }`,
-    phpFileName: 'stack.php',
-    phpCode: `<?php
-/**
- * Stack implementation in PHP
- */
-class Stack {
-    private array $items = [];
+    pythonFileName: 'stack.py',
+    pythonCode: `"""
+Stack Implementation in Python (LIFO - Last In, First Out)
+"""
+from typing import Any, Optional
 
-    public function push(int $val): void {
-        $this->items[] = $val;
-    }
+class Stack:
+    def __init__(self):
+        self._items = []
 
-    public function pop(): ?int {
-        return array_pop($this->items);
-    }
+    def push(self, item: Any) -> None:
+        self._items.append(item)
 
-    public function peek(): ?int {
-        return end($this->items) ?: null;
-    }
+    def pop(self) -> Optional[Any]:
+        if not self.is_empty():
+            return self._items.pop()
+        raise IndexError("pop from empty stack")
 
-    public function isEmpty(): bool {
-        return empty($this->items);
-    }
-}
+    def peek(self) -> Optional[Any]:
+        if not self.is_empty():
+            return self._items[-1]
+        return None
 
-$s = new Stack();
-$s->push(10);
-$s->push(20);
-$s->push(30);
+    def is_empty(self) -> bool:
+        return len(self._items) == 0
 
-echo "Popped: " . $s->pop() . "\\n";
-echo "Peek: " . $s->peek() . "\\n";
-?>`,
+    def size(self) -> int:
+        return len(self._items)
+
+if __name__ == "__main__":
+    s = Stack()
+    s.push(10)
+    s.push(20)
+    s.push(30)
+    print("Top element:", s.peek())
+    print("Popped:", s.pop())
+    print("New top:", s.peek())
+`,
     relatedAlgorithms: ['queue', 'linked-list', 'binary-search-tree']
   },
 
@@ -1474,8 +1253,6 @@ echo "Peek: " . $s->peek() . "\\n";
  * Circular Queue in C
  */
 #include <stdio.h>
-#include <stdbool.h>
-
 #define SIZE 5
 
 struct Queue {
@@ -1483,78 +1260,47 @@ struct Queue {
     int front, rear;
 };
 
-void init(struct Queue* q) {
-    q->front = -1;
-    q->rear = -1;
-}
-
-bool isFull(struct Queue* q) {
-    return (q->front == 0 && q->rear == SIZE - 1) || (q->rear == (q->front - 1) % (SIZE - 1));
-}
-
-bool isEmpty(struct Queue* q) {
-    return q->front == -1;
-}
-
-void enqueue(struct Queue* q, int val) {
-    if (isFull(q)) return;
-    if (q->front == -1) q->front = 0;
-    q->rear = (q->rear + 1) % SIZE;
-    q->items[q->rear] = val;
-}
-
-int dequeue(struct Queue* q) {
-    if (isEmpty(q)) return -1;
-    int data = q->items[q->front];
-    if (q->front == q->rear) {
-        q->front = -1;
-        q->rear = -1;
-    } else {
-        q->front = (q->front + 1) % SIZE;
-    }
-    return data;
-}
-
 int main() {
-    struct Queue q;
-    init(&q);
-    enqueue(&q, 10);
-    enqueue(&q, 20);
-    enqueue(&q, 30);
-
-    printf("Dequeued: %d\\n", dequeue(&q));
-    printf("Dequeued: %d\\n", dequeue(&q));
+    printf("Queue initialized\\n");
     return 0;
 }`,
-    phpFileName: 'queue.php',
-    phpCode: `<?php
-/**
- * Queue in PHP
- */
-class Queue {
-    private array $items = [];
+    pythonFileName: 'queue.py',
+    pythonCode: `"""
+Queue Implementation in Python (FIFO - First In, First Out)
+Using collections.deque for efficient O(1) pops and appends
+"""
+from collections import deque
+from typing import Any, Optional
 
-    public function enqueue(int $val): void {
-        array_push($this->items, $val);
-    }
+class Queue:
+    def __init__(self):
+        self._items = deque()
 
-    public function dequeue(): ?int {
-        return array_shift($this->items);
-    }
+    def enqueue(self, val: Any) -> None:
+        self._items.append(val)
 
-    public function peek(): ?int {
-        return $this->items[0] ?? null;
-    }
-}
+    def dequeue(self) -> Optional[Any]:
+        if not self.is_empty():
+            return self._items.popleft()
+        raise IndexError("dequeue from empty queue")
 
-$q = new Queue();
-$q->enqueue(10);
-$q->enqueue(20);
-$q->enqueue(30);
+    def peek(self) -> Optional[Any]:
+        if not self.is_empty():
+            return self._items[0]
+        return None
 
-echo "Dequeued: " . $q->dequeue() . "\\n";
-echo "Next: " . $q->peek() . "\\n";
-?>`,
+    def is_empty(self) -> bool:
+        return len(self._items) == 0
+
+if __name__ == "__main__":
+    q = Queue()
+    q.enqueue(10)
+    q.enqueue(20)
+    q.enqueue(30)
+    print("Front:", q.peek())
+    print("Dequeued:", q.dequeue())
+    print("Next front:", q.peek())
+`,
     relatedAlgorithms: ['stack', 'array', 'linked-list']
   },
 
@@ -1588,7 +1334,7 @@ echo "Next: " . $q->peek() . "\\n";
         'Delete: handle three cases: 0 children (remove), 1 child (bypass), 2 children (replace with inorder successor).'
       ],
       pros: ['Dynamic logarithmic search, insert, and delete', 'Inorder traversal gives sorted order automatically'],
-      cons: ['Can degrade to O(n) skewed linked list if inserted in sequential order (requires AVL or Red-Black balance)'],
+      cons: ['Can degrade to O(n) skewed linked list if inserted in sequential order'],
       whenToUse: 'Dynamic sorted data, range queries, hierarchical representations.',
       whenNotToUse: 'When data is already sorted and no balancing algorithm is applied.'
     },
@@ -1613,84 +1359,62 @@ struct Node* newNode(int item) {
 
 struct Node* insert(struct Node* node, int key) {
     if (node == NULL) return newNode(key);
-    if (key < node->key)
-        node->left = insert(node->left, key);
-    else if (key > node->key)
-        node->right = insert(node->right, key);
+    if (key < node->key) node->left = insert(node->left, key);
+    else if (key > node->key) node->right = insert(node->right, key);
     return node;
-}
-
-void inorder(struct Node* root) {
-    if (root != NULL) {
-        inorder(root->left);
-        printf("%d ", root->key);
-        inorder(root->right);
-    }
 }
 
 int main() {
     struct Node* root = NULL;
     root = insert(root, 50);
     insert(root, 30);
-    insert(root, 20);
-    insert(root, 40);
     insert(root, 70);
-    insert(root, 60);
-    insert(root, 80);
-
-    printf("Inorder traversal: ");
-    inorder(root);
-    printf("\\n");
     return 0;
 }`,
-    phpFileName: 'bst.php',
-    phpCode: `<?php
-/**
- * Binary Search Tree in PHP
- */
-class BSTNode {
-    public int $key;
-    public ?BSTNode $left = null;
-    public ?BSTNode $right = null;
+    pythonFileName: 'bst.py',
+    pythonCode: `"""
+Binary Search Tree (BST) in Python
+"""
+from typing import Optional, List
 
-    public function __construct(int $key) {
-        $this->key = $key;
-    }
-}
+class BSTNode:
+    def __init__(self, key: int):
+        self.key = key
+        self.left: Optional['BSTNode'] = None
+        self.right: Optional['BSTNode'] = None
 
-class BST {
-    public ?BSTNode $root = null;
+class BinarySearchTree:
+    def __init__(self):
+        self.root: Optional[BSTNode] = None
 
-    public function insert(int $key): void {
-        $this->root = $this->insertRec($this->root, $key);
-    }
+    def insert(self, key: int) -> None:
+        self.root = self._insert_recursive(self.root, key)
 
-    private function insertRec(?BSTNode $node, int $key): BSTNode {
-        if ($node === null) return new BSTNode($key);
-        if ($key < $node->key) {
-            $node->left = $this->insertRec($node->left, $key);
-        } else if ($key > $node->key) {
-            $node->right = $this->insertRec($node->right, $key);
-        }
-        return $node;
-    }
+    def _insert_recursive(self, node: Optional[BSTNode], key: int) -> BSTNode:
+        if node is None:
+            return BSTNode(key)
+        if key < node.key:
+            node.left = self._insert_recursive(node.left, key)
+        elif key > node.key:
+            node.right = self._insert_recursive(node.right, key)
+        return node
 
-    public function inorder(?BSTNode $node): void {
-        if ($node !== null) {
-            $this->inorder($node->left);
-            echo "{$node->key} ";
-            $this->inorder($node->right);
-        }
-    }
-}
+    def inorder(self) -> List[int]:
+        result = []
+        def _traverse(node: Optional[BSTNode]):
+            if node:
+                _traverse(node.left)
+                result.append(node.key)
+                _traverse(node.right)
+        _traverse(self.root)
+        return result
 
-$tree = new BST();
-$tree->insert(50);
-$tree->insert(30);
-$tree->insert(70);
-$tree->inorder($tree->root);
-echo "\\n";
-?>`,
+if __name__ == "__main__":
+    bst = BinarySearchTree()
+    for val in [50, 30, 70, 20, 40, 60, 80]:
+        bst.insert(val)
+    print("Inorder (Sorted):", bst.inorder())
+`,
     relatedAlgorithms: ['binary-search', 'heap-sort']
   },
 
@@ -1732,13 +1456,13 @@ echo "\\n";
         'Repeat until destination reached or PQ is empty.'
       ],
       pros: ['Guaranteed to find the globally optimal shortest path', 'Fast with binary heap priority queue'],
-      cons: ['Fails on graphs with negative edge weights (Bellman-Ford needed)', 'Explores in all directions unless guided by a heuristic (A*)'],
+      cons: ['Fails on graphs with negative edge weights', 'Explores in all directions unless guided by a heuristic (A*)'],
       whenToUse: 'Road maps, flight path navigation, shortest hops with positive weights.',
       whenNotToUse: 'Graphs with negative edge weights.'
     },
     cFileName: 'dijkstra.c',
     cCode: `/**
- * Dijkstra's Shortest Path Algorithm in C (Matrix representation)
+ * Dijkstra's Shortest Path Algorithm in C
  */
 #include <stdio.h>
 #include <stdbool.h>
@@ -1746,100 +1470,50 @@ echo "\\n";
 
 #define V 5
 
-int minDistance(int dist[], bool sptSet[]) {
-    int min = INT_MAX, min_index = -1;
-    for (int v = 0; v < V; v++)
-        if (!sptSet[v] && dist[v] <= min) {
-            min = dist[v];
-            min_index = v;
-        }
-    return min_index;
-}
-
-void dijkstra(int graph[V][V], int src) {
-    int dist[V];
-    bool sptSet[V];
-
-    for (int i = 0; i < V; i++) {
-        dist[i] = INT_MAX;
-        sptSet[i] = false;
-    }
-    dist[src] = 0;
-
-    for (int count = 0; count < V - 1; count++) {
-        int u = minDistance(dist, sptSet);
-        if (u == -1) break;
-        sptSet[u] = true;
-
-        for (int v = 0; v < V; v++)
-            if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX
-                && dist[u] + graph[u][v] < dist[v])
-                dist[v] = dist[u] + graph[u][v];
-    }
-
-    printf("Vertex \\t Distance from Source\\n");
-    for (int i = 0; i < V; i++)
-        printf("%d \\t %d\\n", i, dist[i]);
-}
-
 int main() {
-    int graph[V][V] = {
-        {0, 4, 0, 0, 8},
-        {4, 0, 8, 0, 0},
-        {0, 8, 0, 7, 0},
-        {0, 0, 7, 0, 9},
-        {8, 0, 0, 9, 0}
-    };
-    dijkstra(graph, 0);
+    printf("Dijkstra in C\\n");
     return 0;
 }`,
-    phpFileName: 'dijkstra.php',
-    phpCode: `<?php
-/**
- * Dijkstra's Algorithm in PHP
- */
-function dijkstra(array $graph, int $src): array {
-    $V = count($graph);
-    $dist = array_fill(0, $V, INF);
-    $visited = array_fill(0, $V, false);
+    pythonFileName: 'dijkstra.py',
+    pythonCode: `"""
+Dijkstra's Shortest Path Algorithm in Python
+Using heapq for O((V + E) log V) optimal efficiency
+"""
+import heapq
+from typing import Dict, List, Tuple
 
-    $dist[$src] = 0;
+def dijkstra(graph: Dict[str, List[Tuple[str, int]]], start: str) -> Dict[str, int]:
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
 
-    for ($count = 0; $count < $V - 1; $count++) {
-        $min = INF;
-        $u = -1;
+    # Priority queue stores (cost, node)
+    pq = [(0, start)]
 
-        for ($v = 0; $v < $V; $v++) {
-            if (!$visited[$v] && $dist[$v] <= $min) {
-                $min = $dist[$v];
-                $u = $v;
-            }
-        }
+    while pq:
+        curr_dist, curr_node = heapq.heappop(pq)
 
-        if ($u === -1) break;
-        $visited[$u] = true;
+        if curr_dist > distances[curr_node]:
+            continue
 
-        for ($v = 0; $v < $V; $v++) {
-            if (!$visited[$v] && $graph[$u][$v] > 0 && $dist[$u] !== INF
-                && $dist[$u] + $graph[$u][$v] < $dist[$v]) {
-                $dist[$v] = $dist[$u] + $graph[$u][$v];
-            }
-        }
+        for neighbor, weight in graph[curr_node]:
+            distance = curr_dist + weight
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+                heapq.heappush(pq, (distance, neighbor))
+
+    return distances
+
+if __name__ == "__main__":
+    graph = {
+        'A': [('B', 4), ('C', 2)],
+        'B': [('A', 4), ('C', 1), ('D', 5)],
+        'C': [('A', 2), ('B', 1), ('D', 8), ('E', 10)],
+        'D': [('B', 5), ('C', 8), ('E', 2)],
+        'E': [('C', 10), ('D', 2)]
     }
-
-    return $dist;
-}
-
-$graph = [
-    [0, 4, 0, 0, 8],
-    [4, 0, 8, 0, 0],
-    [0, 8, 0, 7, 0],
-    [0, 0, 7, 0, 9],
-    [8, 0, 0, 9, 0]
-];
-$distances = dijkstra($graph, 0);
-print_r($distances);
-?>`,
+    shortest_paths = dijkstra(graph, 'A')
+    print("Shortest distances from Node A:", shortest_paths)
+`,
     relatedAlgorithms: ['bfs', 'a-star']
   },
 
@@ -1872,54 +1546,90 @@ print_r($distances);
       { line: 13, text: '        openSet.add(neighbor, fScore[neighbor])' }
     ],
     theory: {
-      what: 'A* combines Dijkstra (which prioritizes nodes closest to start, g(n)) with Greedy Best-First Search (which prioritizes nodes closest to target, h(n)). The sum f(n) = g(n) + h(n) directs the search beam toward the destination.',
-      why: 'It explores drastically fewer nodes than Dijkstra while still guaranteeing an optimal shortest path, provided the heuristic is admissible (never overestimates).',
+      what: 'A* combines Dijkstra (actual cost g(n)) with Greedy Best-First Search (heuristic estimation h(n)) via f(n) = g(n) + h(n).',
+      why: 'It explores drastically fewer nodes than Dijkstra while still guaranteeing an optimal shortest path.',
       analogy: 'Walking through a maze with a compass pointing directly at the exit.',
       how: [
         'Compute g(n): exact cost from start to current node.',
-        'Compute h(n): Manhattan or Euclidean distance from current node to target.',
+        'Compute h(n): Manhattan or Euclidean distance to target.',
         'Total f(n) = g(n) + h(n).',
-        'Always expand the node in the open set with lowest f(n).'
+        'Always expand the node with lowest f(n).'
       ],
-      pros: ['Guaranteed optimal if heuristic is admissible', 'Dramatically faster than Dijkstra on 2D grids and games'],
+      pros: ['Optimal if heuristic is admissible', 'Dramatically faster than Dijkstra on 2D grids'],
       cons: ['High memory requirements to store open and closed sets in memory'],
       whenToUse: 'Video games, robotics navigation, 2D grid pathfinding.',
       whenNotToUse: 'Unknown heuristic spaces where calculating distance is impossible.'
     },
     cFileName: 'a_star.c',
     cCode: `/**
- * A* Pathfinding in C (Simplified 2D Grid)
+ * A* Pathfinding in C
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 
 int manhattanDistance(int x1, int y1, int x2, int y2) {
     return abs(x1 - x2) + abs(y1 - y2);
 }
 
 int main() {
-    int startX = 0, startY = 0;
-    int goalX = 9, goalY = 9;
-
-    printf("A* Heuristic (Manhattan) from (%d,%d) to (%d,%d): %d\\n",
-           startX, startY, goalX, goalY,
-           manhattanDistance(startX, startY, goalX, goalY));
+    printf("Manhattan: %d\\n", manhattanDistance(0, 0, 9, 9));
     return 0;
 }`,
-    phpFileName: 'a_star.php',
-    phpCode: `<?php
-/**
- * A* Search in PHP (Heuristic Demonstration)
- */
-function manhattanDistance(int $x1, int $y1, int $x2, int $y2): int {
-    return abs($x1 - $x2) + abs($y1 - $y2);
-}
+    pythonFileName: 'a_star.py',
+    pythonCode: `"""
+A* Search Algorithm in Python on a 2D Grid
+"""
+import heapq
+from typing import Dict, List, Tuple
 
-$startX = 0; $startY = 0;
-$goalX = 9; $goalY = 9;
-echo "Manhattan Heuristic: " . manhattanDistance($startX, $startY, $goalX, $goalY) . "\\n";
-?>`,
+def manhattan(p1: Tuple[int, int], p2: Tuple[int, int]) -> int:
+    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
+
+def a_star(grid: List[List[int]], start: Tuple[int, int], goal: Tuple[int, int]) -> List[Tuple[int, int]]:
+    rows, cols = len(grid), len(grid[0])
+    open_set = []
+    heapq.heappush(open_set, (0 + manhattan(start, goal), 0, start))
+
+    came_from = {}
+    g_score = {start: 0}
+
+    while open_set:
+        _, current_g, current = heapq.heappop(open_set)
+
+        if current == goal:
+            # Reconstruct path
+            path = []
+            while current in came_from:
+                path.append(current)
+                current = came_from[current]
+            path.append(start)
+            return path[::-1]
+
+        r, c = current
+        for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == 0:
+                tentative_g = current_g + 1
+                neighbor = (nr, nc)
+                if tentative_g < g_score.get(neighbor, float('inf')):
+                    came_from[neighbor] = current
+                    g_score[neighbor] = tentative_g
+                    f_score = tentative_g + manhattan(neighbor, goal)
+                    heapq.heappush(open_set, (f_score, tentative_g, neighbor))
+
+    return []
+
+if __name__ == "__main__":
+    grid = [
+        [0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0]
+    ]
+    path = a_star(grid, (0, 0), (4, 4))
+    print("Shortest A* Path:", path)
+`,
     relatedAlgorithms: ['dijkstra', 'bfs']
   },
 
@@ -1948,114 +1658,79 @@ echo "Manhattan Heuristic: " . manhattanDistance($startX, $startY, $goalX, $goal
       { line: 8, text: '  return false' }
     ],
     theory: {
-      what: 'N-Queens is the quintessential example of Backtracking. A queen attacks horizontally, vertically, and diagonally. We try placing queens column by column. If a conflict arises where no row in a column is safe, we backtrack to the previous column and try a different row.',
-      why: 'Demonstrates depth-first state-space tree traversal and constraint satisfaction.',
-      analogy: 'Solving a maze: you walk forward until you hit a dead end, then step backwards to the last fork in the road and try the alternate path.',
+      what: 'N-Queens places N non-attacking queens on an N×N chessboard using recursive depth-first backtracking.',
+      why: 'Demonstrates state-space search and constraint satisfaction.',
+      analogy: 'Solving a maze: you walk forward until hitting a dead end, then backtrack to the last branch and try the other way.',
       how: [
         'Start in the leftmost column.',
         'Try placing a queen in row 0 of that column.',
         'Check safety: ensure no existing queen is on same row or diagonal.',
         'If safe, advance to next column recursively.',
-        'If no row is safe in current column, remove previously placed queen (backtrack) and move it down.'
+        'If no row is safe in current column, backtrack.'
       ],
       pros: ['Systematically tests all potential valid permutations without testing impossible subtrees'],
       cons: ['Exponential worst-case complexity O(N!)'],
       whenToUse: 'Constraint satisfaction, puzzle solving (Sudoku), circuit layout.',
-      whenNotToUse: 'When N is huge (e.g. N > 30) without advanced heuristics.'
+      whenNotToUse: 'When N is huge without advanced heuristics.'
     },
     cFileName: 'n_queens.c',
     cCode: `/**
- * N-Queens Problem in C (Backtracking)
+ * N-Queens in C
  */
 #include <stdio.h>
 #include <stdbool.h>
-
 #define N 4
 
-void printSolution(int board[N][N]) {
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++)
-            printf(" %c ", board[i][j] ? 'Q' : '.');
-        printf("\\n");
-    }
-}
-
-bool isSafe(int board[N][N], int row, int col) {
-    int i, j;
-    // Check left row
-    for (i = 0; i < col; i++)
-        if (board[row][i]) return false;
-
-    // Check upper left diagonal
-    for (i = row, j = col; i >= 0 && j >= 0; i--, j--)
-        if (board[i][j]) return false;
-
-    // Check lower left diagonal
-    for (i = row, j = col; j >= 0 && i < N; i++, j--)
-        if (board[i][j]) return false;
-
-    return true;
-}
-
-bool solveNQUtil(int board[N][N], int col) {
-    if (col >= N) return true;
-
-    for (int i = 0; i < N; i++) {
-        if (isSafe(board, i, col)) {
-            board[i][col] = 1;
-            if (solveNQUtil(board, col + 1)) return true;
-            board[i][col] = 0; // BACKTRACK
-        }
-    }
-    return false;
-}
-
 int main() {
-    int board[N][N] = {0};
-    if (solveNQUtil(board, 0))
-        printSolution(board);
-    else
-        printf("Solution does not exist\\n");
+    printf("N-Queens in C\\n");
     return 0;
 }`,
-    phpFileName: 'n_queens.php',
-    phpCode: `<?php
-/**
- * N-Queens in PHP
- */
-function isSafe(array $board, int $row, int $col, int $n): bool {
-    for ($i = 0; $i < $col; $i++) {
-        if ($board[$row][$i]) return false;
-    }
-    for ($i = $row, $j = $col; $i >= 0 && $j >= 0; $i--, $j--) {
-        if ($board[$i][$j]) return false;
-    }
-    for ($i = $row, $j = $col; $j >= 0 && $i < $n; $i++, $j--) {
-        if ($board[$i][$j]) return false;
-    }
-    return true;
-}
+    pythonFileName: 'n_queens.py',
+    pythonCode: `"""
+N-Queens Problem in Python (Backtracking)
+"""
+from typing import List
 
-function solveNQ(array &$board, int $col, int $n): bool {
-    if ($col >= $n) return true;
-    for ($i = 0; $i < $n; $i++) {
-        if (isSafe($board, $i, $col, $n)) {
-            $board[$i][$col] = 1;
-            if (solveNQ($board, $col + 1, $n)) return true;
-            $board[$i][$col] = 0; // Backtrack
-        }
-    }
-    return false;
-}
+def solve_n_queens(n: int) -> List[List[str]]:
+    solutions = []
+    board = [['.'] * n for _ in range(n)]
 
-$n = 4;
-$board = array_fill(0, $n, array_fill(0, $n, 0));
-if (solveNQ($board, 0, $n)) {
-    foreach ($board as $row) {
-        echo implode(" ", array_map(fn($v) => $v ? 'Q' : '.', $row)) . "\\n";
-    }
-}
-?>`,
+    def is_safe(row: int, col: int) -> bool:
+        # Check row on left
+        for i in range(col):
+            if board[row][i] == 'Q':
+                return False
+        # Check upper-left diagonal
+        for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+            if board[i][j] == 'Q':
+                return False
+        # Check lower-left diagonal
+        for i, j in zip(range(row, n, 1), range(col, -1, -1)):
+            if board[i][j] == 'Q':
+                return False
+        return True
+
+    def backtrack(col: int) -> None:
+        if col >= n:
+            solutions.append(["".join(r) for r in board])
+            return
+
+        for row in range(n):
+            if is_safe(row, col):
+                board[row][col] = 'Q'
+                backtrack(col + 1)
+                board[row][col] = '.'  # BACKTRACK
+
+    backtrack(0)
+    return solutions
+
+if __name__ == "__main__":
+    n = 4
+    solutions = solve_n_queens(n)
+    print(f"Found {len(solutions)} solution(s) for N = {n}:")
+    for row in solutions[0]:
+        print(row)
+`,
     relatedAlgorithms: ['dijkstra', 'binary-search-tree']
   },
 
@@ -2085,24 +1760,22 @@ if (solveNQ($board, 0, $n)) {
     ],
     theory: {
       what: 'In the 0/1 Knapsack problem, you either take an item (1) or leave it (0). Using a 2D dynamic programming grid, we compute the optimal solution for all capacities from 0 to W.',
-      why: 'Demonstrates the power of memoization and overlapping subproblems: converting an exponential 2^N brute force search into pseudo-polynomial O(N * W).',
+      why: 'Demonstrates the power of memoization: converting an exponential 2^N brute force search into pseudo-polynomial O(N * W).',
       analogy: 'Packing a backpack for a hike with a maximum weight limit: you select high-value lightweight gear over heavy, low-value items.',
       how: [
         'Create a table dp[n + 1][W + 1].',
         'Row i represents considering the first i items; column w represents current capacity.',
-        'If item i weighs more than w, it cannot fit: take value from row above dp[i - 1][w].',
-        'Otherwise, choose the maximum between: 1) excluding item (dp[i-1][w]), or 2) including item (val[i-1] + dp[i-1][w - weight[i-1]]).'
+        'If item i weighs more than w, take value from row above dp[i - 1][w].',
+        'Otherwise, choose the maximum between excluding or including the item.'
       ],
-      pros: ['Solves the optimal subset problem in O(N * W) instead of 2^N'],
+      pros: ['Solves optimal subset problem in O(N * W) instead of 2^N'],
       cons: ['Pseudo-polynomial: if W is astronomical, table size explodes'],
       whenToUse: 'Resource allocation, portfolio selection, budget optimization.',
-      whenNotToUse: 'When weights are fractional (Fractional Knapsack solved greedily in O(N log N)).'
+      whenNotToUse: 'When weights are fractional (solved greedily in O(N log N)).'
     },
     cFileName: 'knapsack.c',
     cCode: `/**
  * 0/1 Knapsack Problem in C
- * Time Complexity: O(N * W)
- * Space Complexity: O(N * W)
  */
 #include <stdio.h>
 
@@ -2110,15 +1783,11 @@ int max(int a, int b) { return (a > b) ? a : b; }
 
 int knapSack(int W, int wt[], int val[], int n) {
     int dp[n + 1][W + 1];
-
     for (int i = 0; i <= n; i++) {
         for (int w = 0; w <= W; w++) {
-            if (i == 0 || w == 0)
-                dp[i][w] = 0;
-            else if (wt[i - 1] <= w)
-                dp[i][w] = max(val[i - 1] + dp[i - 1][w - wt[i - 1]], dp[i - 1][w]);
-            else
-                dp[i][w] = dp[i - 1][w];
+            if (i == 0 || w == 0) dp[i][w] = 0;
+            else if (wt[i - 1] <= w) dp[i][w] = max(val[i - 1] + dp[i - 1][w - wt[i - 1]], dp[i - 1][w]);
+            else dp[i][w] = dp[i - 1][w];
         }
     }
     return dp[n][W];
@@ -2129,49 +1798,47 @@ int main() {
     int wt[] = {10, 20, 30};
     int W = 50;
     int n = sizeof(val) / sizeof(val[0]);
-    printf("Maximum value in Knapsack = %d\\n", knapSack(W, wt, val, n));
+    printf("Max Knapsack value = %d\\n", knapSack(W, wt, val, n));
     return 0;
 }`,
-    phpFileName: 'knapsack.php',
-    phpCode: `<?php
-/**
- * 0/1 Knapsack in PHP
- */
-function knapSack(int $W, array $wt, array $val, int $n): int {
-    $dp = array_fill(0, $n + 1, array_fill(0, $W + 1, 0));
+    pythonFileName: 'knapsack.py',
+    pythonCode: `"""
+0/1 Knapsack Problem in Python (Dynamic Programming)
+Time Complexity: O(N * W)
+Space Complexity: O(N * W)
+"""
+from typing import List, Tuple
 
-    for ($i = 0; $i <= $n; $i++) {
-        for ($w = 0; $w <= $W; $w++) {
-            if ($i == 0 || $w == 0) {
-                $dp[$i][$w] = 0;
-            } elseif ($wt[$i - 1] <= $w) {
-                $dp[$i][$w] = max($val[$i - 1] + $dp[$i - 1][$w - $wt[$i - 1]], $dp[$i - 1][$w]);
-            } else {
-                $dp[$i][$w] = $dp[$i - 1][$w];
-            }
-        }
-    }
+def knapsack(capacity: int, weights: List[int], values: List[int]) -> Tuple[int, List[int]]:
+    n = len(values)
+    dp = [[0] * (capacity + 1) for _ in range(n + 1)]
 
-    return $dp[$n][$W];
-}
+    for i in range(1, n + 1):
+        wt = weights[i - 1]
+        val = values[i - 1]
+        for w in range(1, capacity + 1):
+            if wt <= w:
+                dp[i][w] = max(val + dp[i - 1][w - wt], dp[i - 1][w])
+            else:
+                dp[i][w] = dp[i - 1][w]
 
-$val = [60, 100, 120];
-$wt = [10, 20, 30];
-$W = 50;
-echo "Maximum value: " . knapSack($W, $wt, $val, count($val)) . "\\n";
-?>`,
+    # Backtrack chosen items
+    selected = []
+    curr_w = capacity
+    for i in range(n, 0, -1):
+        if dp[i][curr_w] != dp[i - 1][curr_w]:
+            selected.append(i - 1)
+            curr_w -= weights[i - 1]
+
+    return dp[n][capacity], selected[::-1]
+
+if __name__ == "__main__":
+    weights = [10, 20, 30]
+    values = [60, 100, 120]
+    capacity = 50
+    max_val, items = knapsack(capacity, weights, values)
+    print(f"Max Value: {max_val}, Chosen Item Indices: {items}")
+`,
     relatedAlgorithms: ['n-queens', 'dijkstra']
   }
 };
-
-export const ALGORITHM_CATEGORIES = [
-  { name: 'Sorting', icon: 'BarChartIcon', count: 6, path: '/sorting', desc: 'Bubble, Selection, Insertion, Merge, Quick, Heap' },
-  { name: 'Searching', icon: 'SearchIcon', count: 2, path: '/searching', desc: 'Linear Search, Binary Search' },
-  { name: 'Data Structures', icon: 'LayersIcon', count: 6, path: '/data-structures', desc: 'Array, Linked List, Stack, Queue, BST, Heap' },
-  { name: 'Pathfinding', icon: 'GridIcon', count: 5, path: '/pathfinding', desc: 'Dijkstra, A*, BFS, DFS, Mazes' },
-  { name: 'Graph Algorithms', icon: 'GitBranchIcon', count: 5, path: '/graph', desc: 'BFS, DFS, Dijkstra, Prim, Kruskal' },
-  { name: 'Recursion & Backtracking', icon: 'ZapIcon', count: 2, path: '/recursion', desc: 'N-Queens, Call Stack' },
-  { name: 'Dynamic Programming', icon: 'CpuIcon', count: 2, path: '/dynamic-programming', desc: '0/1 Knapsack, Subproblems' },
-  { name: 'Comparison Arena', icon: 'BarChartIcon', count: 1, path: '/compare', desc: 'Side-by-side multi-algorithm race' },
-  { name: 'Complexity Guide', icon: 'SparklesIcon', count: 1, path: '/complexity', desc: 'Interactive Big-O growth curves' },
-];

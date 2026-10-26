@@ -379,9 +379,9 @@ export default function DynamicProgrammingVisualizer() {
         <PseudocodeViewer pseudocode={algorithmData.pseudocode} activeLine={currentStep.line} />
         <CodeViewer
           cCode={algorithmData.cCode}
-          phpCode={algorithmData.phpCode}
+          pythonCode={algorithmData.pythonCode}
           cFileName={algorithmData.cFileName}
-          phpFileName={algorithmData.phpFileName}
+          pythonFileName={algorithmData.pythonFileName}
         />
       </Box>
 

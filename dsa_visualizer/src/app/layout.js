@@ -4,8 +4,13 @@ import Nav from '../Component/NavBar/Nav';
 import Footer from '../components/Footer/Footer';
 
 export const metadata = {
-  title: 'DSA Visualizer - Interactive Data Structures & Algorithms Learning Platform',
-  description: 'Master Data Structures and Algorithms through interactive step-by-step visualizers, animated data flow, C & PHP implementations, code downloads, and Big-O complexity guides.',
+  title: 'DSA Visualizer - Interactive Data Structures & Algorithms Platform',
+  description: 'Master Data Structures and Algorithms with interactive step-by-step visualizers, 3D animated graphs, verified C & Python source code, and code downloads.',
+  icons: {
+    icon: '/favicon.png',
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -13,6 +18,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <link rel="icon" href="/favicon.png" type="image/png" />
       </head>
       <body>
         <ThemeRegistry>

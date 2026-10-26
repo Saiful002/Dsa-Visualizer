@@ -23,7 +23,6 @@ import {
   MenuIcon,
   XIcon,
   SearchIcon,
-  SparklesIcon,
   Volume2Icon,
   VolumeXIcon,
 } from '../../components/Common/Icons';
@@ -31,15 +30,15 @@ import { soundManager } from '../../utils/audio';
 import { ALGORITHMS } from '../../data/algorithmsData';
 
 const NAV_ITEMS = [
-  { label: 'Sorting', path: '/sorting' },
-  { label: 'Searching', path: '/searching' },
-  { label: 'Data Structures', path: '/data-structures' },
-  { label: 'Pathfinding', path: '/pathfinding' },
-  { label: 'Graph', path: '/graph' },
-  { label: 'Recursion', path: '/recursion' },
-  { label: 'DP', path: '/dynamic-programming' },
-  { label: 'Compare', path: '/compare' },
-  { label: 'Big-O', path: '/complexity' },
+  { label: 'Sorting', path: '/sorting', color: '#0ea5e9' },
+  { label: 'Searching', path: '/searching', color: '#10b981' },
+  { label: 'Structures', path: '/data-structures', color: '#10b981' },
+  { label: 'Pathfinding', path: '/pathfinding', color: '#f97316' },
+  { label: 'Graph', path: '/graph', color: '#0ea5e9' },
+  { label: 'Recursion', path: '/recursion', color: '#f97316' },
+  { label: 'DP', path: '/dynamic-programming', color: '#10b981' },
+  { label: 'Race Arena', path: '/compare', color: '#f97316' },
+  { label: 'Big-O', path: '/complexity', color: '#0ea5e9' },
 ];
 
 export default function Nav() {
@@ -59,7 +58,6 @@ export default function Nav() {
     setMobileOpen(!mobileOpen);
   };
 
-  // Search filtering
   const allAlgos = Object.values(ALGORITHMS);
   const searchResults = searchQuery.trim()
     ? allAlgos.filter(
@@ -103,44 +101,31 @@ export default function Nav() {
         position="sticky"
         elevation={0}
         sx={{
-          background: 'rgba(9, 13, 22, 0.85)',
-          backdropFilter: 'blur(16px)',
+          background: 'rgba(7, 10, 19, 0.85)',
+          backdropFilter: 'blur(18px)',
           borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
           zIndex: 1100,
         }}
       >
         <Container maxWidth="xl">
-          <Toolbar disableGutters sx={{ py: 0.75, display: 'flex', justifyContent: 'space-between' }}>
-            {/* Logo */}
-            <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+          <Toolbar disableGutters sx={{ py: 1, display: 'flex', justifyContent: 'space-between' }}>
+            {/* Logo Image */}
+            <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
               <Box
+                component="img"
+                src="/logo.png"
+                alt="DSA Visualizer Logo"
                 sx={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: 1.5,
-                  background: 'linear-gradient(135deg, #38bdf8 0%, #2563eb 100%)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 0 12px rgba(56, 189, 248, 0.5)',
+                  height: { xs: 34, md: 40 },
+                  width: 'auto',
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 2px 10px rgba(14, 165, 233, 0.25))',
+                  transition: 'transform 0.2s ease',
+                  '&:hover': {
+                    transform: 'scale(1.02)',
+                  },
                 }}
-              >
-                <SparklesIcon size={18} color="#ffffff" />
-              </Box>
-              <Typography
-                variant="h6"
-                noWrap
-                sx={{
-                  fontWeight: 800,
-                  letterSpacing: '0.08rem',
-                  color: '#ffffff',
-                  fontFamily: 'monospace',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
-                DSA<span style={{ color: '#38bdf8' }}>.VISUALIZER</span>
-              </Typography>
+              />
             </Link>
 
             {/* Desktop Navigation Links */}
@@ -151,18 +136,19 @@ export default function Nav() {
                   <Link key={item.path} href={item.path} style={{ textDecoration: 'none' }}>
                     <Button
                       sx={{
-                        color: isActive ? '#38bdf8' : '#94a3b8',
-                        backgroundColor: isActive ? 'rgba(56, 189, 248, 0.1)' : 'transparent',
+                        color: isActive ? item.color : '#94a3b8',
+                        backgroundColor: isActive ? `${item.color}15` : 'transparent',
                         borderRadius: 2,
                         textTransform: 'none',
                         fontWeight: isActive ? 700 : 500,
                         fontSize: '0.85rem',
                         px: 1.5,
-                        py: 0.75,
-                        border: `1px solid ${isActive ? 'rgba(56, 189, 248, 0.25)' : 'transparent'}`,
+                        py: 0.7,
+                        border: `1px solid ${isActive ? `${item.color}40` : 'transparent'}`,
+                        transition: 'all 0.2s ease',
                         '&:hover': {
                           color: '#ffffff',
-                          backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                          backgroundColor: 'rgba(255, 255, 255, 0.06)',
                         },
                       }}
                     >
@@ -174,24 +160,24 @@ export default function Nav() {
             </Box>
 
             {/* Action Buttons: Search & Sound & Mobile Toggle */}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
               <Button
                 variant="outlined"
                 size="small"
                 onClick={() => setSearchOpen(true)}
-                startIcon={<SearchIcon size={16} />}
+                startIcon={<SearchIcon size={15} color="#0ea5e9" />}
                 sx={{
                   color: '#cbd5e1',
-                  borderColor: 'rgba(255, 255, 255, 0.15)',
+                  borderColor: 'rgba(255, 255, 255, 0.12)',
                   backgroundColor: 'rgba(255, 255, 255, 0.03)',
                   borderRadius: 2,
                   textTransform: 'none',
                   fontSize: '0.8rem',
                   px: 1.5,
-                  py: 0.5,
+                  py: 0.6,
                   '&:hover': {
-                    borderColor: '#38bdf8',
-                    backgroundColor: 'rgba(56, 189, 248, 0.08)',
+                    borderColor: '#0ea5e9',
+                    backgroundColor: 'rgba(14, 165, 233, 0.08)',
                   },
                 }}
               >
@@ -202,14 +188,15 @@ export default function Nav() {
               <IconButton
                 onClick={toggleAudio}
                 size="small"
+                title={audioEnabled ? 'Mute Sound' : 'Enable Audio'}
                 sx={{
-                  color: audioEnabled ? '#38bdf8' : '#64748b',
-                  backgroundColor: audioEnabled ? 'rgba(56, 189, 248, 0.1)' : 'rgba(255, 255, 255, 0.04)',
+                  color: audioEnabled ? '#10b981' : '#64748b',
+                  backgroundColor: audioEnabled ? 'rgba(16, 185, 129, 0.12)' : 'rgba(255, 255, 255, 0.04)',
                   borderRadius: 2,
                   p: 0.9,
                 }}
               >
-                {audioEnabled ? <Volume2Icon size={18} /> : <VolumeXIcon size={18} />}
+                {audioEnabled ? <Volume2Icon size={17} /> : <VolumeXIcon size={17} />}
               </IconButton>
 
               {/* Mobile Drawer Trigger */}
@@ -232,17 +219,15 @@ export default function Nav() {
         PaperProps={{
           sx: {
             width: 280,
-            backgroundColor: '#090d16',
+            backgroundColor: '#070a13',
             color: '#f8fafc',
             borderLeft: '1px solid rgba(255, 255, 255, 0.08)',
-            p: 2,
+            p: 2.5,
           },
         }}
       >
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-          <Typography variant="h6" sx={{ fontWeight: 800, color: '#38bdf8', fontFamily: 'monospace' }}>
-            DSA VISUALIZER
-          </Typography>
+          <Box component="img" src="/logo.png" alt="Logo" sx={{ height: 32, width: 'auto' }} />
           <IconButton onClick={handleDrawerToggle} sx={{ color: '#94a3b8' }}>
             <XIcon size={20} />
           </IconButton>
@@ -252,7 +237,7 @@ export default function Nav() {
           {NAV_ITEMS.map((item) => {
             const isActive = pathname === item.path;
             return (
-              <ListItem key={item.path} disablePadding sx={{ mb: 0.5 }}>
+              <ListItem key={item.path} disablePadding sx={{ mb: 0.75 }}>
                 <ListItemButton
                   onClick={() => {
                     handleDrawerToggle();
@@ -260,8 +245,9 @@ export default function Nav() {
                   }}
                   sx={{
                     borderRadius: 2,
-                    backgroundColor: isActive ? 'rgba(56, 189, 248, 0.12)' : 'transparent',
-                    color: isActive ? '#38bdf8' : '#cbd5e1',
+                    backgroundColor: isActive ? `${item.color}20` : 'transparent',
+                    color: isActive ? item.color : '#cbd5e1',
+                    border: `1px solid ${isActive ? `${item.color}40` : 'transparent'}`,
                   }}
                 >
                   <ListItemText primary={item.label} primaryTypographyProps={{ fontWeight: 600 }} />
@@ -280,7 +266,7 @@ export default function Nav() {
         fullWidth
         PaperProps={{
           sx: {
-            backgroundColor: '#0f172a',
+            backgroundColor: '#0d1322',
             color: '#f8fafc',
             border: '1px solid rgba(255, 255, 255, 0.1)',
             borderRadius: 3,
@@ -301,8 +287,8 @@ export default function Nav() {
                 backgroundColor: 'rgba(255, 255, 255, 0.05)',
                 borderRadius: 2,
                 '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
-                '&:hover fieldset': { borderColor: '#38bdf8' },
-                '&.Mui-focused fieldset': { borderColor: '#38bdf8' },
+                '&:hover fieldset': { borderColor: '#0ea5e9' },
+                '&.Mui-focused fieldset': { borderColor: '#0ea5e9' },
               },
             }}
           />
@@ -326,8 +312,8 @@ export default function Nav() {
                   justifyContent: 'space-between',
                   cursor: 'pointer',
                   '&:hover': {
-                    backgroundColor: 'rgba(56, 189, 248, 0.1)',
-                    borderColor: '#38bdf8',
+                    backgroundColor: 'rgba(14, 165, 233, 0.1)',
+                    borderColor: '#0ea5e9',
                   },
                 }}
               >
@@ -336,13 +322,13 @@ export default function Nav() {
                     {algo.name}
                   </Typography>
                   <Typography variant="caption" sx={{ color: '#94a3b8' }}>
-                    {algo.description.slice(0, 70)}...
+                    {algo.description.slice(0, 65)}...
                   </Typography>
                 </Box>
                 <Chip
                   label={algo.category}
                   size="small"
-                  sx={{ backgroundColor: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', fontSize: '0.7rem' }}
+                  sx={{ backgroundColor: 'rgba(14, 165, 233, 0.15)', color: '#0ea5e9', fontSize: '0.7rem' }}
                 />
               </Box>
             ))}

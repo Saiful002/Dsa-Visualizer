@@ -819,12 +819,12 @@ export default function SortingVisualizer({ initialAlgorithm = 'bubble-sort' }) 
             const isSorted = currentStep.sortedIndices?.includes(idx) || currentStep.actionType === 'COMPLETE';
             const isVisiting = currentStep.indices?.includes(idx) && currentStep.actionType === 'VISIT';
 
-            let barColor = '#3b82f6'; // default blue
-            if (isSorted) barColor = '#10b981'; // emerald
-            if (isVisiting) barColor = '#a855f7'; // purple
-            if (isPivot) barColor = '#ec4899'; // pink
-            if (isComparing) barColor = '#f59e0b'; // amber
-            if (isSwapping) barColor = '#ef4444'; // red
+            let barColor = '#0ea5e9'; // brand cyan (D)
+            if (isSorted) barColor = '#10b981'; // brand emerald (S)
+            if (isVisiting) barColor = '#38bdf8'; // light cyan
+            if (isPivot) barColor = '#f59e0b'; // amber
+            if (isComparing) barColor = '#f97316'; // brand sunset orange (A)
+            if (isSwapping) barColor = '#ef4444'; // coral red
 
             const heightPct = Math.max(12, Math.round((val / maxVal) * 100));
 
@@ -891,24 +891,24 @@ export default function SortingVisualizer({ initialAlgorithm = 'bubble-sort' }) 
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-            <Box sx={{ width: 12, height: 12, borderRadius: 0.5, backgroundColor: '#3b82f6' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Default</Typography>
+            <Box sx={{ width: 12, height: 12, borderRadius: 0.5, backgroundColor: '#0ea5e9' }} />
+            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Default (D)</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-            <Box sx={{ width: 12, height: 12, borderRadius: 0.5, backgroundColor: '#f59e0b' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Comparing</Typography>
+            <Box sx={{ width: 12, height: 12, borderRadius: 0.5, backgroundColor: '#f97316' }} />
+            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Comparing (A)</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
             <Box sx={{ width: 12, height: 12, borderRadius: 0.5, backgroundColor: '#ef4444' }} />
             <Typography variant="caption" sx={{ color: '#94a3b8' }}>Swapping</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-            <Box sx={{ width: 12, height: 12, borderRadius: 0.5, backgroundColor: '#ec4899' }} />
+            <Box sx={{ width: 12, height: 12, borderRadius: 0.5, backgroundColor: '#f59e0b' }} />
             <Typography variant="caption" sx={{ color: '#94a3b8' }}>Pivot</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
             <Box sx={{ width: 12, height: 12, borderRadius: 0.5, backgroundColor: '#10b981' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Sorted</Typography>
+            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Sorted (S)</Typography>
           </Box>
         </Box>
 
@@ -951,9 +951,9 @@ export default function SortingVisualizer({ initialAlgorithm = 'bubble-sort' }) 
 
         <CodeViewer
           cCode={algorithmData.cCode}
-          phpCode={algorithmData.phpCode}
+          pythonCode={algorithmData.pythonCode}
           cFileName={algorithmData.cFileName}
-          phpFileName={algorithmData.phpFileName}
+          pythonFileName={algorithmData.pythonFileName}
         />
       </Box>
 

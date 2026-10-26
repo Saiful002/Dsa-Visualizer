@@ -9,15 +9,15 @@ import { CopyIcon, CheckIcon, DownloadIcon, CodeIcon } from './Icons';
 
 export default function CodeViewer({
   cCode = '',
-  phpCode = '',
+  pythonCode = '',
   cFileName = 'algorithm.c',
-  phpFileName = 'algorithm.php',
+  pythonFileName = 'algorithm.py',
 }) {
   const [selectedLang, setSelectedLang] = React.useState('c');
   const [copied, setCopied] = React.useState(false);
 
-  const activeCode = selectedLang === 'c' ? cCode : phpCode;
-  const activeFileName = selectedLang === 'c' ? cFileName : phpFileName;
+  const activeCode = selectedLang === 'c' ? cCode : pythonCode;
+  const activeFileName = selectedLang === 'c' ? cFileName : pythonFileName;
 
   const handleCopy = async () => {
     try {
@@ -30,7 +30,7 @@ export default function CodeViewer({
   };
 
   const handleDownload = () => {
-    const mimeType = selectedLang === 'c' ? 'text/x-c;charset=utf-8;' : 'text/x-php;charset=utf-8;';
+    const mimeType = selectedLang === 'c' ? 'text/x-c;charset=utf-8;' : 'text/x-python;charset=utf-8;';
     const blob = new Blob([activeCode], { type: mimeType });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -48,7 +48,7 @@ export default function CodeViewer({
     <Box
       sx={{
         borderRadius: 2.5,
-        backgroundColor: '#0a0f1d',
+        backgroundColor: '#070a13',
         border: '1px solid rgba(255, 255, 255, 0.08)',
         overflow: 'hidden',
         boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4)',
@@ -62,13 +62,13 @@ export default function CodeViewer({
           alignItems: 'center',
           justifyContent: 'space-between',
           px: 2,
-          py: 1,
+          py: 1.2,
           backgroundColor: 'rgba(255, 255, 255, 0.03)',
           borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
           gap: 1.5,
         }}
       >
-        {/* Language Tabs */}
+        {/* Language Tabs: C & Python */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <Button
             size="small"
@@ -80,10 +80,10 @@ export default function CodeViewer({
               fontSize: '0.8rem',
               fontWeight: 700,
               color: selectedLang === 'c' ? '#ffffff' : '#94a3b8',
-              backgroundColor: selectedLang === 'c' ? '#2563eb' : 'transparent',
+              backgroundColor: selectedLang === 'c' ? '#0ea5e9' : 'transparent',
               textTransform: 'none',
               '&:hover': {
-                backgroundColor: selectedLang === 'c' ? '#1d4ed8' : 'rgba(255, 255, 255, 0.05)',
+                backgroundColor: selectedLang === 'c' ? '#0284c7' : 'rgba(255, 255, 255, 0.05)',
               },
             }}
           >
@@ -92,22 +92,22 @@ export default function CodeViewer({
 
           <Button
             size="small"
-            onClick={() => setSelectedLang('php')}
+            onClick={() => setSelectedLang('python')}
             sx={{
               px: 1.75,
               py: 0.5,
               borderRadius: 1.5,
               fontSize: '0.8rem',
               fontWeight: 700,
-              color: selectedLang === 'php' ? '#ffffff' : '#94a3b8',
-              backgroundColor: selectedLang === 'php' ? '#8b5cf6' : 'transparent',
+              color: selectedLang === 'python' ? '#ffffff' : '#94a3b8',
+              backgroundColor: selectedLang === 'python' ? '#10b981' : 'transparent',
               textTransform: 'none',
               '&:hover': {
-                backgroundColor: selectedLang === 'php' ? '#7c3aed' : 'rgba(255, 255, 255, 0.05)',
+                backgroundColor: selectedLang === 'python' ? '#059669' : 'rgba(255, 255, 255, 0.05)',
               },
             }}
           >
-            PHP Implementation
+            Python Implementation
           </Button>
 
           <Typography
@@ -152,16 +152,16 @@ export default function CodeViewer({
               onClick={handleDownload}
               startIcon={<DownloadIcon size={15} />}
               sx={{
-                color: '#38bdf8',
-                borderColor: 'rgba(56, 189, 248, 0.3)',
+                color: selectedLang === 'c' ? '#0ea5e9' : '#10b981',
+                borderColor: selectedLang === 'c' ? 'rgba(14, 165, 233, 0.4)' : 'rgba(16, 185, 129, 0.4)',
                 borderRadius: 1.5,
                 textTransform: 'none',
                 fontSize: '0.75rem',
                 fontWeight: 600,
                 px: 1.25,
                 '&:hover': {
-                  borderColor: '#38bdf8',
-                  backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                  borderColor: selectedLang === 'c' ? '#0ea5e9' : '#10b981',
+                  backgroundColor: selectedLang === 'c' ? 'rgba(14, 165, 233, 0.1)' : 'rgba(16, 185, 129, 0.1)',
                 },
               }}
             >
@@ -180,7 +180,7 @@ export default function CodeViewer({
           fontFamily: 'Consolas, Monaco, "Courier New", monospace',
           fontSize: '0.82rem',
           lineHeight: 1.6,
-          backgroundColor: '#090d16',
+          backgroundColor: '#070a13',
         }}
       >
         <table style={{ borderCollapse: 'collapse', width: '100%' }}>

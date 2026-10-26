@@ -620,9 +620,9 @@ export default function PathfindingVisualizer() {
         <PseudocodeViewer pseudocode={algorithmData.pseudocode} activeLine={null} />
         <CodeViewer
           cCode={algorithmData.cCode}
-          phpCode={algorithmData.phpCode}
+          pythonCode={algorithmData.pythonCode}
           cFileName={algorithmData.cFileName}
-          phpFileName={algorithmData.phpFileName}
+          pythonFileName={algorithmData.pythonFileName}
         />
       </Box>
 

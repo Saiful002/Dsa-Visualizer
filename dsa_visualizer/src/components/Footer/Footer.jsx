@@ -11,9 +11,9 @@ export default function Footer() {
     <Box
       component="footer"
       sx={{
-        mt: 8,
+        mt: 10,
         py: 6,
-        backgroundColor: '#070a12',
+        backgroundColor: '#05070e',
         borderTop: '1px solid rgba(255, 255, 255, 0.08)',
       }}
     >
@@ -28,20 +28,14 @@ export default function Footer() {
         >
           {/* Brand info */}
           <Box>
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: 800,
-                letterSpacing: '0.1rem',
-                color: '#38bdf8',
-                mb: 1.5,
-                fontFamily: 'monospace',
-              }}
-            >
-              DSA VISUALIZER
-            </Typography>
+            <Box
+              component="img"
+              src="/logo.png"
+              alt="DSA Visualizer Logo"
+              sx={{ height: 38, width: 'auto', mb: 2 }}
+            />
             <Typography variant="body2" sx={{ color: '#94a3b8', maxWidth: 360, lineHeight: 1.7 }}>
-              An interactive visual learning platform for Data Structures and Algorithms. Master core computational thinking through real-time step execution, animated data flows, verified C & PHP code, and algorithmic theory.
+              Interactive visual learning platform for Data Structures and Algorithms. Master core computational logic through animated execution, 3D constellations, and verified C & Python code.
             </Typography>
           </Box>
 
@@ -55,18 +49,16 @@ export default function Footer() {
               <Link href="/searching" style={{ color: '#94a3b8', fontSize: '0.875rem' }}>Binary Search</Link>
               <Link href="/pathfinding" style={{ color: '#94a3b8', fontSize: '0.875rem' }}>A* Pathfinding</Link>
               <Link href="/graph" style={{ color: '#94a3b8', fontSize: '0.875rem' }}>Dijkstra Graph</Link>
-              <Link href="/recursion" style={{ color: '#94a3b8', fontSize: '0.875rem' }}>N-Queens Solver</Link>
             </Box>
           </Box>
 
-          {/* Data Structures */}
+          {/* Structures */}
           <Box>
             <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#f8fafc', mb: 1.5 }}>
               Structures
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Link href="/data-structures" style={{ color: '#94a3b8', fontSize: '0.875rem' }}>Arrays & Pointers</Link>
-              <Link href="/data-structures" style={{ color: '#94a3b8', fontSize: '0.875rem' }}>Linked Lists</Link>
+              <Link href="/data-structures" style={{ color: '#94a3b8', fontSize: '0.875rem' }}>Arrays & Linked Lists</Link>
               <Link href="/data-structures" style={{ color: '#94a3b8', fontSize: '0.875rem' }}>Stacks & Queues</Link>
               <Link href="/data-structures" style={{ color: '#94a3b8', fontSize: '0.875rem' }}>Binary Search Trees</Link>
               <Link href="/dynamic-programming" style={{ color: '#94a3b8', fontSize: '0.875rem' }}>0/1 Knapsack DP</Link>
@@ -76,12 +68,12 @@ export default function Footer() {
           {/* Tools */}
           <Box>
             <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#f8fafc', mb: 1.5 }}>
-              Tools & Docs
+              Interactive
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Link href="/compare" style={{ color: '#94a3b8', fontSize: '0.875rem' }}>Algorithm Race Arena</Link>
-              <Link href="/complexity" style={{ color: '#94a3b8', fontSize: '0.875rem' }}>Big-O Cheat Sheet</Link>
-              <Link href="/sorting" style={{ color: '#94a3b8', fontSize: '0.875rem' }}>C / PHP Source Downloads</Link>
+              <Link href="/compare" style={{ color: '#f97316', fontSize: '0.875rem', fontWeight: 600 }}>Race Arena 🏁</Link>
+              <Link href="/recursion" style={{ color: '#10b981', fontSize: '0.875rem', fontWeight: 600 }}>N-Queens Backtracking</Link>
+              <Link href="/complexity" style={{ color: '#0ea5e9', fontSize: '0.875rem', fontWeight: 600 }}>Big-O Curves & Cheat Sheet</Link>
             </Box>
           </Box>
         </Box>
@@ -98,11 +90,13 @@ export default function Footer() {
           }}
         >
           <Typography variant="caption" sx={{ color: '#64748b' }}>
-            © {new Date().getFullYear()} DSA Visualizer. Crafted for visual computer science learners.
+            © {new Date().getFullYear()} DSA Visualizer. Learn • Visualize • Practice • Master.
           </Typography>
-          <Typography variant="caption" sx={{ color: '#64748b' }}>
-            Learn → Visualize → Practice → Understand
-          </Typography>
+          <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+            <Box sx={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#0ea5e9' }} />
+            <Box sx={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#10b981' }} />
+            <Box sx={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#f97316' }} />
+          </Box>
         </Box>
       </Container>
     </Box>

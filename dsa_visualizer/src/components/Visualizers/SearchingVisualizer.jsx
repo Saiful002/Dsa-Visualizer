@@ -582,9 +582,9 @@ export default function SearchingVisualizer({ initialAlgorithm = 'binary-search'
 
         <CodeViewer
           cCode={algorithmData.cCode}
-          phpCode={algorithmData.phpCode}
+          pythonCode={algorithmData.pythonCode}
           cFileName={algorithmData.cFileName}
-          phpFileName={algorithmData.phpFileName}
+          pythonFileName={algorithmData.pythonFileName}
         />
       </Box>
 
