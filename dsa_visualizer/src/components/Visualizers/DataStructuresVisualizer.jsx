@@ -11,10 +11,14 @@ import AlgorithmHeader from '../Common/AlgorithmHeader';
 import PseudocodeViewer from '../Common/PseudocodeViewer';
 import CodeViewer from '../Common/CodeViewer';
 import TheorySection from '../Common/TheorySection';
+import SecondarySidebar from '../Common/SecondarySidebar';
 import { ALGORITHMS } from '../../data/algorithmsData';
 import { soundManager } from '../../utils/audio';
+import { useColorMode } from '../../app/ThemeRegistry';
 
 export default function DataStructuresVisualizer({ initialType = 'array' }) {
+  const { mode } = useColorMode();
+  const isDark = mode === 'dark';
   const [dsType, setDsType] = useState(initialType);
   const [inputValue, setInputValue] = useState('42');
   const [inputIndex, setInputIndex] = useState('2');
@@ -269,7 +273,7 @@ export default function DataStructuresVisualizer({ initialType = 'array' }) {
             y1={e.y1}
             x2={e.x2}
             y2={e.y2}
-            stroke="rgba(255, 255, 255, 0.2)"
+            stroke={isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(15, 23, 42, 0.2)"}
             strokeWidth="2"
           />
         ))}
@@ -281,11 +285,11 @@ export default function DataStructuresVisualizer({ initialType = 'array' }) {
                 cx={n.x}
                 cy={n.y}
                 r={18}
-                fill={isHigh ? '#10b981' : '#1e293b'}
-                stroke={isHigh ? '#34d399' : '#38bdf8'}
+                fill={isHigh ? '#10b981' : (isDark ? '#1e293b' : '#ffffff')}
+                stroke={isHigh ? '#34d399' : (isDark ? '#38bdf8' : '#0284c7')}
                 strokeWidth={isHigh ? 3 : 2}
                 style={{
-                  filter: isHigh ? 'drop-shadow(0 0 10px #10b981)' : 'none',
+                  filter: isHigh ? 'drop-shadow(0 0 10px #10b981)' : (isDark ? 'none' : 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'),
                   transition: 'all 0.3s ease',
                 }}
               />
@@ -293,7 +297,7 @@ export default function DataStructuresVisualizer({ initialType = 'array' }) {
                 x={n.x}
                 y={n.y + 5}
                 textAnchor="middle"
-                fill="#ffffff"
+                fill={isHigh ? '#ffffff' : (isDark ? '#ffffff' : '#0f172a')}
                 fontSize="12"
                 fontWeight="700"
                 fontFamily="monospace"
@@ -308,47 +312,44 @@ export default function DataStructuresVisualizer({ initialType = 'array' }) {
   };
 
   const dsTabs = [
-    { type: 'array', label: 'Array' },
-    { type: 'linked-list', label: 'Linked List' },
-    { type: 'stack', label: 'Stack (LIFO)' },
-    { type: 'queue', label: 'Queue (FIFO)' },
-    { type: 'binary-search-tree', label: 'Binary Search Tree' },
+    { slug: 'array', label: 'Array', badge: 'Linear' },
+    { slug: 'linked-list', label: 'Linked List', badge: 'Dynamic' },
+    { slug: 'stack', label: 'Stack (LIFO)', badge: 'O(1) Push' },
+    { slug: 'queue', label: 'Queue (FIFO)', badge: 'O(1) Enq' },
+    { slug: 'binary-search-tree', label: 'Binary Search Tree', badge: 'O(log n)' },
   ];
 
   return (
-    <Box sx={{ width: '100%', maxWidth: 1400, mx: 'auto', px: { xs: 2, md: 4 }, py: 3 }}>
-      {/* Category Tabs */}
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
-        {dsTabs.map((tab) => (
-          <Button
-            key={tab.type}
-            onClick={() => {
-              setDsType(tab.type);
-              setStatusMessage(`Switched to ${tab.label}. Try operations below.`);
-              setActiveHighlight(null);
-            }}
-            sx={{
-              px: 2,
-              py: 0.75,
-              borderRadius: 2,
-              fontWeight: 700,
-              fontSize: '0.85rem',
-              color: dsType === tab.type ? '#ffffff' : '#94a3b8',
-              backgroundColor: dsType === tab.type ? '#2563eb' : 'rgba(255, 255, 255, 0.04)',
-              border: `1px solid ${dsType === tab.type ? '#3b82f6' : 'rgba(255, 255, 255, 0.06)'}`,
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: dsType === tab.type ? '#1d4ed8' : 'rgba(255, 255, 255, 0.08)',
-              },
-            }}
-          >
-            {tab.label}
-          </Button>
-        ))}
-      </Box>
+    <Box
+      sx={{
+        width: '100%',
+        maxWidth: 1600,
+        mx: 'auto',
+        px: { xs: 1.5, sm: 2, md: 3 },
+        py: 3,
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
+        gap: { xs: 2, md: 3 },
+        alignItems: 'flex-start',
+      }}
+    >
+      {/* Secondary Left Sidebar / SideDrawer for Data Structures */}
+      <SecondarySidebar
+        title="Structures Suite"
+        category="Data Structures"
+        items={dsTabs}
+        activeSlug={dsType}
+        onSelect={(slug) => {
+          setDsType(slug);
+          setStatusMessage(`Switched to ${dsTabs.find(t => t.slug === slug)?.label || slug}.`);
+          setActiveHighlight(null);
+        }}
+      />
 
-      {/* Header */}
-      <AlgorithmHeader algorithm={algorithmData} />
+      {/* Main Content Area */}
+      <Box sx={{ flex: 1, minWidth: 0, width: '100%' }}>
+        {/* Header */}
+        <AlgorithmHeader algorithm={algorithmData} />
 
       {/* Hero Visualizer Canvas */}
       <Paper
@@ -356,10 +357,10 @@ export default function DataStructuresVisualizer({ initialType = 'array' }) {
         sx={{
           p: { xs: 2, sm: 3 },
           borderRadius: 3,
-          backgroundColor: 'rgba(15, 23, 42, 0.7)',
+          backgroundColor: isDark ? 'rgba(13, 19, 34, 0.75)' : 'rgba(255, 255, 255, 0.9)',
           backdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4)',
+          border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
+          boxShadow: isDark ? '0 20px 40px rgba(0, 0, 0, 0.4)' : '0 10px 30px rgba(0, 0, 0, 0.06)',
           mb: 3,
         }}
       >
@@ -368,11 +369,11 @@ export default function DataStructuresVisualizer({ initialType = 'array' }) {
           sx={{
             p: 1.5,
             borderRadius: 2,
-            backgroundColor: 'rgba(56, 189, 248, 0.1)',
-            border: '1px solid rgba(56, 189, 248, 0.25)',
-            color: '#38bdf8',
+            backgroundColor: isDark ? 'rgba(56, 189, 248, 0.1)' : 'rgba(2, 132, 199, 0.08)',
+            border: isDark ? '1px solid rgba(56, 189, 248, 0.25)' : '1px solid rgba(2, 132, 199, 0.25)',
+            color: isDark ? '#38bdf8' : '#0369a1',
             fontSize: '0.9rem',
-            fontWeight: 600,
+            fontWeight: 700,
             mb: 3,
             display: 'flex',
             alignItems: 'center',
@@ -392,8 +393,8 @@ export default function DataStructuresVisualizer({ initialType = 'array' }) {
             justifyContent: 'center',
             p: 3,
             borderRadius: 2,
-            backgroundColor: 'rgba(9, 13, 22, 0.6)',
-            border: '1px solid rgba(255, 255, 255, 0.04)',
+            backgroundColor: isDark ? 'rgba(9, 13, 22, 0.6)' : 'rgba(241, 245, 249, 0.95)',
+            border: isDark ? '1px solid rgba(255, 255, 255, 0.04)' : '1px solid rgba(0, 0, 0, 0.06)',
             overflowX: 'auto',
           }}
         >
@@ -409,22 +410,26 @@ export default function DataStructuresVisualizer({ initialType = 'array' }) {
                         width: 55,
                         height: 55,
                         borderRadius: 2,
-                        backgroundColor: isHighlight ? 'rgba(56, 189, 248, 0.3)' : 'rgba(30, 41, 59, 0.8)',
-                        border: `2px solid ${isHighlight ? '#38bdf8' : 'rgba(255, 255, 255, 0.15)'}`,
+                        backgroundColor: isHighlight
+                          ? (isDark ? 'rgba(56, 189, 248, 0.3)' : 'rgba(2, 132, 199, 0.15)')
+                          : (isDark ? 'rgba(30, 41, 59, 0.8)' : '#ffffff'),
+                        border: `2px solid ${isHighlight ? (isDark ? '#38bdf8' : '#0284c7') : (isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.15)')}`,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        color: isHighlight ? '#38bdf8' : '#ffffff',
+                        color: isHighlight ? (isDark ? '#38bdf8' : '#0284c7') : (isDark ? '#ffffff' : '#0f172a'),
                         fontWeight: 800,
                         fontSize: '1.1rem',
                         fontFamily: 'monospace',
-                        boxShadow: isHighlight ? '0 0 15px #38bdf8' : 'none',
+                        boxShadow: isHighlight
+                          ? (isDark ? '0 0 15px #38bdf8' : '0 0 12px rgba(2, 132, 199, 0.3)')
+                          : (isDark ? 'none' : '0 2px 8px rgba(0,0,0,0.06)'),
                         transition: 'all 0.25s ease',
                       }}
                     >
                       {val}
                     </Box>
-                    <Typography variant="caption" sx={{ color: '#64748b', fontFamily: 'monospace' }}>
+                    <Typography variant="caption" sx={{ color: isDark ? '#64748b' : '#64748b', fontWeight: 600, fontFamily: 'monospace' }}>
                       idx [{idx}]
                     </Typography>
                   </Box>
@@ -444,38 +449,39 @@ export default function DataStructuresVisualizer({ initialType = 'array' }) {
                       <Chip
                         label="HEAD"
                         size="small"
-                        sx={{ backgroundColor: '#2563eb', color: '#fff', fontWeight: 800, fontSize: '0.65rem' }}
+                        sx={{ backgroundColor: '#0284c7', color: '#fff', fontWeight: 800, fontSize: '0.65rem' }}
                       />
                     )}
                     <Box
                       sx={{
                         display: 'flex',
-                        border: `2px solid ${isHighlight ? '#10b981' : 'rgba(255, 255, 255, 0.2)'}`,
+                        border: `2px solid ${isHighlight ? '#10b981' : (isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.15)')}`,
                         borderRadius: 2,
                         overflow: 'hidden',
-                        backgroundColor: 'rgba(30, 41, 59, 0.9)',
-                        boxShadow: isHighlight ? '0 0 15px #10b981' : 'none',
+                        backgroundColor: isDark ? 'rgba(30, 41, 59, 0.9)' : '#ffffff',
+                        boxShadow: isHighlight ? '0 0 15px #10b981' : (isDark ? 'none' : '0 2px 8px rgba(0,0,0,0.06)'),
                         transition: 'all 0.25s ease',
                       }}
                     >
-                      <Box sx={{ px: 2, py: 1.25, color: '#f8fafc', fontWeight: 800, fontFamily: 'monospace' }}>
+                      <Box sx={{ px: 2, py: 1.25, color: isDark ? '#f8fafc' : '#0f172a', fontWeight: 800, fontFamily: 'monospace' }}>
                         {node.value}
                       </Box>
                       <Box
                         sx={{
                           px: 1,
                           py: 1.25,
-                          backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                          borderLeft: '1px solid rgba(255, 255, 255, 0.1)',
-                          color: '#38bdf8',
+                          backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.04)',
+                          borderLeft: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
+                          color: isDark ? '#38bdf8' : '#0284c7',
                           fontSize: '0.75rem',
+                          fontWeight: 700,
                           fontFamily: 'monospace',
                         }}
                       >
                         next
                       </Box>
                     </Box>
-                    <Typography sx={{ color: '#38bdf8', fontWeight: 800, fontSize: '1.2rem' }}>
+                    <Typography sx={{ color: isDark ? '#38bdf8' : '#0284c7', fontWeight: 800, fontSize: '1.2rem' }}>
                       →
                     </Typography>
                   </Box>
@@ -488,8 +494,8 @@ export default function DataStructuresVisualizer({ initialType = 'array' }) {
                   borderRadius: 2,
                   backgroundColor: 'rgba(239, 68, 68, 0.15)',
                   border: '1px dashed #ef4444',
-                  color: '#ef4444',
-                  fontWeight: 700,
+                  color: '#dc2626',
+                  fontWeight: 800,
                   fontSize: '0.75rem',
                   fontFamily: 'monospace',
                 }}
@@ -502,21 +508,22 @@ export default function DataStructuresVisualizer({ initialType = 'array' }) {
           {/* STACK VISUALIZER (Vertical cylinder) */}
           {dsType === 'stack' && (
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-              <Typography variant="caption" sx={{ color: '#38bdf8', fontWeight: 700 }}>
+              <Typography variant="caption" sx={{ color: isDark ? '#38bdf8' : '#0284c7', fontWeight: 800 }}>
                 ▲ TOP OF STACK (LIFO)
               </Typography>
               <Box
                 sx={{
-                  width: 140,
+                  width: 150,
                   minHeight: 180,
-                  border: '3px solid #38bdf8',
+                  border: `3px solid ${isDark ? '#38bdf8' : '#0284c7'}`,
                   borderTop: 'none',
                   borderRadius: '0 0 16px 16px',
                   p: 1.5,
                   display: 'flex',
                   flexDirection: 'column-reverse',
                   gap: 1,
-                  backgroundColor: 'rgba(15, 23, 42, 0.4)',
+                  backgroundColor: isDark ? 'rgba(15, 23, 42, 0.4)' : '#ffffff',
+                  boxShadow: isDark ? 'none' : '0 4px 15px rgba(0,0,0,0.05)',
                 }}
               >
                 {stackData.map((val, idx) => {
@@ -528,12 +535,14 @@ export default function DataStructuresVisualizer({ initialType = 'array' }) {
                       sx={{
                         width: '100%',
                         py: 1,
-                        backgroundColor: isTop ? 'rgba(56, 189, 248, 0.25)' : 'rgba(30, 41, 59, 0.8)',
-                        border: `1px solid ${isTop ? '#38bdf8' : 'rgba(255, 255, 255, 0.1)'}`,
+                        backgroundColor: isTop
+                          ? (isDark ? 'rgba(56, 189, 248, 0.25)' : 'rgba(2, 132, 199, 0.15)')
+                          : (isDark ? 'rgba(30, 41, 59, 0.8)' : '#f8fafc'),
+                        border: `1px solid ${isTop ? (isDark ? '#38bdf8' : '#0284c7') : (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.12)')}`,
                         borderRadius: 1.5,
                         textAlign: 'center',
-                        color: isTop ? '#38bdf8' : '#ffffff',
-                        fontWeight: 700,
+                        color: isTop ? (isDark ? '#38bdf8' : '#0284c7') : (isDark ? '#ffffff' : '#0f172a'),
+                        fontWeight: 800,
                         fontFamily: 'monospace',
                         boxShadow: isHighlight ? '0 0 15px #38bdf8' : 'none',
                         animation: 'fadeIn 0.2s ease',
@@ -544,7 +553,7 @@ export default function DataStructuresVisualizer({ initialType = 'array' }) {
                   );
                 })}
               </Box>
-              <Typography variant="caption" sx={{ color: '#64748b' }}>
+              <Typography variant="caption" sx={{ color: isDark ? '#64748b' : '#64748b', fontWeight: 600 }}>
                 Bottom of Stack
               </Typography>
             </Box>
@@ -554,10 +563,10 @@ export default function DataStructuresVisualizer({ initialType = 'array' }) {
           {dsType === 'queue' && (
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5, width: '100%' }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', maxWidth: 500, px: 2 }}>
-                <Typography variant="caption" sx={{ color: '#10b981', fontWeight: 700 }}>
+                <Typography variant="caption" sx={{ color: isDark ? '#10b981' : '#059669', fontWeight: 800 }}>
                   ← FRONT (DEQUEUE)
                 </Typography>
-                <Typography variant="caption" sx={{ color: '#38bdf8', fontWeight: 700 }}>
+                <Typography variant="caption" sx={{ color: isDark ? '#38bdf8' : '#0284c7', fontWeight: 800 }}>
                   REAR (ENQUEUE) ←
                 </Typography>
               </Box>
@@ -566,11 +575,12 @@ export default function DataStructuresVisualizer({ initialType = 'array' }) {
                   display: 'flex',
                   gap: 1.5,
                   p: 2,
-                  border: '2px dashed rgba(255, 255, 255, 0.2)',
+                  border: isDark ? '2px dashed rgba(255, 255, 255, 0.2)' : '2px dashed rgba(0, 0, 0, 0.2)',
                   borderRadius: 3,
-                  backgroundColor: 'rgba(15, 23, 42, 0.5)',
+                  backgroundColor: isDark ? 'rgba(15, 23, 42, 0.5)' : '#ffffff',
                   minWidth: 320,
                   justifyContent: 'center',
+                  boxShadow: isDark ? 'none' : '0 2px 10px rgba(0,0,0,0.05)',
                 }}
               >
                 {queueData.map((val, idx) => {
@@ -583,12 +593,16 @@ export default function DataStructuresVisualizer({ initialType = 'array' }) {
                         width: 55,
                         height: 55,
                         borderRadius: 2,
-                        backgroundColor: isFront ? 'rgba(16, 185, 129, 0.25)' : isRear ? 'rgba(56, 189, 248, 0.25)' : 'rgba(30, 41, 59, 0.8)',
-                        border: `2px solid ${isFront ? '#10b981' : isRear ? '#38bdf8' : 'rgba(255, 255, 255, 0.1)'}`,
+                        backgroundColor: isFront
+                          ? (isDark ? 'rgba(16, 185, 129, 0.25)' : 'rgba(16, 185, 129, 0.15)')
+                          : isRear
+                          ? (isDark ? 'rgba(56, 189, 248, 0.25)' : 'rgba(2, 132, 199, 0.15)')
+                          : (isDark ? 'rgba(30, 41, 59, 0.8)' : '#f8fafc'),
+                        border: `2px solid ${isFront ? '#10b981' : isRear ? (isDark ? '#38bdf8' : '#0284c7') : (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.12)')}`,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        color: '#ffffff',
+                        color: isDark ? '#ffffff' : '#0f172a',
                         fontWeight: 800,
                         fontFamily: 'monospace',
                       }}
@@ -619,8 +633,9 @@ export default function DataStructuresVisualizer({ initialType = 'array' }) {
             mt: 3,
             p: 2,
             borderRadius: 2.5,
-            backgroundColor: 'rgba(15, 23, 42, 0.8)',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
+            backgroundColor: isDark ? 'rgba(13, 19, 34, 0.8)' : 'rgba(255, 255, 255, 0.95)',
+            border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
+            boxShadow: isDark ? 'none' : '0 4px 15px rgba(0,0,0,0.05)',
           }}
         >
           {/* Input Fields */}
@@ -633,11 +648,13 @@ export default function DataStructuresVisualizer({ initialType = 'array' }) {
               sx={{
                 width: 90,
                 '& .MuiOutlinedInput-root': {
-                  color: '#ffffff',
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                  '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
+                  color: isDark ? '#ffffff' : '#0f172a',
+                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
+                  '& fieldset': { borderColor: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)' },
+                  '&:hover fieldset': { borderColor: '#0284c7' },
+                  '&.Mui-focused fieldset': { borderColor: '#0284c7' },
                 },
-                '& .MuiInputLabel-root': { color: '#94a3b8' },
+                '& .MuiInputLabel-root': { color: isDark ? '#94a3b8' : '#64748b' },
               }}
             />
 
@@ -650,11 +667,13 @@ export default function DataStructuresVisualizer({ initialType = 'array' }) {
                 sx={{
                   width: 80,
                   '& .MuiOutlinedInput-root': {
-                    color: '#ffffff',
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
+                    color: isDark ? '#ffffff' : '#0f172a',
+                    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
+                    '& fieldset': { borderColor: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)' },
+                    '&:hover fieldset': { borderColor: '#0284c7' },
+                    '&.Mui-focused fieldset': { borderColor: '#0284c7' },
                   },
-                  '& .MuiInputLabel-root': { color: '#94a3b8' },
+                  '& .MuiInputLabel-root': { color: isDark ? '#94a3b8' : '#64748b' },
                 }}
               />
             )}
@@ -752,6 +771,7 @@ export default function DataStructuresVisualizer({ initialType = 'array' }) {
 
       {/* Theory */}
       <TheorySection theory={algorithmData.theory} />
+      </Box>
     </Box>
   );
 }

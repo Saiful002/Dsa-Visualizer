@@ -8,8 +8,10 @@ import Paper from '@mui/material/Paper';
 import Chip from '@mui/material/Chip';
 import Slider from '@mui/material/Slider';
 import { soundManager } from '../../utils/audio';
+import { useColorMode } from '../../app/ThemeRegistry';
 
 export default function CompareArena() {
+  const { isDark } = useColorMode();
   const [arraySize, setArraySize] = useState(25);
   const [initialArray, setInitialArray] = useState([]);
   const [isRacing, setIsRacing] = useState(false);
@@ -239,7 +241,7 @@ export default function CompareArena() {
           justifyContent: 'center',
           gap: '2px',
           p: 1,
-          backgroundColor: 'rgba(9, 13, 22, 0.7)',
+          backgroundColor: isDark ? 'rgba(9, 13, 22, 0.7)' : 'rgba(241, 245, 249, 0.95)',
           borderRadius: 2,
         }}
       >
@@ -262,233 +264,250 @@ export default function CompareArena() {
     );
   };
 
+  const cardBg = isDark ? 'rgba(13, 19, 34, 0.75)' : 'rgba(255, 255, 255, 0.9)';
+  const cardBorder = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.08)';
+
   return (
     <Box sx={{ width: '100%', maxWidth: 1400, mx: 'auto', px: { xs: 2, md: 4 }, py: 3 }}>
       <Box sx={{ mb: 3 }}>
-        <Chip
-          label="ALGORITHM COMPARISON"
-          size="small"
-          sx={{
-            backgroundColor: 'rgba(236, 72, 153, 0.15)',
-            color: '#ec4899',
-            border: '1px solid rgba(236, 72, 153, 0.3)',
-            fontWeight: 700,
-            mb: 1,
-          }}
-        />
-        <Typography
-          variant="h4"
-          sx={{
-            fontWeight: 800,
-            background: 'linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            mb: 1,
-          }}
-        >
-          Algorithm Race Arena
-        </Typography>
-        <Typography variant="body1" sx={{ color: '#94a3b8' }}>
-          Watch Bubble Sort, Insertion Sort, Quick Sort, and Merge Sort execute simultaneously on the <em>identical dataset</em> to compare operation efficiency and runtime in real time.
-        </Typography>
-      </Box>
-
-      {/* Arena Grid */}
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
-          gap: 2.5,
-          mb: 3,
-        }}
-      >
-        {/* Quick Sort Card */}
-        <Paper
-          elevation={0}
-          sx={{
-            p: 2.5,
-            borderRadius: 3,
-            backgroundColor: 'rgba(15, 23, 42, 0.7)',
-            border: `1px solid ${quickState.finished ? '#10b981' : 'rgba(255, 255, 255, 0.08)'}`,
-          }}
-        >
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
-            <Box>
-              <Typography variant="h6" sx={{ fontWeight: 700, color: '#38bdf8' }}>
-                Quick Sort (O(n log n))
-              </Typography>
-              <Typography variant="caption" sx={{ color: '#64748b' }}>
-                Divide and Conquer (Pivot Partition)
-              </Typography>
-            </Box>
-            {quickState.finished && <Chip label="FINISHED" size="small" color="success" />}
-          </Box>
-          {renderMiniBars(quickState.arr, quickState.finished, '#38bdf8')}
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1.5, pt: 1, borderTop: '1px solid rgba(255, 255, 255, 0.05)' }}>
-            <Typography variant="caption" sx={{ color: '#94a3b8', fontFamily: 'monospace' }}>
-              Comparisons: <strong style={{ color: '#f59e0b' }}>{quickState.comparisons}</strong>
-            </Typography>
-            <Typography variant="caption" sx={{ color: '#94a3b8', fontFamily: 'monospace' }}>
-              Swaps: <strong style={{ color: '#ef4444' }}>{quickState.swaps}</strong>
-            </Typography>
-          </Box>
-        </Paper>
-
-        {/* Merge Sort Card */}
-        <Paper
-          elevation={0}
-          sx={{
-            p: 2.5,
-            borderRadius: 3,
-            backgroundColor: 'rgba(15, 23, 42, 0.7)',
-            border: `1px solid ${mergeState.finished ? '#10b981' : 'rgba(255, 255, 255, 0.08)'}`,
-          }}
-        >
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
-            <Box>
-              <Typography variant="h6" sx={{ fontWeight: 700, color: '#a855f7' }}>
-                Merge Sort (O(n log n))
-              </Typography>
-              <Typography variant="caption" sx={{ color: '#64748b' }}>
-                Divide, Recurse & Merge Halves
-              </Typography>
-            </Box>
-            {mergeState.finished && <Chip label="FINISHED" size="small" color="success" />}
-          </Box>
-          {renderMiniBars(mergeState.arr, mergeState.finished, '#a855f7')}
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1.5, pt: 1, borderTop: '1px solid rgba(255, 255, 255, 0.05)' }}>
-            <Typography variant="caption" sx={{ color: '#94a3b8', fontFamily: 'monospace' }}>
-              Comparisons: <strong style={{ color: '#f59e0b' }}>{mergeState.comparisons}</strong>
-            </Typography>
-            <Typography variant="caption" sx={{ color: '#94a3b8', fontFamily: 'monospace' }}>
-              Writes: <strong style={{ color: '#ef4444' }}>{mergeState.swaps}</strong>
-            </Typography>
-          </Box>
-        </Paper>
-
-        {/* Insertion Sort Card */}
-        <Paper
-          elevation={0}
-          sx={{
-            p: 2.5,
-            borderRadius: 3,
-            backgroundColor: 'rgba(15, 23, 42, 0.7)',
-            border: `1px solid ${insertionState.finished ? '#10b981' : 'rgba(255, 255, 255, 0.08)'}`,
-          }}
-        >
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
-            <Box>
-              <Typography variant="h6" sx={{ fontWeight: 700, color: '#f59e0b' }}>
-                Insertion Sort (O(n²))
-              </Typography>
-              <Typography variant="caption" sx={{ color: '#64748b' }}>
-                Insert key into sorted prefix
-              </Typography>
-            </Box>
-            {insertionState.finished && <Chip label="FINISHED" size="small" color="success" />}
-          </Box>
-          {renderMiniBars(insertionState.arr, insertionState.finished, '#f59e0b')}
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1.5, pt: 1, borderTop: '1px solid rgba(255, 255, 255, 0.05)' }}>
-            <Typography variant="caption" sx={{ color: '#94a3b8', fontFamily: 'monospace' }}>
-              Comparisons: <strong style={{ color: '#f59e0b' }}>{insertionState.comparisons}</strong>
-            </Typography>
-            <Typography variant="caption" sx={{ color: '#94a3b8', fontFamily: 'monospace' }}>
-              Shifts: <strong style={{ color: '#ef4444' }}>{insertionState.swaps}</strong>
-            </Typography>
-          </Box>
-        </Paper>
-
-        {/* Bubble Sort Card */}
-        <Paper
-          elevation={0}
-          sx={{
-            p: 2.5,
-            borderRadius: 3,
-            backgroundColor: 'rgba(15, 23, 42, 0.7)',
-            border: `1px solid ${bubbleState.finished ? '#10b981' : 'rgba(255, 255, 255, 0.08)'}`,
-          }}
-        >
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
-            <Box>
-              <Typography variant="h6" sx={{ fontWeight: 700, color: '#ef4444' }}>
-                Bubble Sort (O(n²))
-              </Typography>
-              <Typography variant="caption" sx={{ color: '#64748b' }}>
-                Adjacent pairwise comparisons
-              </Typography>
-            </Box>
-            {bubbleState.finished && <Chip label="FINISHED" size="small" color="success" />}
-          </Box>
-          {renderMiniBars(bubbleState.arr, bubbleState.finished, '#ef4444')}
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1.5, pt: 1, borderTop: '1px solid rgba(255, 255, 255, 0.05)' }}>
-            <Typography variant="caption" sx={{ color: '#94a3b8', fontFamily: 'monospace' }}>
-              Comparisons: <strong style={{ color: '#f59e0b' }}>{bubbleState.comparisons}</strong>
-            </Typography>
-            <Typography variant="caption" sx={{ color: '#94a3b8', fontFamily: 'monospace' }}>
-              Swaps: <strong style={{ color: '#ef4444' }}>{bubbleState.swaps}</strong>
-            </Typography>
-          </Box>
-        </Paper>
-      </Box>
-
-      {/* Control Toolbar */}
-      <Paper
-        elevation={0}
-        sx={{
-          p: 2.5,
-          borderRadius: 2.5,
-          backgroundColor: 'rgba(15, 23, 42, 0.8)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 2,
-        }}
-      >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <Button
-            variant="contained"
-            onClick={startRace}
-            disabled={isRacing}
+          <Chip
+            label="ALGORITHM COMPARISON"
+            size="small"
             sx={{
-              background: 'linear-gradient(135deg, #ec4899 0%, #be185d 100%)',
+              backgroundColor: 'rgba(236, 72, 153, 0.15)',
+              color: '#ec4899',
+              border: '1px solid rgba(236, 72, 153, 0.3)',
               fontWeight: 700,
-              px: 3,
-              py: 1,
-              borderRadius: 2,
-              boxShadow: '0 0 15px rgba(236, 72, 153, 0.4)',
+              mb: 1,
+            }}
+          />
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: 800,
+              color: isDark ? '#f8fafc' : '#0f172a',
+              mb: 1,
             }}
           >
-            🏁 Start Race
-          </Button>
+            Algorithm Race Arena
+          </Typography>
+          <Typography variant="body1" sx={{ color: isDark ? '#94a3b8' : '#475569' }}>
+            Watch Bubble Sort, Insertion Sort, Quick Sort, and Merge Sort execute simultaneously on the <em>identical dataset</em> to compare operation efficiency and runtime in real time.
+          </Typography>
+        </Box>
 
-          <Button
-            variant="outlined"
-            onClick={() => generateData(arraySize)}
-            disabled={isRacing}
-            sx={{ borderColor: 'rgba(255, 255, 255, 0.2)', color: '#cbd5e1' }}
+        {/* Arena Grid */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+            gap: 2.5,
+            mb: 3,
+          }}
+        >
+          {/* Quick Sort Card */}
+          <Paper
+            elevation={0}
+            sx={{
+              p: 2.5,
+              borderRadius: 3,
+              backgroundColor: cardBg,
+              backdropFilter: 'blur(12px)',
+              border: `1px solid ${quickState.finished ? '#10b981' : cardBorder}`,
+              boxShadow: isDark ? '0 10px 30px rgba(0,0,0,0.3)' : '0 10px 24px rgba(15,23,42,0.06)',
+            }}
           >
-            Generate New Array
-          </Button>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+              <Box>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: '#0284c7' }}>
+                  Quick Sort (O(n log n))
+                </Typography>
+                <Typography variant="caption" sx={{ color: isDark ? '#64748b' : '#64748b' }}>
+                  Divide and Conquer (Pivot Partition)
+                </Typography>
+              </Box>
+              {quickState.finished && <Chip label="FINISHED" size="small" color="success" />}
+            </Box>
+            {renderMiniBars(quickState.arr, quickState.finished, '#0284c7')}
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1.5, pt: 1, borderTop: `1px solid ${cardBorder}` }}>
+              <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#64748b', fontFamily: 'monospace' }}>
+                Comparisons: <strong style={{ color: '#d97706' }}>{quickState.comparisons}</strong>
+              </Typography>
+              <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#64748b', fontFamily: 'monospace' }}>
+                Swaps: <strong style={{ color: '#ef4444' }}>{quickState.swaps}</strong>
+              </Typography>
+            </Box>
+          </Paper>
+
+          {/* Merge Sort Card */}
+          <Paper
+            elevation={0}
+            sx={{
+              p: 2.5,
+              borderRadius: 3,
+              backgroundColor: cardBg,
+              backdropFilter: 'blur(12px)',
+              border: `1px solid ${mergeState.finished ? '#10b981' : cardBorder}`,
+              boxShadow: isDark ? '0 10px 30px rgba(0,0,0,0.3)' : '0 10px 24px rgba(15,23,42,0.06)',
+            }}
+          >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+              <Box>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: '#9333ea' }}>
+                  Merge Sort (O(n log n))
+                </Typography>
+                <Typography variant="caption" sx={{ color: isDark ? '#64748b' : '#64748b' }}>
+                  Divide, Recurse & Merge Halves
+                </Typography>
+              </Box>
+              {mergeState.finished && <Chip label="FINISHED" size="small" color="success" />}
+            </Box>
+            {renderMiniBars(mergeState.arr, mergeState.finished, '#9333ea')}
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1.5, pt: 1, borderTop: `1px solid ${cardBorder}` }}>
+              <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#64748b', fontFamily: 'monospace' }}>
+                Comparisons: <strong style={{ color: '#d97706' }}>{mergeState.comparisons}</strong>
+              </Typography>
+              <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#64748b', fontFamily: 'monospace' }}>
+                Writes: <strong style={{ color: '#ef4444' }}>{mergeState.swaps}</strong>
+              </Typography>
+            </Box>
+          </Paper>
+
+          {/* Insertion Sort Card */}
+          <Paper
+            elevation={0}
+            sx={{
+              p: 2.5,
+              borderRadius: 3,
+              backgroundColor: cardBg,
+              backdropFilter: 'blur(12px)',
+              border: `1px solid ${insertionState.finished ? '#10b981' : cardBorder}`,
+              boxShadow: isDark ? '0 10px 30px rgba(0,0,0,0.3)' : '0 10px 24px rgba(15,23,42,0.06)',
+            }}
+          >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+              <Box>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: '#d97706' }}>
+                  Insertion Sort (O(n²))
+                </Typography>
+                <Typography variant="caption" sx={{ color: isDark ? '#64748b' : '#64748b' }}>
+                  Insert key into sorted prefix
+                </Typography>
+              </Box>
+              {insertionState.finished && <Chip label="FINISHED" size="small" color="success" />}
+            </Box>
+            {renderMiniBars(insertionState.arr, insertionState.finished, '#d97706')}
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1.5, pt: 1, borderTop: `1px solid ${cardBorder}` }}>
+              <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#64748b', fontFamily: 'monospace' }}>
+                Comparisons: <strong style={{ color: '#d97706' }}>{insertionState.comparisons}</strong>
+              </Typography>
+              <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#64748b', fontFamily: 'monospace' }}>
+                Shifts: <strong style={{ color: '#ef4444' }}>{insertionState.swaps}</strong>
+              </Typography>
+            </Box>
+          </Paper>
+
+          {/* Bubble Sort Card */}
+          <Paper
+            elevation={0}
+            sx={{
+              p: 2.5,
+              borderRadius: 3,
+              backgroundColor: cardBg,
+              backdropFilter: 'blur(12px)',
+              border: `1px solid ${bubbleState.finished ? '#10b981' : cardBorder}`,
+              boxShadow: isDark ? '0 10px 30px rgba(0,0,0,0.3)' : '0 10px 24px rgba(15,23,42,0.06)',
+            }}
+          >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+              <Box>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: '#dc2626' }}>
+                  Bubble Sort (O(n²))
+                </Typography>
+                <Typography variant="caption" sx={{ color: isDark ? '#64748b' : '#64748b' }}>
+                  Adjacent pairwise comparisons
+                </Typography>
+              </Box>
+              {bubbleState.finished && <Chip label="FINISHED" size="small" color="success" />}
+            </Box>
+            {renderMiniBars(bubbleState.arr, bubbleState.finished, '#dc2626')}
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1.5, pt: 1, borderTop: `1px solid ${cardBorder}` }}>
+              <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#64748b', fontFamily: 'monospace' }}>
+                Comparisons: <strong style={{ color: '#d97706' }}>{bubbleState.comparisons}</strong>
+              </Typography>
+              <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#64748b', fontFamily: 'monospace' }}>
+                Swaps: <strong style={{ color: '#ef4444' }}>{bubbleState.swaps}</strong>
+              </Typography>
+            </Box>
+          </Paper>
         </Box>
 
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, minWidth: 240 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
-            <Typography variant="caption" sx={{ color: '#64748b', fontWeight: 600, whiteSpace: 'nowrap' }}>
-              Array Size: {arraySize}
-            </Typography>
-            <Slider
-              value={arraySize}
-              min={15}
-              max={45}
-              onChange={(e, v) => setArraySize(v)}
+        {/* Control Toolbar */}
+        <Paper
+          elevation={0}
+          sx={{
+            p: 2.5,
+            borderRadius: 2.5,
+            backgroundColor: cardBg,
+            backdropFilter: 'blur(12px)',
+            border: `1px solid ${cardBorder}`,
+            boxShadow: isDark ? '0 10px 30px rgba(0,0,0,0.3)' : '0 10px 24px rgba(15,23,42,0.06)',
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 2,
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <Button
+              variant="contained"
+              onClick={startRace}
               disabled={isRacing}
-              sx={{ color: '#ec4899' }}
-            />
+              sx={{
+                background: 'linear-gradient(135deg, #ec4899 0%, #be185d 100%)',
+                fontWeight: 700,
+                px: 3,
+                py: 1,
+                borderRadius: 2,
+                boxShadow: '0 0 15px rgba(236, 72, 153, 0.4)',
+              }}
+            >
+              🏁 Start Race
+            </Button>
+
+            <Button
+              variant="outlined"
+              onClick={() => generateData(arraySize)}
+              disabled={isRacing}
+              sx={{
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(15, 23, 42, 0.2)',
+                color: isDark ? '#cbd5e1' : '#334155',
+                '&:hover': {
+                  borderColor: isDark ? '#ffffff' : '#0f172a',
+                },
+              }}
+            >
+              Generate New Array
+            </Button>
           </Box>
-        </Box>
-      </Paper>
-    </Box>
+
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, minWidth: 240 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
+              <Typography variant="caption" sx={{ color: isDark ? '#64748b' : '#64748b', fontWeight: 600, whiteSpace: 'nowrap' }}>
+                Array Size: {arraySize}
+              </Typography>
+              <Slider
+                value={arraySize}
+                min={15}
+                max={45}
+                onChange={(e, v) => setArraySize(v)}
+                disabled={isRacing}
+                sx={{ color: '#ec4899' }}
+              />
+            </Box>
+          </Box>
+        </Paper>
+      </Box>
   );
 }

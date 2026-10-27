@@ -10,13 +10,17 @@ import AlgorithmHeader from '../Common/AlgorithmHeader';
 import PseudocodeViewer from '../Common/PseudocodeViewer';
 import CodeViewer from '../Common/CodeViewer';
 import TheorySection from '../Common/TheorySection';
+import SecondarySidebar from '../Common/SecondarySidebar';
 import { ALGORITHMS } from '../../data/algorithmsData';
 import { soundManager } from '../../utils/audio';
+import { useColorMode } from '../../app/ThemeRegistry';
 
 const ROWS = 16;
 const COLS = 32;
 
 export default function PathfindingVisualizer() {
+  const { mode } = useColorMode();
+  const isDark = mode === 'dark';
   const [grid, setGrid] = useState([]);
   const [startPos, setStartPos] = useState({ r: 7, c: 5 });
   const [targetPos, setTargetPos] = useState({ r: 7, c: 26 });
@@ -326,43 +330,42 @@ export default function PathfindingVisualizer() {
     });
   };
 
-  return (
-    <Box sx={{ width: '100%', maxWidth: 1400, mx: 'auto', px: { xs: 2, md: 4 }, py: 3 }}>
-      {/* Algorithm Tabs */}
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
-        {[
-          { slug: 'a-star', label: 'A* Search (Heuristic)' },
-          { slug: 'dijkstra', label: "Dijkstra's (Shortest Path)" },
-          { slug: 'bfs', label: 'Breadth-First Search (BFS)' },
-        ].map((item) => (
-          <Button
-            key={item.slug}
-            onClick={() => {
-              setSelectedAlgo(item.slug);
-              clearPathOnly();
-            }}
-            sx={{
-              px: 2,
-              py: 0.75,
-              borderRadius: 2,
-              fontWeight: 700,
-              fontSize: '0.85rem',
-              color: selectedAlgo === item.slug ? '#ffffff' : '#94a3b8',
-              backgroundColor: selectedAlgo === item.slug ? '#2563eb' : 'rgba(255, 255, 255, 0.04)',
-              border: `1px solid ${selectedAlgo === item.slug ? '#3b82f6' : 'rgba(255, 255, 255, 0.06)'}`,
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: selectedAlgo === item.slug ? '#1d4ed8' : 'rgba(255, 255, 255, 0.08)',
-              },
-            }}
-          >
-            {item.label}
-          </Button>
-        ))}
-      </Box>
+  const pathfindingAlgos = [
+    { slug: 'a-star', label: 'A* Search (Heuristic)', badge: 'O(b^d)' },
+    { slug: 'dijkstra', label: "Dijkstra's Algorithm", badge: 'O(V²)' },
+    { slug: 'bfs', label: 'Breadth-First Search (BFS)', badge: 'O(V+E)' },
+  ];
 
-      {/* Header */}
-      <AlgorithmHeader algorithm={algorithmData} />
+  return (
+    <Box
+      sx={{
+        width: '100%',
+        maxWidth: 1600,
+        mx: 'auto',
+        px: { xs: 1.5, sm: 2, md: 3 },
+        py: 3,
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
+        gap: { xs: 2, md: 3 },
+        alignItems: 'flex-start',
+      }}
+    >
+      {/* Secondary Left Sidebar / SideDrawer for Pathfinding */}
+      <SecondarySidebar
+        title="Pathfinding Suite"
+        category="Pathfinding"
+        items={pathfindingAlgos}
+        activeSlug={selectedAlgo}
+        onSelect={(slug) => {
+          setSelectedAlgo(slug);
+          clearPathOnly();
+        }}
+      />
+
+      {/* Main Content Area */}
+      <Box sx={{ flex: 1, minWidth: 0, width: '100%' }}>
+        {/* Header */}
+        <AlgorithmHeader algorithm={algorithmData} />
 
       {/* Hero Visualizer Canvas */}
       <Paper
@@ -370,10 +373,10 @@ export default function PathfindingVisualizer() {
         sx={{
           p: { xs: 2, sm: 3 },
           borderRadius: 3,
-          backgroundColor: 'rgba(15, 23, 42, 0.7)',
+          backgroundColor: isDark ? 'rgba(13, 19, 34, 0.75)' : 'rgba(255, 255, 255, 0.9)',
           backdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4)',
+          border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
+          boxShadow: isDark ? '0 20px 40px rgba(0, 0, 0, 0.4)' : '0 10px 30px rgba(0, 0, 0, 0.06)',
           mb: 3,
         }}
       >
@@ -388,22 +391,22 @@ export default function PathfindingVisualizer() {
             mb: 2,
             p: 1.5,
             borderRadius: 2,
-            backgroundColor: 'rgba(56, 189, 248, 0.1)',
-            border: '1px solid rgba(56, 189, 248, 0.25)',
+            backgroundColor: isDark ? 'rgba(56, 189, 248, 0.1)' : 'rgba(2, 132, 199, 0.08)',
+            border: isDark ? '1px solid rgba(56, 189, 248, 0.25)' : '1px solid rgba(2, 132, 199, 0.25)',
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
             <span>🧭</span>
-            <Typography variant="body2" sx={{ color: '#38bdf8', fontWeight: 600 }}>
+            <Typography variant="body2" sx={{ color: isDark ? '#38bdf8' : '#0369a1', fontWeight: 700 }}>
               {statusMessage}
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Typography variant="caption" sx={{ color: '#cbd5e1', fontFamily: 'monospace' }}>
-              Nodes Visited: <strong style={{ color: '#38bdf8' }}>{stats.visited}</strong>
+            <Typography variant="caption" sx={{ color: isDark ? '#cbd5e1' : '#334155', fontFamily: 'monospace', fontWeight: 600 }}>
+              Nodes Visited: <strong style={{ color: isDark ? '#38bdf8' : '#0284c7' }}>{stats.visited}</strong>
             </Typography>
-            <Typography variant="caption" sx={{ color: '#cbd5e1', fontFamily: 'monospace' }}>
-              Path Length: <strong style={{ color: '#f59e0b' }}>{stats.pathLength}</strong>
+            <Typography variant="caption" sx={{ color: isDark ? '#cbd5e1' : '#334155', fontFamily: 'monospace', fontWeight: 600 }}>
+              Path Length: <strong style={{ color: isDark ? '#f59e0b' : '#d97706' }}>{stats.pathLength}</strong>
             </Typography>
           </Box>
         </Box>
@@ -417,8 +420,8 @@ export default function PathfindingVisualizer() {
             alignItems: 'center',
             p: 1.5,
             borderRadius: 2,
-            backgroundColor: 'rgba(9, 13, 22, 0.9)',
-            border: '1px solid rgba(255, 255, 255, 0.06)',
+            backgroundColor: isDark ? 'rgba(9, 13, 22, 0.9)' : 'rgba(241, 245, 249, 0.95)',
+            border: isDark ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(0, 0, 0, 0.08)',
             overflowX: 'auto',
             userSelect: 'none',
           }}
@@ -426,28 +429,28 @@ export default function PathfindingVisualizer() {
           {grid.map((row, rIdx) => (
             <Box key={rIdx} sx={{ display: 'flex' }}>
               {row.map((node, cIdx) => {
-                let cellBg = 'rgba(15, 23, 42, 0.6)';
-                let border = '1px solid rgba(255, 255, 255, 0.04)';
+                let cellBg = isDark ? 'rgba(15, 23, 42, 0.6)' : '#ffffff';
+                let border = isDark ? '1px solid rgba(255, 255, 255, 0.04)' : '1px solid rgba(0, 0, 0, 0.08)';
                 let glow = 'none';
 
                 if (node.isStart) {
                   cellBg = '#10b981';
-                  border = '1px solid #34d399';
+                  border = '1px solid #059669';
                   glow = '0 0 10px #10b981';
                 } else if (node.isTarget) {
                   cellBg = '#ef4444';
-                  border = '1px solid #f87171';
+                  border = '1px solid #dc2626';
                   glow = '0 0 10px #ef4444';
                 } else if (node.isPath) {
                   cellBg = '#f59e0b';
-                  border = '1px solid #fbbf24';
+                  border = '1px solid #d97706';
                   glow = '0 0 8px #f59e0b';
                 } else if (node.isVisited) {
-                  cellBg = 'rgba(56, 189, 248, 0.45)';
-                  border = '1px solid rgba(56, 189, 248, 0.2)';
+                  cellBg = isDark ? 'rgba(56, 189, 248, 0.45)' : 'rgba(14, 165, 233, 0.35)';
+                  border = isDark ? '1px solid rgba(56, 189, 248, 0.3)' : '1px solid rgba(14, 165, 233, 0.3)';
                 } else if (node.isWall) {
-                  cellBg = '#020617';
-                  border = '1px solid #334155';
+                  cellBg = isDark ? '#020617' : '#334155';
+                  border = isDark ? '1px solid #334155' : '1px solid #1e293b';
                 }
 
                 return (
@@ -491,28 +494,28 @@ export default function PathfindingVisualizer() {
             gap: 2.5,
             mt: 2,
             pt: 2,
-            borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+            borderTop: isDark ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(0, 0, 0, 0.08)',
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
             <Box sx={{ width: 14, height: 14, borderRadius: 0.5, backgroundColor: '#10b981' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Start Node (S)</Typography>
+            <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#475569', fontWeight: 600 }}>Start Node (S)</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
             <Box sx={{ width: 14, height: 14, borderRadius: 0.5, backgroundColor: '#ef4444' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Target Node (G)</Typography>
+            <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#475569', fontWeight: 600 }}>Target Node (G)</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-            <Box sx={{ width: 14, height: 14, borderRadius: 0.5, backgroundColor: '#020617', border: '1px solid #334155' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Wall / Obstacle</Typography>
+            <Box sx={{ width: 14, height: 14, borderRadius: 0.5, backgroundColor: isDark ? '#020617' : '#334155', border: '1px solid #334155' }} />
+            <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#475569', fontWeight: 600 }}>Wall / Obstacle</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-            <Box sx={{ width: 14, height: 14, borderRadius: 0.5, backgroundColor: 'rgba(56, 189, 248, 0.45)' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Visited Node</Typography>
+            <Box sx={{ width: 14, height: 14, borderRadius: 0.5, backgroundColor: isDark ? 'rgba(56, 189, 248, 0.45)' : 'rgba(14, 165, 233, 0.4)' }} />
+            <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#475569', fontWeight: 600 }}>Visited Node</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
             <Box sx={{ width: 14, height: 14, borderRadius: 0.5, backgroundColor: '#f59e0b' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Shortest Path</Typography>
+            <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#475569', fontWeight: 600 }}>Shortest Path</Typography>
           </Box>
         </Box>
 
@@ -527,8 +530,9 @@ export default function PathfindingVisualizer() {
             mt: 3,
             p: 2,
             borderRadius: 2.5,
-            backgroundColor: 'rgba(15, 23, 42, 0.8)',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
+            backgroundColor: isDark ? 'rgba(15, 23, 42, 0.8)' : '#ffffff',
+            border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.1)',
+            boxShadow: isDark ? 'none' : '0 4px 12px rgba(0, 0, 0, 0.05)',
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
@@ -554,8 +558,8 @@ export default function PathfindingVisualizer() {
               onClick={generateMaze}
               disabled={isRunning}
               sx={{
-                borderColor: '#38bdf8',
-                color: '#38bdf8',
+                borderColor: isDark ? '#38bdf8' : '#0284c7',
+                color: isDark ? '#38bdf8' : '#0284c7',
                 borderRadius: 2,
                 textTransform: 'none',
                 fontWeight: 600,
@@ -568,7 +572,7 @@ export default function PathfindingVisualizer() {
               variant="text"
               onClick={clearPathOnly}
               disabled={isRunning}
-              sx={{ color: '#94a3b8', textTransform: 'none' }}
+              sx={{ color: isDark ? '#94a3b8' : '#475569', textTransform: 'none', fontWeight: 600 }}
             >
               Clear Path
             </Button>
@@ -577,14 +581,14 @@ export default function PathfindingVisualizer() {
               variant="text"
               onClick={initializeGrid}
               disabled={isRunning}
-              sx={{ color: '#ef4444', textTransform: 'none' }}
+              sx={{ color: '#ef4444', textTransform: 'none', fontWeight: 600 }}
             >
               Reset Board
             </Button>
           </Box>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Typography variant="caption" sx={{ color: '#64748b', fontWeight: 600 }}>SPEED:</Typography>
+            <Typography variant="caption" sx={{ color: isDark ? '#64748b' : '#334155', fontWeight: 700 }}>SPEED:</Typography>
             {[0.5, 1, 2].map((s) => (
               <Button
                 key={s}
@@ -596,7 +600,7 @@ export default function PathfindingVisualizer() {
                   py: 0.25,
                   fontSize: '0.75rem',
                   fontWeight: 700,
-                  color: speed === s ? '#ffffff' : '#94a3b8',
+                  color: speed === s ? '#ffffff' : (isDark ? '#94a3b8' : '#475569'),
                   backgroundColor: speed === s ? '#2563eb' : 'transparent',
                   borderRadius: 1.5,
                 }}
@@ -628,6 +632,7 @@ export default function PathfindingVisualizer() {
 
       {/* Theory */}
       <TheorySection theory={algorithmData.theory} />
+      </Box>
     </Box>
   );
 }

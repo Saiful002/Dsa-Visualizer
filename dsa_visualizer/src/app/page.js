@@ -18,8 +18,11 @@ import {
   LayersIcon,
   GridIcon,
 } from '../components/Common/Icons';
+import { useColorMode } from './ThemeRegistry';
 
 export default function Home() {
+  const { mode } = useColorMode();
+  const isDark = mode === 'dark';
   const [activeTab, setActiveTab] = useState('sorting'); // 'sorting' | 'searching' | 'graph'
 
   // Mini interactive sorting simulator
@@ -106,15 +109,23 @@ export default function Home() {
               px: 2.25,
               py: 0.8,
               borderRadius: 8,
-              backgroundColor: 'rgba(14, 165, 233, 0.08)',
-              border: '1px solid rgba(14, 165, 233, 0.25)',
+              backgroundColor: isDark ? 'rgba(14, 165, 233, 0.1)' : 'rgba(2, 132, 199, 0.08)',
+              border: isDark ? '1px solid rgba(14, 165, 233, 0.3)' : '1px solid rgba(2, 132, 199, 0.3)',
               mb: 3,
             }}
           >
             <Box sx={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#0ea5e9' }} />
             <Box sx={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#10b981' }} />
             <Box sx={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#f97316' }} />
-            <Typography variant="caption" sx={{ fontWeight: 700, letterSpacing: '0.08em', color: '#e2e8f0' }}>
+            <Typography
+              variant="caption"
+              sx={{
+                fontWeight: 800,
+                letterSpacing: '0.08em',
+                color: isDark ? '#e2e8f0' : '#0369a1',
+                fontSize: '0.78rem',
+              }}
+            >
               LEARN • VISUALIZE • PRACTICE • MASTER
             </Typography>
           </Box>
@@ -128,7 +139,9 @@ export default function Home() {
               lineHeight: 1.1,
               fontSize: { xs: '2.5rem', sm: '3.6rem', md: '4.5rem' },
               mb: 2.5,
-              background: 'linear-gradient(135deg, #ffffff 0%, #cbd5e1 55%, #94a3b8 100%)',
+              background: isDark
+                ? 'linear-gradient(135deg, #ffffff 0%, #cbd5e1 55%, #94a3b8 100%)'
+                : 'linear-gradient(135deg, #0f172a 0%, #334155 55%, #475569 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
             }}
@@ -140,7 +153,7 @@ export default function Home() {
           <Typography
             variant="body1"
             sx={{
-              color: '#94a3b8',
+              color: isDark ? '#94a3b8' : '#334155',
               fontSize: { xs: '1rem', md: '1.2rem' },
               lineHeight: 1.6,
               maxWidth: 680,
@@ -181,9 +194,9 @@ export default function Home() {
                 variant="outlined"
                 size="large"
                 sx={{
-                  borderColor: 'rgba(249, 115, 22, 0.4)',
-                  backgroundColor: 'rgba(249, 115, 22, 0.08)',
-                  color: '#f97316',
+                  borderColor: isDark ? 'rgba(249, 115, 22, 0.4)' : 'rgba(234, 88, 12, 0.4)',
+                  backgroundColor: isDark ? 'rgba(249, 115, 22, 0.08)' : 'rgba(234, 88, 12, 0.06)',
+                  color: isDark ? '#f97316' : '#c2410c',
                   fontWeight: 700,
                   px: 3,
                   py: 1.4,
@@ -191,7 +204,7 @@ export default function Home() {
                   fontSize: '0.95rem',
                   '&:hover': {
                     borderColor: '#f97316',
-                    backgroundColor: 'rgba(249, 115, 22, 0.15)',
+                    backgroundColor: isDark ? 'rgba(249, 115, 22, 0.15)' : 'rgba(234, 88, 12, 0.12)',
                   },
                 }}
               >
@@ -201,14 +214,22 @@ export default function Home() {
 
             <Link href="/data-structures" style={{ textDecoration: 'none' }}>
               <Button
-                variant="text"
+                variant="outlined"
                 size="large"
                 sx={{
-                  color: '#10b981',
-                  fontWeight: 600,
+                  borderColor: isDark ? 'rgba(16, 185, 129, 0.4)' : 'rgba(5, 150, 105, 0.45)',
+                  backgroundColor: isDark ? 'rgba(16, 185, 129, 0.08)' : 'rgba(5, 150, 105, 0.06)',
+                  color: isDark ? '#10b981' : '#047857',
+                  fontWeight: 700,
                   fontSize: '0.95rem',
-                  px: 2,
-                  '&:hover': { color: '#34d399' },
+                  px: 3,
+                  py: 1.4,
+                  borderRadius: 2.5,
+                  '&:hover': {
+                    borderColor: '#10b981',
+                    backgroundColor: isDark ? 'rgba(16, 185, 129, 0.15)' : 'rgba(5, 150, 105, 0.12)',
+                    color: isDark ? '#34d399' : '#065f46',
+                  },
                 }}
               >
                 Data Structures →
@@ -224,10 +245,10 @@ export default function Home() {
             maxWidth: 1040,
             mx: 'auto',
             borderRadius: 4,
-            backgroundColor: 'rgba(13, 19, 34, 0.8)',
+            backgroundColor: isDark ? 'rgba(13, 19, 34, 0.8)' : 'rgba(255, 255, 255, 0.9)',
             backdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.7)',
+            border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.08)',
+            boxShadow: isDark ? '0 25px 60px -15px rgba(0, 0, 0, 0.7)' : '0 20px 50px rgba(0, 0, 0, 0.06)',
             overflow: 'hidden',
             mb: 10,
           }}
@@ -241,8 +262,8 @@ export default function Home() {
               alignItems: 'center',
               px: { xs: 2, sm: 3 },
               py: 1.5,
-              backgroundColor: 'rgba(255, 255, 255, 0.03)',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)',
+              borderBottom: isDark ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(0, 0, 0, 0.08)',
               gap: 1.5,
             }}
           >
@@ -256,7 +277,7 @@ export default function Home() {
                   py: 0.5,
                   fontSize: '0.8rem',
                   fontWeight: 700,
-                  color: activeTab === 'sorting' ? '#0ea5e9' : '#94a3b8',
+                  color: activeTab === 'sorting' ? '#0ea5e9' : (isDark ? '#94a3b8' : '#475569'),
                   backgroundColor: activeTab === 'sorting' ? 'rgba(14, 165, 233, 0.12)' : 'transparent',
                   border: `1px solid ${activeTab === 'sorting' ? 'rgba(14, 165, 233, 0.3)' : 'transparent'}`,
                   borderRadius: 2,
@@ -273,7 +294,7 @@ export default function Home() {
                   py: 0.5,
                   fontSize: '0.8rem',
                   fontWeight: 700,
-                  color: activeTab === 'searching' ? '#10b981' : '#94a3b8',
+                  color: activeTab === 'searching' ? '#10b981' : (isDark ? '#94a3b8' : '#475569'),
                   backgroundColor: activeTab === 'searching' ? 'rgba(16, 185, 129, 0.12)' : 'transparent',
                   border: `1px solid ${activeTab === 'searching' ? 'rgba(16, 185, 129, 0.3)' : 'transparent'}`,
                   borderRadius: 2,
@@ -306,7 +327,7 @@ export default function Home() {
                     size="small"
                     onClick={resetMiniSort}
                     disabled={isSorting}
-                    sx={{ color: '#94a3b8', minWidth: 32 }}
+                    sx={{ color: isDark ? '#94a3b8' : '#475569', minWidth: 32 }}
                   >
                     <RotateCcwIcon size={16} />
                   </Button>
@@ -338,7 +359,8 @@ export default function Home() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: 'rgba(7, 10, 19, 0.6)',
+              backgroundColor: isDark ? 'rgba(7, 10, 19, 0.6)' : 'rgba(241, 245, 249, 0.95)',
+              borderTop: isDark ? '1px solid rgba(255, 255, 255, 0.05)' : '1px solid rgba(0, 0, 0, 0.06)',
             }}
           >
             {activeTab === 'sorting' && (
@@ -393,8 +415,8 @@ export default function Home() {
 
             {activeTab === 'searching' && (
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-                <Typography variant="body2" sx={{ color: '#94a3b8' }}>
-                  Target: <strong style={{ color: '#10b981' }}>62</strong> (Halving search space logarithmically)
+                <Typography variant="body2" sx={{ color: isDark ? '#94a3b8' : '#334155', fontWeight: 600 }}>
+                  Target: <strong style={{ color: isDark ? '#10b981' : '#059669' }}>62</strong> (Halving search space logarithmically)
                 </Typography>
                 <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', justifyContent: 'center' }}>
                   {searchArr.map((val, idx) => {
@@ -402,22 +424,22 @@ export default function Home() {
                     const isFound = searchPointers.found === idx;
                     const isOutside = idx < searchPointers.low || idx > searchPointers.high;
 
-                    let bg = 'rgba(13, 19, 34, 0.8)';
-                    let border = 'rgba(255, 255, 255, 0.15)';
-                    let textCol = '#ffffff';
+                    let bg = isDark ? 'rgba(13, 19, 34, 0.8)' : '#ffffff';
+                    let border = isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.12)';
+                    let textCol = isDark ? '#ffffff' : '#0f172a';
 
                     if (isFound) {
-                      bg = 'rgba(16, 185, 129, 0.3)';
-                      border = '#10b981';
-                      textCol = '#10b981';
+                      bg = isDark ? 'rgba(16, 185, 129, 0.3)' : 'rgba(16, 185, 129, 0.15)';
+                      border = isDark ? '#10b981' : '#059669';
+                      textCol = isDark ? '#10b981' : '#047857';
                     } else if (isMid) {
-                      bg = 'rgba(249, 115, 22, 0.25)';
-                      border = '#f97316';
-                      textCol = '#f97316';
+                      bg = isDark ? 'rgba(249, 115, 22, 0.25)' : 'rgba(249, 115, 22, 0.12)';
+                      border = isDark ? '#f97316' : '#ea580c';
+                      textCol = isDark ? '#f97316' : '#c2410c';
                     } else if (isOutside) {
-                      bg = 'rgba(255, 255, 255, 0.02)';
-                      border = 'rgba(255, 255, 255, 0.05)';
-                      textCol = '#475569';
+                      bg = isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.03)';
+                      border = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)';
+                      textCol = isDark ? '#475569' : '#94a3b8';
                     }
 
                     return (
@@ -458,7 +480,7 @@ export default function Home() {
             <Typography variant="caption" sx={{ color: '#0ea5e9', fontWeight: 700, letterSpacing: '0.1em' }}>
               ALGORITHMIC PLATFORM SUITE
             </Typography>
-            <Typography variant="h4" sx={{ fontWeight: 800, color: '#f8fafc', mt: 0.5 }}>
+            <Typography variant="h4" sx={{ fontWeight: 800, color: isDark ? '#f8fafc' : '#0f172a', mt: 0.5 }}>
               Choose a Core Domain
             </Typography>
           </Box>
@@ -478,9 +500,10 @@ export default function Home() {
                   p: 3.5,
                   height: '100%',
                   borderRadius: 3.5,
-                  backgroundColor: 'rgba(13, 19, 34, 0.75)',
+                  backgroundColor: isDark ? 'rgba(13, 19, 34, 0.75)' : 'rgba(255, 255, 255, 0.9)',
                   backdropFilter: 'blur(16px)',
-                  border: '1px solid rgba(14, 165, 233, 0.25)',
+                  border: isDark ? '1px solid rgba(14, 165, 233, 0.25)' : '1px solid rgba(14, 165, 233, 0.3)',
+                  boxShadow: isDark ? 'none' : '0 10px 25px rgba(0, 0, 0, 0.04)',
                   transition: 'all 0.25s ease',
                   '&:hover': {
                     transform: 'translateY(-6px)',
@@ -515,10 +538,10 @@ export default function Home() {
                     mb: 1.5,
                   }}
                 />
-                <Typography variant="h5" sx={{ fontWeight: 800, color: '#f8fafc', mb: 1 }}>
+                <Typography variant="h5" sx={{ fontWeight: 800, color: isDark ? '#f8fafc' : '#0f172a', mb: 1 }}>
                   Data & Sorting
                 </Typography>
-                <Typography variant="body2" sx={{ color: '#94a3b8', lineHeight: 1.6, mb: 3 }}>
+                <Typography variant="body2" sx={{ color: isDark ? '#94a3b8' : '#475569', lineHeight: 1.6, mb: 3 }}>
                   Bubble, Selection, Insertion, Merge, Quick, and Heap Sort with step-by-step swaps, pivots, and logarithmic binary search.
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#0ea5e9', fontWeight: 700 }}>
@@ -536,9 +559,10 @@ export default function Home() {
                   p: 3.5,
                   height: '100%',
                   borderRadius: 3.5,
-                  backgroundColor: 'rgba(13, 19, 34, 0.75)',
+                  backgroundColor: isDark ? 'rgba(13, 19, 34, 0.75)' : 'rgba(255, 255, 255, 0.9)',
                   backdropFilter: 'blur(16px)',
-                  border: '1px solid rgba(16, 185, 129, 0.25)',
+                  border: isDark ? '1px solid rgba(16, 185, 129, 0.25)' : '1px solid rgba(16, 185, 129, 0.3)',
+                  boxShadow: isDark ? 'none' : '0 10px 25px rgba(0, 0, 0, 0.04)',
                   transition: 'all 0.25s ease',
                   '&:hover': {
                     transform: 'translateY(-6px)',
@@ -573,10 +597,10 @@ export default function Home() {
                     mb: 1.5,
                   }}
                 />
-                <Typography variant="h5" sx={{ fontWeight: 800, color: '#f8fafc', mb: 1 }}>
+                <Typography variant="h5" sx={{ fontWeight: 800, color: isDark ? '#f8fafc' : '#0f172a', mb: 1 }}>
                   Structures & Trees
                 </Typography>
-                <Typography variant="body2" sx={{ color: '#94a3b8', lineHeight: 1.6, mb: 3 }}>
+                <Typography variant="body2" sx={{ color: isDark ? '#94a3b8' : '#475569', lineHeight: 1.6, mb: 3 }}>
                   Arrays, Linked Lists, LIFO Stacks, FIFO Queues, and dynamic SVG Binary Search Trees with real-time operations.
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#10b981', fontWeight: 700 }}>
@@ -594,9 +618,10 @@ export default function Home() {
                   p: 3.5,
                   height: '100%',
                   borderRadius: 3.5,
-                  backgroundColor: 'rgba(13, 19, 34, 0.75)',
+                  backgroundColor: isDark ? 'rgba(13, 19, 34, 0.75)' : 'rgba(255, 255, 255, 0.9)',
                   backdropFilter: 'blur(16px)',
-                  border: '1px solid rgba(249, 115, 22, 0.25)',
+                  border: isDark ? '1px solid rgba(249, 115, 22, 0.25)' : '1px solid rgba(249, 115, 22, 0.3)',
+                  boxShadow: isDark ? 'none' : '0 10px 25px rgba(0, 0, 0, 0.04)',
                   transition: 'all 0.25s ease',
                   '&:hover': {
                     transform: 'translateY(-6px)',
@@ -631,10 +656,10 @@ export default function Home() {
                     mb: 1.5,
                   }}
                 />
-                <Typography variant="h5" sx={{ fontWeight: 800, color: '#f8fafc', mb: 1 }}>
+                <Typography variant="h5" sx={{ fontWeight: 800, color: isDark ? '#f8fafc' : '#0f172a', mb: 1 }}>
                   Pathfinding & Graphs
                 </Typography>
-                <Typography variant="body2" sx={{ color: '#94a3b8', lineHeight: 1.6, mb: 3 }}>
+                <Typography variant="body2" sx={{ color: isDark ? '#94a3b8' : '#475569', lineHeight: 1.6, mb: 3 }}>
                   Draw walls on 2D grids, generate mazes, and solve shortest paths using A*, Dijkstra, BFS, and N-Queens backtracking.
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#f97316', fontWeight: 700 }}>

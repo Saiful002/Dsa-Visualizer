@@ -11,8 +11,10 @@ import StepExplanation from '../Common/StepExplanation';
 import PseudocodeViewer from '../Common/PseudocodeViewer';
 import CodeViewer from '../Common/CodeViewer';
 import TheorySection from '../Common/TheorySection';
+import SecondarySidebar from '../Common/SecondarySidebar';
 import { ALGORITHMS } from '../../data/algorithmsData';
 import { soundManager } from '../../utils/audio';
+import { useColorMode } from '../../app/ThemeRegistry';
 
 function generateNQueensSteps(n = 4) {
   const steps = [];
@@ -97,6 +99,8 @@ function generateNQueensSteps(n = 4) {
 }
 
 export default function RecursionVisualizer() {
+  const { mode } = useColorMode();
+  const isDark = mode === 'dark';
   const [n, setN] = useState(4);
   const [steps, setSteps] = useState([]);
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
@@ -154,9 +158,38 @@ export default function RecursionVisualizer() {
     row: 0,
   };
 
+  const recursionAlgos = [
+    { slug: 'n-queens', label: 'N-Queens Backtracking', badge: 'O(N!)' },
+    { slug: 'tower-of-hanoi', label: 'Tower of Hanoi', badge: '2ⁿ - 1' },
+    { slug: 'fibonacci-tree', label: 'Fibonacci Tree', badge: 'O(2ⁿ)' },
+  ];
+
   return (
-    <Box sx={{ width: '100%', maxWidth: 1400, mx: 'auto', px: { xs: 2, md: 4 }, py: 3 }}>
-      <AlgorithmHeader algorithm={algorithmData} />
+    <Box
+      sx={{
+        width: '100%',
+        maxWidth: 1600,
+        mx: 'auto',
+        px: { xs: 1.5, sm: 2, md: 3 },
+        py: 3,
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
+        gap: { xs: 2, md: 3 },
+        alignItems: 'flex-start',
+      }}
+    >
+      {/* Secondary Left Sidebar / SideDrawer for Recursion */}
+      <SecondarySidebar
+        title="Recursion Trees"
+        category="Recursion"
+        items={recursionAlgos}
+        activeSlug="n-queens"
+        onSelect={() => {}}
+      />
+
+      {/* Main Content Area */}
+      <Box sx={{ flex: 1, minWidth: 0, width: '100%' }}>
+        <AlgorithmHeader algorithm={algorithmData} />
 
       {/* Hero Visualizer Canvas */}
       <Paper
@@ -164,10 +197,10 @@ export default function RecursionVisualizer() {
         sx={{
           p: { xs: 2, sm: 3 },
           borderRadius: 3,
-          backgroundColor: 'rgba(15, 23, 42, 0.7)',
+          backgroundColor: isDark ? 'rgba(13, 19, 34, 0.75)' : 'rgba(255, 255, 255, 0.9)',
           backdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4)',
+          border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
+          boxShadow: isDark ? '0 20px 40px rgba(0, 0, 0, 0.4)' : '0 10px 30px rgba(0, 0, 0, 0.06)',
           mb: 3,
         }}
       >
@@ -185,8 +218,9 @@ export default function RecursionVisualizer() {
             justifyContent: 'center',
             alignItems: 'center',
             p: 3,
-            backgroundColor: 'rgba(9, 13, 22, 0.8)',
+            backgroundColor: isDark ? 'rgba(9, 13, 22, 0.8)' : 'rgba(241, 245, 249, 0.95)',
             borderRadius: 2,
+            border: isDark ? '1px solid rgba(255, 255, 255, 0.05)' : '1px solid rgba(0, 0, 0, 0.06)',
             overflowX: 'auto',
           }}
         >
@@ -194,10 +228,10 @@ export default function RecursionVisualizer() {
             sx={{
               display: 'inline-grid',
               gridTemplateColumns: `repeat(${n}, 1fr)`,
-              border: '3px solid #334155',
+              border: isDark ? '3px solid #334155' : '3px solid #94a3b8',
               borderRadius: 2,
               overflow: 'hidden',
-              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5)',
+              boxShadow: isDark ? '0 10px 30px rgba(0, 0, 0, 0.5)' : '0 10px 25px rgba(0, 0, 0, 0.08)',
             }}
           >
             {currentStep.board.map((rowArr, rIdx) =>
@@ -206,9 +240,11 @@ export default function RecursionVisualizer() {
                 const isQueen = cell === 1;
                 const isCurrent = currentStep.row === rIdx && currentStep.col === cIdx;
 
-                let cellBg = isLight ? '#1e293b' : '#0f172a';
-                if (isCurrent) cellBg = 'rgba(245, 158, 11, 0.3)';
-                if (isQueen) cellBg = 'rgba(16, 185, 129, 0.35)';
+                let cellBg = isLight
+                  ? (isDark ? '#1e293b' : '#ffffff')
+                  : (isDark ? '#0f172a' : '#e2e8f0');
+                if (isCurrent) cellBg = isDark ? 'rgba(245, 158, 11, 0.35)' : 'rgba(245, 158, 11, 0.25)';
+                if (isQueen) cellBg = isDark ? 'rgba(16, 185, 129, 0.35)' : 'rgba(16, 185, 129, 0.25)';
 
                 return (
                   <Box
@@ -217,7 +253,11 @@ export default function RecursionVisualizer() {
                       width: { xs: 44, sm: 58, md: 66 },
                       height: { xs: 44, sm: 58, md: 66 },
                       backgroundColor: cellBg,
-                      border: isCurrent ? '2px solid #f59e0b' : '1px solid rgba(255, 255, 255, 0.05)',
+                      border: isCurrent
+                        ? '2px solid #f59e0b'
+                        : isDark
+                        ? '1px solid rgba(255, 255, 255, 0.05)'
+                        : '1px solid rgba(0, 0, 0, 0.06)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -305,6 +345,7 @@ export default function RecursionVisualizer() {
 
       {/* Theory */}
       <TheorySection theory={algorithmData.theory} />
+      </Box>
     </Box>
   );
 }

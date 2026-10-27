@@ -5,16 +5,24 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from 'next/link';
+import { useColorMode } from '../../app/ThemeRegistry';
 
 export default function Footer() {
+  const { mode } = useColorMode();
+  const isDark = mode === 'dark';
+
   return (
     <Box
       component="footer"
       sx={{
-        mt: 10,
+        position: 'relative',
+        zIndex: 10,
+        mt: { xs: 8, md: 10 },
         py: 6,
-        backgroundColor: '#05070e',
-        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+        backgroundColor: isDark ? '#070a13' : '#ffffff',
+        borderTop: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.08)',
+        boxShadow: isDark ? '0 -10px 30px rgba(0, 0, 0, 0.35)' : '0 -4px 20px rgba(0, 0, 0, 0.04)',
+        transition: 'background 0.25s ease, border-color 0.25s ease',
       }}
     >
       <Container maxWidth="xl">
@@ -26,54 +34,61 @@ export default function Footer() {
             mb: 4,
           }}
         >
-          {/* Brand info */}
+          {/* Brand info with enlarged Logo */}
           <Box>
             <Box
               component="img"
               src="/logo.png"
               alt="DSA Visualizer Logo"
-              sx={{ height: 38, width: 'auto', mb: 2 }}
+              sx={{
+                height: 52,
+                width: 'auto',
+                mb: 2,
+                filter: isDark
+                  ? 'drop-shadow(0 2px 10px rgba(14, 165, 233, 0.25))'
+                  : 'drop-shadow(0 2px 6px rgba(0, 0, 0, 0.08))',
+              }}
             />
-            <Typography variant="body2" sx={{ color: '#94a3b8', maxWidth: 360, lineHeight: 1.7 }}>
+            <Typography variant="body2" sx={{ color: isDark ? '#94a3b8' : '#475569', maxWidth: 360, lineHeight: 1.7 }}>
               Interactive visual learning platform for Data Structures and Algorithms. Master core computational logic through animated execution, 3D constellations, and verified C & Python code.
             </Typography>
           </Box>
 
           {/* Quick Links */}
           <Box>
-            <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#f8fafc', mb: 1.5 }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 700, color: isDark ? '#f8fafc' : '#0f172a', mb: 1.5 }}>
               Algorithms
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Link href="/sorting" style={{ color: '#94a3b8', fontSize: '0.875rem' }}>Sorting Suite</Link>
-              <Link href="/searching" style={{ color: '#94a3b8', fontSize: '0.875rem' }}>Binary Search</Link>
-              <Link href="/pathfinding" style={{ color: '#94a3b8', fontSize: '0.875rem' }}>A* Pathfinding</Link>
-              <Link href="/graph" style={{ color: '#94a3b8', fontSize: '0.875rem' }}>Dijkstra Graph</Link>
+              <Link href="/sorting" style={{ color: isDark ? '#94a3b8' : '#64748b', fontSize: '0.875rem' }}>Sorting Suite</Link>
+              <Link href="/searching" style={{ color: isDark ? '#94a3b8' : '#64748b', fontSize: '0.875rem' }}>Binary Search</Link>
+              <Link href="/pathfinding" style={{ color: isDark ? '#94a3b8' : '#64748b', fontSize: '0.875rem' }}>A* Pathfinding</Link>
+              <Link href="/graph" style={{ color: isDark ? '#94a3b8' : '#64748b', fontSize: '0.875rem' }}>Dijkstra Graph</Link>
             </Box>
           </Box>
 
           {/* Structures */}
           <Box>
-            <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#f8fafc', mb: 1.5 }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 700, color: isDark ? '#f8fafc' : '#0f172a', mb: 1.5 }}>
               Structures
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Link href="/data-structures" style={{ color: '#94a3b8', fontSize: '0.875rem' }}>Arrays & Linked Lists</Link>
-              <Link href="/data-structures" style={{ color: '#94a3b8', fontSize: '0.875rem' }}>Stacks & Queues</Link>
-              <Link href="/data-structures" style={{ color: '#94a3b8', fontSize: '0.875rem' }}>Binary Search Trees</Link>
-              <Link href="/dynamic-programming" style={{ color: '#94a3b8', fontSize: '0.875rem' }}>0/1 Knapsack DP</Link>
+              <Link href="/data-structures" style={{ color: isDark ? '#94a3b8' : '#64748b', fontSize: '0.875rem' }}>Arrays & Linked Lists</Link>
+              <Link href="/data-structures" style={{ color: isDark ? '#94a3b8' : '#64748b', fontSize: '0.875rem' }}>Stacks & Queues</Link>
+              <Link href="/data-structures" style={{ color: isDark ? '#94a3b8' : '#64748b', fontSize: '0.875rem' }}>Binary Search Trees</Link>
+              <Link href="/dynamic-programming" style={{ color: isDark ? '#94a3b8' : '#64748b', fontSize: '0.875rem' }}>0/1 Knapsack DP</Link>
             </Box>
           </Box>
 
-          {/* Tools */}
+          {/* Practice & Analysis */}
           <Box>
-            <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#f8fafc', mb: 1.5 }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 700, color: isDark ? '#f8fafc' : '#0f172a', mb: 1.5 }}>
               Interactive
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Link href="/compare" style={{ color: '#f97316', fontSize: '0.875rem', fontWeight: 600 }}>Race Arena 🏁</Link>
-              <Link href="/recursion" style={{ color: '#10b981', fontSize: '0.875rem', fontWeight: 600 }}>N-Queens Backtracking</Link>
-              <Link href="/complexity" style={{ color: '#0ea5e9', fontSize: '0.875rem', fontWeight: 600 }}>Big-O Curves & Cheat Sheet</Link>
+              <Link href="/compare" style={{ color: isDark ? '#94a3b8' : '#64748b', fontSize: '0.875rem' }}>Race Arena 🏁</Link>
+              <Link href="/recursion" style={{ color: isDark ? '#94a3b8' : '#64748b', fontSize: '0.875rem' }}>N-Queens Backtracking</Link>
+              <Link href="/complexity" style={{ color: isDark ? '#94a3b8' : '#64748b', fontSize: '0.875rem' }}>Big-O Curves & Cheat Sheet</Link>
             </Box>
           </Box>
         </Box>
@@ -81,21 +96,21 @@ export default function Footer() {
         <Box
           sx={{
             pt: 4,
-            borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+            borderTop: isDark ? '1px solid rgba(255, 255, 255, 0.05)' : '1px solid rgba(0, 0, 0, 0.05)',
             display: 'flex',
-            flexWrap: 'wrap',
+            flexDirection: { xs: 'column', sm: 'row' },
             justifyContent: 'space-between',
             alignItems: 'center',
             gap: 2,
           }}
         >
-          <Typography variant="caption" sx={{ color: '#64748b' }}>
-            © {new Date().getFullYear()} DSA Visualizer. Learn • Visualize • Practice • Master.
+          <Typography variant="caption" sx={{ color: isDark ? '#64748b' : '#94a3b8' }}>
+            © {new Date().getFullYear()} DSA Visualizer. Crafted with precision for visual algorithmic mastery.
           </Typography>
-          <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-            <Box sx={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#0ea5e9' }} />
-            <Box sx={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#10b981' }} />
-            <Box sx={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#f97316' }} />
+          <Box sx={{ display: 'flex', gap: 3 }}>
+            <Link href="/" style={{ color: isDark ? '#64748b' : '#94a3b8', fontSize: '0.75rem' }}>Home</Link>
+            <Link href="/complexity" style={{ color: isDark ? '#64748b' : '#94a3b8', fontSize: '0.75rem' }}>Documentation</Link>
+            <Link href="/compare" style={{ color: isDark ? '#64748b' : '#94a3b8', fontSize: '0.75rem' }}>Benchmarks</Link>
           </Box>
         </Box>
       </Container>

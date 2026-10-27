@@ -9,8 +9,10 @@ import AlgorithmHeader from '../Common/AlgorithmHeader';
 import PseudocodeViewer from '../Common/PseudocodeViewer';
 import CodeViewer from '../Common/CodeViewer';
 import TheorySection from '../Common/TheorySection';
+import SecondarySidebar from '../Common/SecondarySidebar';
 import { ALGORITHMS } from '../../data/algorithmsData';
 import { soundManager } from '../../utils/audio';
+import { useColorMode } from '../../app/ThemeRegistry';
 
 const INITIAL_NODES = [
   { id: 0, label: 'A', x: 80, y: 140 },
@@ -34,6 +36,8 @@ const INITIAL_EDGES = [
 ];
 
 export default function GraphVisualizer() {
+  const { mode } = useColorMode();
+  const isDark = mode === 'dark';
   const [nodes, setNodes] = useState(INITIAL_NODES);
   const [edges, setEdges] = useState(INITIAL_EDGES);
   const [selectedAlgo, setSelectedAlgo] = useState('dijkstra');
@@ -169,9 +173,42 @@ export default function GraphVisualizer() {
     });
   };
 
+  const graphAlgos = [
+    { slug: 'dijkstras-algorithm', label: "Dijkstra's Shortest Path", badge: 'O(V²)' },
+    { slug: 'breadth-first-search', label: 'Breadth-First Search (BFS)', badge: 'O(V+E)' },
+    { slug: 'depth-first-search', label: 'Depth-First Search (DFS)', badge: 'O(V+E)' },
+    { slug: 'prims-algorithm', label: "Prim's Algorithm (MST)", badge: 'O(E log V)' },
+  ];
+
   return (
-    <Box sx={{ width: '100%', maxWidth: 1400, mx: 'auto', px: { xs: 2, md: 4 }, py: 3 }}>
-      <AlgorithmHeader algorithm={algorithmData} />
+    <Box
+      sx={{
+        width: '100%',
+        maxWidth: 1600,
+        mx: 'auto',
+        px: { xs: 1.5, sm: 2, md: 3 },
+        py: 3,
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
+        gap: { xs: 2, md: 3 },
+        alignItems: 'flex-start',
+      }}
+    >
+      {/* Secondary Left Sidebar / SideDrawer for Graph */}
+      <SecondarySidebar
+        title="Graph Networks"
+        category="Graph"
+        items={graphAlgos}
+        activeSlug={selectedAlgo}
+        onSelect={(slug) => {
+          setSelectedAlgo(slug);
+          handleReset();
+        }}
+      />
+
+      {/* Main Content Area */}
+      <Box sx={{ flex: 1, minWidth: 0, width: '100%' }}>
+        <AlgorithmHeader algorithm={algorithmData} />
 
       {/* Hero Visualizer Canvas */}
       <Paper
@@ -179,10 +216,10 @@ export default function GraphVisualizer() {
         sx={{
           p: { xs: 2, sm: 3 },
           borderRadius: 3,
-          backgroundColor: 'rgba(15, 23, 42, 0.7)',
+          backgroundColor: isDark ? 'rgba(13, 19, 34, 0.75)' : 'rgba(255, 255, 255, 0.9)',
           backdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4)',
+          border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
+          boxShadow: isDark ? '0 20px 40px rgba(0, 0, 0, 0.4)' : '0 10px 30px rgba(0, 0, 0, 0.06)',
           mb: 3,
         }}
       >
@@ -191,11 +228,11 @@ export default function GraphVisualizer() {
           sx={{
             p: 1.5,
             borderRadius: 2,
-            backgroundColor: 'rgba(56, 189, 248, 0.1)',
-            border: '1px solid rgba(56, 189, 248, 0.25)',
-            color: '#38bdf8',
+            backgroundColor: isDark ? 'rgba(56, 189, 248, 0.1)' : 'rgba(2, 132, 199, 0.08)',
+            border: isDark ? '1px solid rgba(56, 189, 248, 0.25)' : '1px solid rgba(2, 132, 199, 0.25)',
+            color: isDark ? '#38bdf8' : '#0369a1',
             fontSize: '0.9rem',
-            fontWeight: 600,
+            fontWeight: 700,
             mb: 2.5,
           }}
         >
@@ -210,8 +247,8 @@ export default function GraphVisualizer() {
             alignItems: 'center',
             justifyContent: 'center',
             borderRadius: 2,
-            backgroundColor: 'rgba(9, 13, 22, 0.8)',
-            border: '1px solid rgba(255, 255, 255, 0.04)',
+            backgroundColor: isDark ? 'rgba(9, 13, 22, 0.8)' : 'rgba(241, 245, 249, 0.95)',
+            border: isDark ? '1px solid rgba(255, 255, 255, 0.04)' : '1px solid rgba(0, 0, 0, 0.06)',
             overflowX: 'auto',
           }}
         >
@@ -233,7 +270,7 @@ export default function GraphVisualizer() {
                     y1={uNode.y}
                     x2={vNode.x}
                     y2={vNode.y}
-                    stroke={isEdgeActive ? '#38bdf8' : 'rgba(255, 255, 255, 0.2)'}
+                    stroke={isEdgeActive ? (isDark ? '#38bdf8' : '#0284c7') : (isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(15, 23, 42, 0.2)')}
                     strokeWidth={isEdgeActive ? 3.5 : 2}
                     style={{ transition: 'all 0.3s ease' }}
                   />
@@ -244,14 +281,14 @@ export default function GraphVisualizer() {
                     width="20"
                     height="20"
                     rx="4"
-                    fill="#0f172a"
-                    stroke={isEdgeActive ? '#38bdf8' : 'rgba(255, 255, 255, 0.2)'}
+                    fill={isDark ? '#0f172a' : '#ffffff'}
+                    stroke={isEdgeActive ? (isDark ? '#38bdf8' : '#0284c7') : (isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.15)')}
                   />
                   <text
                     x={midX}
                     y={midY + 4}
                     textAnchor="middle"
-                    fill="#94a3b8"
+                    fill={isDark ? '#94a3b8' : '#475569'}
                     fontSize="11"
                     fontWeight="700"
                     fontFamily="monospace"
@@ -267,8 +304,8 @@ export default function GraphVisualizer() {
               const isCurrent = activeNode === node.id;
               const isVisited = visitedNodes.includes(node.id);
 
-              let fill = '#1e293b';
-              let stroke = '#64748b';
+              let fill = isDark ? '#1e293b' : '#ffffff';
+              let stroke = isDark ? '#64748b' : '#94a3b8';
 
               if (isCurrent) {
                 fill = '#f59e0b';
@@ -288,7 +325,7 @@ export default function GraphVisualizer() {
                     stroke={stroke}
                     strokeWidth={isCurrent ? 3 : 2}
                     style={{
-                      filter: isCurrent ? 'drop-shadow(0 0 12px #f59e0b)' : isVisited ? 'drop-shadow(0 0 8px #10b981)' : 'none',
+                      filter: isCurrent ? 'drop-shadow(0 0 12px #f59e0b)' : isVisited ? 'drop-shadow(0 0 8px #10b981)' : (isDark ? 'none' : 'drop-shadow(0 2px 6px rgba(0,0,0,0.1))'),
                       transition: 'all 0.3s ease',
                     }}
                   />
@@ -296,7 +333,7 @@ export default function GraphVisualizer() {
                     x={node.x}
                     y={node.y + 5}
                     textAnchor="middle"
-                    fill="#ffffff"
+                    fill={isCurrent || isVisited ? '#ffffff' : (isDark ? '#ffffff' : '#0f172a')}
                     fontSize="14"
                     fontWeight="800"
                     fontFamily="monospace"
@@ -319,24 +356,24 @@ export default function GraphVisualizer() {
             gap: 2.5,
             mt: 2,
             pt: 2,
-            borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+            borderTop: isDark ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(0, 0, 0, 0.06)',
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-            <Box sx={{ width: 14, height: 14, borderRadius: '50%', backgroundColor: '#1e293b', border: '1px solid #64748b' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Unvisited Node</Typography>
+            <Box sx={{ width: 14, height: 14, borderRadius: '50%', backgroundColor: isDark ? '#1e293b' : '#ffffff', border: isDark ? '1px solid #64748b' : '1px solid #94a3b8' }} />
+            <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#475569', fontWeight: 600 }}>Unvisited Node</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
             <Box sx={{ width: 14, height: 14, borderRadius: '50%', backgroundColor: '#f59e0b' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Current Node</Typography>
+            <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#475569', fontWeight: 600 }}>Current Node</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
             <Box sx={{ width: 14, height: 14, borderRadius: '50%', backgroundColor: '#10b981' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Visited / Solved</Typography>
+            <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#475569', fontWeight: 600 }}>Visited / Solved</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-            <Box sx={{ width: 18, height: 3, backgroundColor: '#38bdf8' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Relaxed Edge</Typography>
+            <Box sx={{ width: 18, height: 3, backgroundColor: isDark ? '#38bdf8' : '#0284c7' }} />
+            <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#475569', fontWeight: 600 }}>Relaxed Edge</Typography>
           </Box>
         </Box>
 
@@ -349,15 +386,16 @@ export default function GraphVisualizer() {
             mt: 3,
             p: 2,
             borderRadius: 2.5,
-            backgroundColor: 'rgba(15, 23, 42, 0.8)',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
+            backgroundColor: isDark ? 'rgba(13, 19, 34, 0.8)' : 'rgba(255, 255, 255, 0.95)',
+            border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
+            boxShadow: isDark ? 'none' : '0 4px 15px rgba(0,0,0,0.05)',
           }}
         >
           <Button
             variant="contained"
             onClick={runDijkstra}
             disabled={isRunning}
-            sx={{ backgroundColor: '#2563eb', fontWeight: 700 }}
+            sx={{ backgroundColor: '#0284c7', color: '#fff', fontWeight: 700 }}
           >
             Run Dijkstra (Shortest Path)
           </Button>
@@ -366,7 +404,7 @@ export default function GraphVisualizer() {
             variant="contained"
             onClick={runBFS}
             disabled={isRunning}
-            sx={{ backgroundColor: '#0284c7', fontWeight: 700 }}
+            sx={{ backgroundColor: '#10b981', color: '#fff', fontWeight: 700 }}
           >
             Run BFS Traversal
           </Button>
@@ -375,7 +413,10 @@ export default function GraphVisualizer() {
             variant="outlined"
             onClick={resetVisualState}
             disabled={isRunning}
-            sx={{ borderColor: 'rgba(255, 255, 255, 0.2)', color: '#94a3b8' }}
+            sx={{
+              borderColor: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+              color: isDark ? '#94a3b8' : '#334155',
+            }}
           >
             Reset Traversal
           </Button>
@@ -402,6 +443,7 @@ export default function GraphVisualizer() {
 
       {/* Theory */}
       <TheorySection theory={algorithmData.theory} />
+      </Box>
     </Box>
   );
 }

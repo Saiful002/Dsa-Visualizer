@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
       <body>
         <ThemeRegistry>
           <Nav />
-          <main style={{ minHeight: 'calc(100vh - 160px)' }}>
+          <main style={{ minHeight: 'calc(100vh - 160px)', position: 'relative', zIndex: 1 }}>
             {children}
           </main>
           <Footer />

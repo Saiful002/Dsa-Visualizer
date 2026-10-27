@@ -11,6 +11,7 @@ import StepExplanation from '../Common/StepExplanation';
 import PseudocodeViewer from '../Common/PseudocodeViewer';
 import CodeViewer from '../Common/CodeViewer';
 import TheorySection from '../Common/TheorySection';
+import SecondarySidebar from '../Common/SecondarySidebar';
 import { ALGORITHMS } from '../../data/algorithmsData';
 import { soundManager } from '../../utils/audio';
 
@@ -729,60 +730,60 @@ export default function SortingVisualizer({ initialAlgorithm = 'bubble-sort' }) 
   };
 
   const sortingAlgos = [
-    { slug: 'bubble-sort', label: 'Bubble Sort' },
-    { slug: 'selection-sort', label: 'Selection Sort' },
-    { slug: 'insertion-sort', label: 'Insertion Sort' },
-    { slug: 'merge-sort', label: 'Merge Sort' },
-    { slug: 'quick-sort', label: 'Quick Sort' },
-    { slug: 'heap-sort', label: 'Heap Sort' },
+    { slug: 'bubble-sort', label: 'Bubble Sort', badge: 'O(n²)' },
+    { slug: 'selection-sort', label: 'Selection Sort', badge: 'O(n²)' },
+    { slug: 'insertion-sort', label: 'Insertion Sort', badge: 'O(n²)' },
+    { slug: 'merge-sort', label: 'Merge Sort', badge: 'O(n log n)' },
+    { slug: 'quick-sort', label: 'Quick Sort', badge: 'O(n log n)' },
+    { slug: 'heap-sort', label: 'Heap Sort', badge: 'O(n log n)' },
   ];
 
   const maxVal = Math.max(...currentDisplayArray, 100);
 
   return (
-    <Box sx={{ width: '100%', maxWidth: 1400, mx: 'auto', px: { xs: 2, md: 4 }, py: 3 }}>
-      {/* Algorithm Tabs */}
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
-        {sortingAlgos.map((item) => (
-          <Button
-            key={item.slug}
-            onClick={() => setSelectedAlgo(item.slug)}
-            sx={{
-              px: 2,
-              py: 0.75,
-              borderRadius: 2,
-              fontWeight: 700,
-              fontSize: '0.85rem',
-              color: selectedAlgo === item.slug ? '#ffffff' : '#94a3b8',
-              backgroundColor: selectedAlgo === item.slug ? '#2563eb' : 'rgba(255, 255, 255, 0.04)',
-              border: `1px solid ${selectedAlgo === item.slug ? '#3b82f6' : 'rgba(255, 255, 255, 0.06)'}`,
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: selectedAlgo === item.slug ? '#1d4ed8' : 'rgba(255, 255, 255, 0.08)',
-              },
-            }}
-          >
-            {item.label}
-          </Button>
-        ))}
-      </Box>
+    <Box
+      sx={{
+        width: '100%',
+        maxWidth: 1600,
+        mx: 'auto',
+        px: { xs: 1.5, sm: 2, md: 3 },
+        py: 3,
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
+        gap: { xs: 2, md: 3 },
+        alignItems: 'flex-start',
+      }}
+    >
+      {/* Secondary Left Sidebar / SideDrawer for Algorithms */}
+      <SecondarySidebar
+        title="Sorting Suite"
+        category="Sorting"
+        items={sortingAlgos}
+        activeSlug={selectedAlgo}
+        onSelect={setSelectedAlgo}
+      />
 
-      {/* Header with Title and Complexity Cards */}
-      <AlgorithmHeader algorithm={algorithmData} />
+      {/* Main Content Area */}
+      <Box sx={{ flex: 1, minWidth: 0, width: '100%' }}>
+        {/* Header with Title and Complexity Cards */}
+        <AlgorithmHeader algorithm={algorithmData} />
 
-      {/* Hero Visualizer Canvas */}
-      <Paper
-        elevation={0}
-        sx={{
-          p: { xs: 2, sm: 3 },
-          borderRadius: 3,
-          backgroundColor: 'rgba(15, 23, 42, 0.7)',
-          backdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4)',
-          mb: 3,
-        }}
-      >
+        {/* Hero Visualizer Canvas */}
+        <Paper
+          elevation={0}
+          sx={{
+            p: { xs: 2, sm: 3 },
+            borderRadius: 3,
+            backgroundColor: (theme) =>
+              theme.palette.mode === 'dark' ? 'rgba(15, 23, 42, 0.75)' : 'rgba(255, 255, 255, 0.9)',
+            backdropFilter: 'blur(16px)',
+            border: (theme) =>
+              theme.palette.mode === 'dark' ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
+            boxShadow: (theme) =>
+              theme.palette.mode === 'dark' ? '0 20px 40px rgba(0, 0, 0, 0.4)' : '0 10px 30px rgba(0, 0, 0, 0.05)',
+            mb: 3,
+          }}
+        >
         {/* Step Explanation Banner */}
         <StepExplanation
           stepNumber={currentStepIdx + 1}
@@ -807,8 +808,10 @@ export default function SortingVisualizer({ initialAlgorithm = 'bubble-sort' }) 
             pb: 2,
             pt: 4,
             borderRadius: 2,
-            backgroundColor: 'rgba(9, 13, 22, 0.6)',
-            border: '1px solid rgba(255, 255, 255, 0.04)',
+            backgroundColor: (theme) =>
+              theme.palette.mode === 'dark' ? 'rgba(9, 13, 22, 0.6)' : 'rgba(241, 245, 249, 0.95)',
+            border: (theme) =>
+              theme.palette.mode === 'dark' ? '1px solid rgba(255, 255, 255, 0.04)' : '1px solid rgba(0, 0, 0, 0.06)',
             overflowX: 'auto',
           }}
         >
@@ -887,28 +890,29 @@ export default function SortingVisualizer({ initialAlgorithm = 'bubble-sort' }) 
             gap: 2.5,
             mt: 2.5,
             pt: 2,
-            borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+            borderTop: (theme) =>
+              theme.palette.mode === 'dark' ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(0, 0, 0, 0.08)',
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
             <Box sx={{ width: 12, height: 12, borderRadius: 0.5, backgroundColor: '#0ea5e9' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Default (D)</Typography>
+            <Typography variant="caption" sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#94a3b8' : '#475569', fontWeight: 600 }}>Default (D)</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
             <Box sx={{ width: 12, height: 12, borderRadius: 0.5, backgroundColor: '#f97316' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Comparing (A)</Typography>
+            <Typography variant="caption" sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#94a3b8' : '#475569', fontWeight: 600 }}>Comparing (A)</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
             <Box sx={{ width: 12, height: 12, borderRadius: 0.5, backgroundColor: '#ef4444' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Swapping</Typography>
+            <Typography variant="caption" sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#94a3b8' : '#475569', fontWeight: 600 }}>Swapping</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
             <Box sx={{ width: 12, height: 12, borderRadius: 0.5, backgroundColor: '#f59e0b' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Pivot</Typography>
+            <Typography variant="caption" sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#94a3b8' : '#475569', fontWeight: 600 }}>Pivot</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
             <Box sx={{ width: 12, height: 12, borderRadius: 0.5, backgroundColor: '#10b981' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Sorted (S)</Typography>
+            <Typography variant="caption" sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#94a3b8' : '#475569', fontWeight: 600 }}>Sorted (S)</Typography>
           </Box>
         </Box>
 
@@ -959,6 +963,7 @@ export default function SortingVisualizer({ initialAlgorithm = 'bubble-sort' }) 
 
       {/* Theory & Learning Guide */}
       <TheorySection theory={algorithmData.theory} />
+      </Box>
     </Box>
   );
 }

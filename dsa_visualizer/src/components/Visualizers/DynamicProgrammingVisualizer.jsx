@@ -11,8 +11,10 @@ import StepExplanation from '../Common/StepExplanation';
 import PseudocodeViewer from '../Common/PseudocodeViewer';
 import CodeViewer from '../Common/CodeViewer';
 import TheorySection from '../Common/TheorySection';
+import SecondarySidebar from '../Common/SecondarySidebar';
 import { ALGORITHMS } from '../../data/algorithmsData';
 import { soundManager } from '../../utils/audio';
+import { useColorMode } from '../../app/ThemeRegistry';
 
 const DEFAULT_ITEMS = [
   { name: 'Item 1', weight: 2, val: 3 },
@@ -91,6 +93,8 @@ function generateKnapsackSteps(items, capacity) {
 }
 
 export default function DynamicProgrammingVisualizer() {
+  const { mode } = useColorMode();
+  const isDark = mode === 'dark';
   const [capacity, setCapacity] = useState(7);
   const [items, setItems] = useState(DEFAULT_ITEMS);
   const [steps, setSteps] = useState([]);
@@ -147,9 +151,38 @@ export default function DynamicProgrammingVisualizer() {
     description: 'Ready to solve 0/1 Knapsack.',
   };
 
+  const dpAlgos = [
+    { slug: 'knapsack-01', label: '0/1 Knapsack Problem', badge: 'O(N×W)' },
+    { slug: 'fibonacci-memoization', label: 'Fibonacci (Memoized)', badge: 'O(n)' },
+    { slug: 'longest-common-subsequence', label: 'Longest Common Subsequence', badge: 'O(m×n)' },
+  ];
+
   return (
-    <Box sx={{ width: '100%', maxWidth: 1400, mx: 'auto', px: { xs: 2, md: 4 }, py: 3 }}>
-      <AlgorithmHeader algorithm={algorithmData} />
+    <Box
+      sx={{
+        width: '100%',
+        maxWidth: 1600,
+        mx: 'auto',
+        px: { xs: 1.5, sm: 2, md: 3 },
+        py: 3,
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
+        gap: { xs: 2, md: 3 },
+        alignItems: 'flex-start',
+      }}
+    >
+      {/* Secondary Left Sidebar / SideDrawer for DP */}
+      <SecondarySidebar
+        title="DP Suite"
+        category="Dynamic Programming"
+        items={dpAlgos}
+        activeSlug="knapsack-01"
+        onSelect={() => {}}
+      />
+
+      {/* Main Content Area */}
+      <Box sx={{ flex: 1, minWidth: 0, width: '100%' }}>
+        <AlgorithmHeader algorithm={algorithmData} />
 
       {/* Hero Visualizer Canvas */}
       <Paper
@@ -157,10 +190,10 @@ export default function DynamicProgrammingVisualizer() {
         sx={{
           p: { xs: 2, sm: 3 },
           borderRadius: 3,
-          backgroundColor: 'rgba(15, 23, 42, 0.7)',
+          backgroundColor: isDark ? 'rgba(13, 19, 34, 0.75)' : 'rgba(255, 255, 255, 0.9)',
           backdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4)',
+          border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
+          boxShadow: isDark ? '0 20px 40px rgba(0, 0, 0, 0.4)' : '0 10px 30px rgba(0, 0, 0, 0.06)',
           mb: 3,
         }}
       >
@@ -180,8 +213,8 @@ export default function DynamicProgrammingVisualizer() {
             mb: 3,
             p: 1.5,
             borderRadius: 2,
-            backgroundColor: 'rgba(255, 255, 255, 0.02)',
-            border: '1px solid rgba(255, 255, 255, 0.05)',
+            backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.03)',
+            border: isDark ? '1px solid rgba(255, 255, 255, 0.05)' : '1px solid rgba(0, 0, 0, 0.06)',
           }}
         >
           {items.map((it, idx) => (
@@ -191,21 +224,24 @@ export default function DynamicProgrammingVisualizer() {
                 px: 2,
                 py: 1,
                 borderRadius: 1.5,
-                backgroundColor: currentStep.activeCell?.i === idx + 1 ? 'rgba(56, 189, 248, 0.15)' : 'rgba(15, 23, 42, 0.6)',
-                border: `1px solid ${currentStep.activeCell?.i === idx + 1 ? '#38bdf8' : 'rgba(255, 255, 255, 0.08)'}`,
+                backgroundColor: currentStep.activeCell?.i === idx + 1
+                  ? (isDark ? 'rgba(56, 189, 248, 0.15)' : 'rgba(2, 132, 199, 0.12)')
+                  : (isDark ? 'rgba(15, 23, 42, 0.6)' : '#ffffff'),
+                border: `1px solid ${currentStep.activeCell?.i === idx + 1 ? '#0ea5e9' : (isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.1)')}`,
+                boxShadow: isDark ? 'none' : '0 2px 4px rgba(0,0,0,0.04)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 1.5,
               }}
             >
-              <Typography variant="body2" sx={{ fontWeight: 700, color: '#f8fafc' }}>
+              <Typography variant="body2" sx={{ fontWeight: 700, color: isDark ? '#f8fafc' : '#0f172a' }}>
                 {it.name}:
               </Typography>
-              <Typography variant="caption" sx={{ color: '#94a3b8' }}>
-                Weight = <strong style={{ color: '#f59e0b' }}>{it.weight}</strong>
+              <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#475569' }}>
+                Weight = <strong style={{ color: isDark ? '#f59e0b' : '#d97706' }}>{it.weight}</strong>
               </Typography>
-              <Typography variant="caption" sx={{ color: '#94a3b8' }}>
-                Value = <strong style={{ color: '#10b981' }}>${it.val}</strong>
+              <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#475569' }}>
+                Value = <strong style={{ color: isDark ? '#10b981' : '#059669' }}>${it.val}</strong>
               </Typography>
             </Box>
           ))}
@@ -216,19 +252,20 @@ export default function DynamicProgrammingVisualizer() {
           sx={{
             p: 2,
             borderRadius: 2,
-            backgroundColor: 'rgba(9, 13, 22, 0.8)',
-            border: '1px solid rgba(255, 255, 255, 0.04)',
+            backgroundColor: isDark ? 'rgba(9, 13, 22, 0.8)' : 'rgba(241, 245, 249, 0.95)',
+            border: isDark ? '1px solid rgba(255, 255, 255, 0.04)' : '1px solid rgba(0, 0, 0, 0.08)',
+            boxShadow: isDark ? 'none' : '0 2px 8px rgba(0, 0, 0, 0.04)',
             overflowX: 'auto',
           }}
         >
           <table style={{ borderCollapse: 'collapse', margin: '0 auto' }}>
             <thead>
               <tr>
-                <th style={{ padding: '8px 12px', color: '#64748b', fontSize: '0.75rem', fontFamily: 'monospace' }}>
+                <th style={{ padding: '8px 12px', color: isDark ? '#64748b' : '#475569', fontSize: '0.75rem', fontFamily: 'monospace' }}>
                   Item \ Cap
                 </th>
                 {Array.from({ length: capacity + 1 }, (_, w) => (
-                  <th key={w} style={{ padding: '8px 12px', color: '#38bdf8', fontSize: '0.8rem', fontFamily: 'monospace' }}>
+                  <th key={w} style={{ padding: '8px 12px', color: isDark ? '#38bdf8' : '#0284c7', fontSize: '0.8rem', fontFamily: 'monospace', fontWeight: 800 }}>
                     W={w}
                   </th>
                 ))}
@@ -240,7 +277,7 @@ export default function DynamicProgrammingVisualizer() {
                   <td
                     style={{
                       padding: '8px 12px',
-                      color: '#cbd5e1',
+                      color: isDark ? '#cbd5e1' : '#0f172a',
                       fontWeight: 700,
                       fontSize: '0.75rem',
                       fontFamily: 'monospace',
@@ -254,22 +291,22 @@ export default function DynamicProgrammingVisualizer() {
                     const isInclude = currentStep.includeCell?.i === i && currentStep.includeCell?.w === w;
                     const isExclude = currentStep.excludeCell?.i === i && currentStep.excludeCell?.w === w;
 
-                    let bg = 'rgba(15, 23, 42, 0.6)';
-                    let border = '1px solid rgba(255, 255, 255, 0.08)';
-                    let color = '#f8fafc';
+                    let bg = isDark ? 'rgba(15, 23, 42, 0.6)' : '#ffffff';
+                    let border = isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)';
+                    let color = isDark ? '#f8fafc' : '#0f172a';
 
                     if (isActive) {
-                      bg = 'rgba(16, 185, 129, 0.3)';
-                      border = '2px solid #10b981';
-                      color = '#10b981';
+                      bg = isDark ? 'rgba(16, 185, 129, 0.3)' : 'rgba(16, 185, 129, 0.2)';
+                      border = isDark ? '2px solid #10b981' : '2px solid #059669';
+                      color = isDark ? '#10b981' : '#047857';
                     } else if (isInclude) {
-                      bg = 'rgba(56, 189, 248, 0.2)';
-                      border = '1px solid #38bdf8';
-                      color = '#38bdf8';
+                      bg = isDark ? 'rgba(56, 189, 248, 0.2)' : 'rgba(2, 132, 199, 0.15)';
+                      border = isDark ? '1px solid #38bdf8' : '1px solid #0284c7';
+                      color = isDark ? '#38bdf8' : '#0369a1';
                     } else if (isExclude) {
-                      bg = 'rgba(245, 158, 11, 0.2)';
-                      border = '1px solid #f59e0b';
-                      color = '#f59e0b';
+                      bg = isDark ? 'rgba(245, 158, 11, 0.2)' : 'rgba(249, 115, 22, 0.15)';
+                      border = isDark ? '1px solid #f59e0b' : '1px solid #ea580c';
+                      color = isDark ? '#f59e0b' : '#c2410c';
                     }
 
                     return (
@@ -309,20 +346,20 @@ export default function DynamicProgrammingVisualizer() {
             gap: 2.5,
             mt: 2,
             pt: 2,
-            borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+            borderTop: isDark ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(0, 0, 0, 0.08)',
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
             <Box sx={{ width: 14, height: 14, borderRadius: 0.5, backgroundColor: 'rgba(16, 185, 129, 0.5)', border: '1px solid #10b981' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Active dp[i][w]</Typography>
+            <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#475569', fontWeight: 600 }}>Active dp[i][w]</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-            <Box sx={{ width: 14, height: 14, borderRadius: 0.5, backgroundColor: 'rgba(56, 189, 248, 0.4)', border: '1px solid #38bdf8' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Include Subproblem: dp[i-1][w-wt]</Typography>
+            <Box sx={{ width: 14, height: 14, borderRadius: 0.5, backgroundColor: 'rgba(56, 189, 248, 0.4)', border: '1px solid #0ea5e9' }} />
+            <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#475569', fontWeight: 600 }}>Include Subproblem: dp[i-1][w-wt]</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-            <Box sx={{ width: 14, height: 14, borderRadius: 0.5, backgroundColor: 'rgba(245, 158, 11, 0.4)', border: '1px solid #f59e0b' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Exclude Subproblem: dp[i-1][w]</Typography>
+            <Box sx={{ width: 14, height: 14, borderRadius: 0.5, backgroundColor: 'rgba(245, 158, 11, 0.4)', border: '1px solid #f97316' }} />
+            <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#475569', fontWeight: 600 }}>Exclude Subproblem: dp[i-1][w]</Typography>
           </Box>
         </Box>
 
@@ -387,6 +424,7 @@ export default function DynamicProgrammingVisualizer() {
 
       {/* Theory */}
       <TheorySection theory={algorithmData.theory} />
+      </Box>
     </Box>
   );
 }

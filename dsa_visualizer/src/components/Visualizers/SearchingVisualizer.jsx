@@ -12,8 +12,10 @@ import StepExplanation from '../Common/StepExplanation';
 import PseudocodeViewer from '../Common/PseudocodeViewer';
 import CodeViewer from '../Common/CodeViewer';
 import TheorySection from '../Common/TheorySection';
+import SecondarySidebar from '../Common/SecondarySidebar';
 import { ALGORITHMS } from '../../data/algorithmsData';
 import { soundManager } from '../../utils/audio';
+import { useColorMode } from '../../app/ThemeRegistry';
 
 // Searching Step Generators
 function generateLinearSearchSteps(arr, target) {
@@ -154,6 +156,8 @@ function generateBinarySearchSteps(arr, target) {
 }
 
 export default function SearchingVisualizer({ initialAlgorithm = 'binary-search' }) {
+  const { mode } = useColorMode();
+  const isDark = mode === 'dark';
   const [selectedAlgo, setSelectedAlgo] = useState(initialAlgorithm);
   const [arraySize, setArraySize] = useState(12);
   const [array, setArray] = useState([]);
@@ -252,39 +256,38 @@ export default function SearchingVisualizer({ initialAlgorithm = 'binary-search'
     }
   };
 
-  return (
-    <Box sx={{ width: '100%', maxWidth: 1400, mx: 'auto', px: { xs: 2, md: 4 }, py: 3 }}>
-      {/* Algorithm Tabs */}
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
-        {[
-          { slug: 'binary-search', label: 'Binary Search (Sorted)' },
-          { slug: 'linear-search', label: 'Linear Search (Sequential)' },
-        ].map((item) => (
-          <Button
-            key={item.slug}
-            onClick={() => setSelectedAlgo(item.slug)}
-            sx={{
-              px: 2,
-              py: 0.75,
-              borderRadius: 2,
-              fontWeight: 700,
-              fontSize: '0.85rem',
-              color: selectedAlgo === item.slug ? '#ffffff' : '#94a3b8',
-              backgroundColor: selectedAlgo === item.slug ? '#2563eb' : 'rgba(255, 255, 255, 0.04)',
-              border: `1px solid ${selectedAlgo === item.slug ? '#3b82f6' : 'rgba(255, 255, 255, 0.06)'}`,
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: selectedAlgo === item.slug ? '#1d4ed8' : 'rgba(255, 255, 255, 0.08)',
-              },
-            }}
-          >
-            {item.label}
-          </Button>
-        ))}
-      </Box>
+  const searchAlgos = [
+    { slug: 'binary-search', label: 'Binary Search', badge: 'O(log n)' },
+    { slug: 'linear-search', label: 'Linear Search', badge: 'O(n)' },
+  ];
 
-      {/* Header */}
-      <AlgorithmHeader algorithm={algorithmData} />
+  return (
+    <Box
+      sx={{
+        width: '100%',
+        maxWidth: 1600,
+        mx: 'auto',
+        px: { xs: 1.5, sm: 2, md: 3 },
+        py: 3,
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
+        gap: { xs: 2, md: 3 },
+        alignItems: 'flex-start',
+      }}
+    >
+      {/* Secondary Left Sidebar / SideDrawer for Searching */}
+      <SecondarySidebar
+        title="Searching Suite"
+        category="Searching"
+        items={searchAlgos}
+        activeSlug={selectedAlgo}
+        onSelect={setSelectedAlgo}
+      />
+
+      {/* Main Content Area */}
+      <Box sx={{ flex: 1, minWidth: 0, width: '100%' }}>
+        {/* Header */}
+        <AlgorithmHeader algorithm={algorithmData} />
 
       {/* Hero Visualizer Canvas */}
       <Paper
@@ -292,10 +295,10 @@ export default function SearchingVisualizer({ initialAlgorithm = 'binary-search'
         sx={{
           p: { xs: 2, sm: 3 },
           borderRadius: 3,
-          backgroundColor: 'rgba(15, 23, 42, 0.7)',
+          backgroundColor: isDark ? 'rgba(13, 19, 34, 0.75)' : 'rgba(255, 255, 255, 0.9)',
           backdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4)',
+          border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
+          boxShadow: isDark ? '0 20px 40px rgba(0, 0, 0, 0.4)' : '0 10px 30px rgba(0, 0, 0, 0.06)',
           mb: 3,
         }}
       >
@@ -319,12 +322,12 @@ export default function SearchingVisualizer({ initialAlgorithm = 'binary-search'
             mb: 3,
             p: 1.5,
             borderRadius: 2,
-            backgroundColor: 'rgba(255, 255, 255, 0.03)',
-            border: '1px solid rgba(255, 255, 255, 0.06)',
+            backgroundColor: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)',
+            border: isDark ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(0, 0, 0, 0.06)',
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Typography variant="body2" sx={{ color: '#cbd5e1', fontWeight: 600 }}>
+            <Typography variant="body2" sx={{ color: isDark ? '#cbd5e1' : '#0f172a', fontWeight: 700 }}>
               Search Target:
             </Typography>
             <Box
@@ -332,9 +335,9 @@ export default function SearchingVisualizer({ initialAlgorithm = 'binary-search'
                 px: 2,
                 py: 0.5,
                 borderRadius: 1.5,
-                backgroundColor: 'rgba(56, 189, 248, 0.15)',
-                border: '1px solid #38bdf8',
-                color: '#38bdf8',
+                backgroundColor: isDark ? 'rgba(56, 189, 248, 0.15)' : 'rgba(2, 132, 199, 0.12)',
+                border: isDark ? '1px solid #38bdf8' : '1px solid #0284c7',
+                color: isDark ? '#38bdf8' : '#0369a1',
                 fontWeight: 800,
                 fontSize: '1rem',
                 fontFamily: 'monospace',
@@ -345,7 +348,7 @@ export default function SearchingVisualizer({ initialAlgorithm = 'binary-search'
           </Box>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Typography variant="caption" sx={{ color: '#64748b' }}>Change Target:</Typography>
+            <Typography variant="caption" sx={{ color: isDark ? '#64748b' : '#475569', fontWeight: 600 }}>Change Target:</Typography>
             <Box sx={{ display: 'flex', gap: 0.75, flexWrap: 'wrap' }}>
               {array.slice(0, 5).map((val) => (
                 <Button
@@ -357,8 +360,9 @@ export default function SearchingVisualizer({ initialAlgorithm = 'binary-search'
                     px: 1,
                     py: 0.25,
                     fontSize: '0.75rem',
-                    color: target === val ? '#ffffff' : '#94a3b8',
-                    backgroundColor: target === val ? '#2563eb' : 'rgba(255, 255, 255, 0.05)',
+                    fontWeight: 700,
+                    color: target === val ? '#ffffff' : (isDark ? '#94a3b8' : '#334155'),
+                    backgroundColor: target === val ? '#0284c7' : (isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.06)'),
                     borderRadius: 1.5,
                   }}
                 >
@@ -380,8 +384,8 @@ export default function SearchingVisualizer({ initialAlgorithm = 'binary-search'
             gap: 1.5,
             p: 3,
             borderRadius: 2,
-            backgroundColor: 'rgba(9, 13, 22, 0.6)',
-            border: '1px solid rgba(255, 255, 255, 0.04)',
+            backgroundColor: isDark ? 'rgba(9, 13, 22, 0.6)' : 'rgba(241, 245, 249, 0.95)',
+            border: isDark ? '1px solid rgba(255, 255, 255, 0.04)' : '1px solid rgba(0, 0, 0, 0.06)',
           }}
         >
           {array.map((val, idx) => {
@@ -397,26 +401,26 @@ export default function SearchingVisualizer({ initialAlgorithm = 'binary-search'
               isOutsideRange = idx < currentStep.low || idx > currentStep.high;
             }
 
-            let boxBg = 'rgba(15, 23, 42, 0.8)';
-            let borderColor = 'rgba(255, 255, 255, 0.15)';
-            let textColor = '#f8fafc';
+            let boxBg = isDark ? 'rgba(15, 23, 42, 0.8)' : '#ffffff';
+            let borderColor = isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.12)';
+            let textColor = isDark ? '#f8fafc' : '#0f172a';
 
             if (isFound) {
-              boxBg = 'rgba(16, 185, 129, 0.25)';
+              boxBg = isDark ? 'rgba(16, 185, 129, 0.25)' : 'rgba(16, 185, 129, 0.2)';
               borderColor = '#10b981';
-              textColor = '#10b981';
+              textColor = isDark ? '#10b981' : '#047857';
             } else if (isMid) {
-              boxBg = 'rgba(245, 158, 11, 0.25)';
-              borderColor = '#f59e0b';
-              textColor = '#f59e0b';
+              boxBg = isDark ? 'rgba(245, 158, 11, 0.25)' : 'rgba(249, 115, 22, 0.18)';
+              borderColor = '#f97316';
+              textColor = isDark ? '#f97316' : '#c2410c';
             } else if (isCurrent) {
-              boxBg = 'rgba(56, 189, 248, 0.25)';
-              borderColor = '#38bdf8';
-              textColor = '#38bdf8';
+              boxBg = isDark ? 'rgba(56, 189, 248, 0.25)' : 'rgba(2, 132, 199, 0.18)';
+              borderColor = '#0ea5e9';
+              textColor = isDark ? '#38bdf8' : '#0369a1';
             } else if (isOutsideRange && selectedAlgo === 'binary-search') {
-              boxBg = 'rgba(15, 23, 42, 0.2)';
-              borderColor = 'rgba(255, 255, 255, 0.04)';
-              textColor = '#475569';
+              boxBg = isDark ? 'rgba(15, 23, 42, 0.2)' : 'rgba(0, 0, 0, 0.04)';
+              borderColor = isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.06)';
+              textColor = isDark ? '#475569' : '#94a3b8';
             }
 
             return (
@@ -432,22 +436,22 @@ export default function SearchingVisualizer({ initialAlgorithm = 'binary-search'
                 {/* Pointer Badge above element */}
                 <Box sx={{ height: 22, display: 'flex', alignItems: 'center' }}>
                   {selectedAlgo === 'binary-search' && currentStep.low === idx && (
-                    <Typography variant="caption" sx={{ color: '#38bdf8', fontWeight: 800, fontSize: '0.7rem' }}>
+                    <Typography variant="caption" sx={{ color: isDark ? '#38bdf8' : '#0284c7', fontWeight: 800, fontSize: '0.7rem' }}>
                       L
                     </Typography>
                   )}
                   {selectedAlgo === 'binary-search' && currentStep.mid === idx && (
-                    <Typography variant="caption" sx={{ color: '#f59e0b', fontWeight: 800, fontSize: '0.7rem', mx: 0.5 }}>
+                    <Typography variant="caption" sx={{ color: isDark ? '#f59e0b' : '#d97706', fontWeight: 800, fontSize: '0.7rem', mx: 0.5 }}>
                       MID
                     </Typography>
                   )}
                   {selectedAlgo === 'binary-search' && currentStep.high === idx && (
-                    <Typography variant="caption" sx={{ color: '#ec4899', fontWeight: 800, fontSize: '0.7rem' }}>
+                    <Typography variant="caption" sx={{ color: isDark ? '#ec4899' : '#be185d', fontWeight: 800, fontSize: '0.7rem' }}>
                       R
                     </Typography>
                   )}
                   {selectedAlgo === 'linear-search' && isCurrent && (
-                    <Typography variant="caption" sx={{ color: '#38bdf8', fontWeight: 800, fontSize: '0.7rem' }}>
+                    <Typography variant="caption" sx={{ color: isDark ? '#38bdf8' : '#0284c7', fontWeight: 800, fontSize: '0.7rem' }}>
                       ▼
                     </Typography>
                   )}
@@ -464,7 +468,7 @@ export default function SearchingVisualizer({ initialAlgorithm = 'binary-search'
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: isFound ? '0 0 20px #10b981' : isMid ? '0 0 15px #f59e0b' : isCurrent ? '0 0 15px #38bdf8' : 'none',
+                    boxShadow: isFound ? '0 0 20px #10b981' : isMid ? '0 0 15px #f59e0b' : isCurrent ? '0 0 15px #38bdf8' : (isDark ? 'none' : '0 2px 4px rgba(0,0,0,0.05)'),
                     transition: 'all 0.2s ease',
                   }}
                 >
@@ -481,7 +485,7 @@ export default function SearchingVisualizer({ initialAlgorithm = 'binary-search'
                 </Box>
 
                 {/* Index label below */}
-                <Typography variant="caption" sx={{ color: '#64748b', fontSize: '0.7rem', fontFamily: 'monospace' }}>
+                <Typography variant="caption" sx={{ color: isDark ? '#64748b' : '#64748b', fontSize: '0.7rem', fontFamily: 'monospace', fontWeight: 600 }}>
                   [{idx}]
                 </Typography>
               </Box>
@@ -499,28 +503,28 @@ export default function SearchingVisualizer({ initialAlgorithm = 'binary-search'
             gap: 2.5,
             mt: 2.5,
             pt: 2,
-            borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+            borderTop: isDark ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(0, 0, 0, 0.08)',
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-            <Box sx={{ width: 12, height: 12, borderRadius: 0.5, backgroundColor: '#38bdf8' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Low (L) / Current</Typography>
+            <Box sx={{ width: 12, height: 12, borderRadius: 0.5, backgroundColor: isDark ? '#38bdf8' : '#0284c7' }} />
+            <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#475569', fontWeight: 600 }}>Low (L) / Current</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-            <Box sx={{ width: 12, height: 12, borderRadius: 0.5, backgroundColor: '#f59e0b' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Mid (M)</Typography>
+            <Box sx={{ width: 12, height: 12, borderRadius: 0.5, backgroundColor: isDark ? '#f59e0b' : '#d97706' }} />
+            <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#475569', fontWeight: 600 }}>Mid (M)</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
             <Box sx={{ width: 12, height: 12, borderRadius: 0.5, backgroundColor: '#ec4899' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>High (R)</Typography>
+            <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#475569', fontWeight: 600 }}>High (R)</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
             <Box sx={{ width: 12, height: 12, borderRadius: 0.5, backgroundColor: '#10b981' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Found Target</Typography>
+            <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#475569', fontWeight: 600 }}>Found Target</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-            <Box sx={{ width: 12, height: 12, borderRadius: 0.5, backgroundColor: '#475569' }} />
-            <Typography variant="caption" sx={{ color: '#94a3b8' }}>Discarded Range</Typography>
+            <Box sx={{ width: 12, height: 12, borderRadius: 0.5, backgroundColor: isDark ? '#475569' : '#94a3b8' }} />
+            <Typography variant="caption" sx={{ color: isDark ? '#94a3b8' : '#475569', fontWeight: 600 }}>Discarded Range</Typography>
           </Box>
         </Box>
 
@@ -590,6 +594,7 @@ export default function SearchingVisualizer({ initialAlgorithm = 'binary-search'
 
       {/* Theory */}
       <TheorySection theory={algorithmData.theory} />
+      </Box>
     </Box>
   );
 }

@@ -23,6 +23,7 @@ import {
   VolumeXIcon,
 } from './Icons';
 import { soundManager } from '../../utils/audio';
+import { useColorMode } from '../../app/ThemeRegistry';
 
 export default function VisualizationControls({
   isPlaying,
@@ -43,6 +44,7 @@ export default function VisualizationControls({
   minSize = 5,
   maxSize = 40,
 }) {
+  const { isDark } = useColorMode();
   const [audioEnabled, setAudioEnabled] = React.useState(false);
   const [customOpen, setCustomOpen] = React.useState(false);
   const [customValue, setCustomValue] = React.useState('');
@@ -71,10 +73,10 @@ export default function VisualizationControls({
         gap: 2,
         p: 2,
         borderRadius: 2.5,
-        backgroundColor: 'rgba(15, 23, 42, 0.8)',
+        backgroundColor: isDark ? 'rgba(13, 19, 34, 0.85)' : 'rgba(255, 255, 255, 0.95)',
         backdropFilter: 'blur(12px)',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+        border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(15, 23, 42, 0.08)',
+        boxShadow: isDark ? '0 8px 32px rgba(0, 0, 0, 0.3)' : '0 8px 24px rgba(15, 23, 42, 0.06)',
       }}
     >
       {/* Primary Playback Buttons */}
@@ -109,12 +111,12 @@ export default function VisualizationControls({
               onClick={onStepBack}
               disabled={!canStepBack || isPlaying}
               sx={{
-                color: '#cbd5e1',
-                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                color: isDark ? '#cbd5e1' : '#334155',
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(15, 23, 42, 0.05)',
                 borderRadius: 2,
                 p: 1.25,
-                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' },
-                '&.Mui-disabled': { color: '#475569' },
+                '&:hover': { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(15, 23, 42, 0.1)' },
+                '&.Mui-disabled': { color: isDark ? '#475569' : '#94a3b8' },
               }}
             >
               <StepBackIcon size={18} />
@@ -128,12 +130,12 @@ export default function VisualizationControls({
               onClick={onStepForward}
               disabled={!canStepForward || isPlaying}
               sx={{
-                color: '#cbd5e1',
-                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                color: isDark ? '#cbd5e1' : '#334155',
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(15, 23, 42, 0.05)',
                 borderRadius: 2,
                 p: 1.25,
-                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' },
-                '&.Mui-disabled': { color: '#475569' },
+                '&:hover': { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(15, 23, 42, 0.1)' },
+                '&.Mui-disabled': { color: isDark ? '#475569' : '#94a3b8' },
               }}
             >
               <StepForwardIcon size={18} />
@@ -145,11 +147,11 @@ export default function VisualizationControls({
           <IconButton
             onClick={onRestart}
             sx={{
-              color: '#cbd5e1',
-              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              color: isDark ? '#cbd5e1' : '#334155',
+              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(15, 23, 42, 0.05)',
               borderRadius: 2,
               p: 1.25,
-              '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' },
+              '&:hover': { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(15, 23, 42, 0.1)' },
             }}
           >
             <RotateCcwIcon size={18} />
@@ -164,16 +166,16 @@ export default function VisualizationControls({
               onClick={onRandomize}
               startIcon={<ShuffleIcon size={16} />}
               sx={{
-                color: '#38bdf8',
-                borderColor: 'rgba(56, 189, 248, 0.3)',
+                color: isDark ? '#38bdf8' : '#0284c7',
+                borderColor: isDark ? 'rgba(56, 189, 248, 0.3)' : 'rgba(2, 132, 199, 0.35)',
                 borderRadius: 2,
                 textTransform: 'none',
                 fontWeight: 600,
                 px: 1.5,
                 py: 1,
                 '&:hover': {
-                  borderColor: '#38bdf8',
-                  backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                  borderColor: isDark ? '#38bdf8' : '#0284c7',
+                  backgroundColor: isDark ? 'rgba(56, 189, 248, 0.1)' : 'rgba(2, 132, 199, 0.08)',
                 },
               }}
             >
@@ -188,12 +190,12 @@ export default function VisualizationControls({
             size="small"
             onClick={() => setCustomOpen(true)}
             sx={{
-              color: '#94a3b8',
+              color: isDark ? '#94a3b8' : '#64748b',
               borderRadius: 2,
               textTransform: 'none',
-              fontWeight: 500,
+              fontWeight: 600,
               fontSize: '0.85rem',
-              '&:hover': { color: '#ffffff' },
+              '&:hover': { color: isDark ? '#ffffff' : '#0f172a' },
             }}
           >
             Custom Input
@@ -205,10 +207,10 @@ export default function VisualizationControls({
       <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 2.5 }}>
         {/* Speed Selector */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Typography variant="caption" sx={{ color: '#64748b', fontWeight: 600 }}>
+          <Typography variant="caption" sx={{ color: isDark ? '#64748b' : '#64748b', fontWeight: 600 }}>
             SPEED:
           </Typography>
-          <Box sx={{ display: 'flex', backgroundColor: 'rgba(255, 255, 255, 0.05)', borderRadius: 2, p: 0.5 }}>
+          <Box sx={{ display: 'flex', backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(15, 23, 42, 0.05)', borderRadius: 2, p: 0.5 }}>
             {speedOptions.map((s) => (
               <Button
                 key={s}
@@ -220,11 +222,11 @@ export default function VisualizationControls({
                   py: 0.25,
                   fontSize: '0.75rem',
                   fontWeight: 700,
-                  color: speed === s ? '#ffffff' : '#94a3b8',
-                  backgroundColor: speed === s ? '#2563eb' : 'transparent',
+                  color: speed === s ? '#ffffff' : (isDark ? '#94a3b8' : '#475569'),
+                  backgroundColor: speed === s ? '#0284c7' : 'transparent',
                   borderRadius: 1.5,
                   textTransform: 'none',
-                  '&:hover': { backgroundColor: speed === s ? '#1d4ed8' : 'rgba(255,255,255,0.05)' },
+                  '&:hover': { backgroundColor: speed === s ? '#0369a1' : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(15,23,42,0.05)') },
                 }}
               >
                 {s}x
@@ -236,7 +238,7 @@ export default function VisualizationControls({
         {/* Size Slider */}
         {showSizeSlider && onSizeChange && (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: 150 }}>
-            <Typography variant="caption" sx={{ color: '#64748b', fontWeight: 600, whiteSpace: 'nowrap' }}>
+            <Typography variant="caption" sx={{ color: isDark ? '#64748b' : '#475569', fontWeight: 600, whiteSpace: 'nowrap' }}>
               {sizeLabel}: {size}
             </Typography>
             <Slider
@@ -246,14 +248,14 @@ export default function VisualizationControls({
               onChange={(e, val) => onSizeChange(val)}
               disabled={isPlaying}
               sx={{
-                color: '#38bdf8',
+                color: isDark ? '#38bdf8' : '#0284c7',
                 '& .MuiSlider-thumb': {
                   width: 14,
                   height: 14,
-                  backgroundColor: '#ffffff',
+                  backgroundColor: isDark ? '#ffffff' : '#0284c7',
                 },
                 '& .MuiSlider-rail': {
-                  opacity: 0.2,
+                  opacity: 0.25,
                 },
               }}
             />
@@ -266,8 +268,10 @@ export default function VisualizationControls({
             onClick={toggleAudio}
             size="small"
             sx={{
-              color: audioEnabled ? '#38bdf8' : '#64748b',
-              backgroundColor: audioEnabled ? 'rgba(56, 189, 248, 0.1)' : 'rgba(255, 255, 255, 0.05)',
+              color: audioEnabled ? (isDark ? '#38bdf8' : '#0284c7') : (isDark ? '#64748b' : '#94a3b8'),
+              backgroundColor: audioEnabled
+                ? (isDark ? 'rgba(56, 189, 248, 0.1)' : 'rgba(2, 132, 199, 0.1)')
+                : (isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(15, 23, 42, 0.05)'),
               borderRadius: 2,
               p: 1,
             }}
@@ -283,17 +287,18 @@ export default function VisualizationControls({
         onClose={() => setCustomOpen(false)}
         PaperProps={{
           sx: {
-            backgroundColor: '#0f172a',
-            color: '#f8fafc',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            backgroundColor: isDark ? '#0d1322' : '#ffffff',
+            color: isDark ? '#f8fafc' : '#0f172a',
+            border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(15, 23, 42, 0.1)',
             borderRadius: 3,
             p: 1,
+            boxShadow: isDark ? '0 20px 40px rgba(0,0,0,0.5)' : '0 20px 40px rgba(15,23,42,0.12)',
           },
         }}
       >
-        <DialogTitle sx={{ fontWeight: 700 }}>Custom Input Values</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 700, color: isDark ? '#f8fafc' : '#0f172a' }}>Custom Input Values</DialogTitle>
         <DialogContent>
-          <Typography variant="body2" sx={{ color: '#94a3b8', mb: 2 }}>
+          <Typography variant="body2" sx={{ color: isDark ? '#94a3b8' : '#64748b', mb: 2 }}>
             Enter comma-separated numbers (e.g. <code>25, 10, 85, 4, 32, 60</code>):
           </Typography>
           <TextField
@@ -305,20 +310,20 @@ export default function VisualizationControls({
             onChange={(e) => setCustomValue(e.target.value)}
             sx={{
               '& .MuiOutlinedInput-root': {
-                color: '#ffffff',
-                backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
-                '&:hover fieldset': { borderColor: '#38bdf8' },
-                '&.Mui-focused fieldset': { borderColor: '#38bdf8' },
+                color: isDark ? '#ffffff' : '#0f172a',
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(15, 23, 42, 0.03)',
+                '& fieldset': { borderColor: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(15, 23, 42, 0.2)' },
+                '&:hover fieldset': { borderColor: '#0284c7' },
+                '&.Mui-focused fieldset': { borderColor: '#0284c7' },
               },
             }}
           />
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={() => setCustomOpen(false)} sx={{ color: '#94a3b8' }}>
+          <Button onClick={() => setCustomOpen(false)} sx={{ color: isDark ? '#94a3b8' : '#64748b' }}>
             Cancel
           </Button>
-          <Button onClick={handleApplyCustom} variant="contained" sx={{ backgroundColor: '#2563eb' }}>
+          <Button onClick={handleApplyCustom} variant="contained" sx={{ backgroundColor: '#0284c7', color: '#fff' }}>
             Apply Input
           </Button>
         </DialogActions>
